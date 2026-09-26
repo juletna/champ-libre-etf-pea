@@ -1,0 +1,223 @@
+{
+  "source": "Amundi ETF — encours du fonds en EUR (FUND_AUM_IN_EURO)",
+  "url_source": "https://www.amundietf.fr/mapi/ProductAPI/getProductsData",
+  "date_extraction": "2026-09-26",
+  "par_isin": {
+    "FR0013346681": {
+      "encours_fonds_eur": 209618131,
+      "date": "2026-09-24"
+    },
+    "LU1681043599": {
+      "encours_fonds_eur": 7198477341,
+      "date": "2026-09-24"
+    },
+    "LU2655993207": {
+      "encours_fonds_eur": 7198477341,
+      "date": "2026-09-24"
+    },
+    "FR001400U5Q4": {
+      "encours_fonds_eur": 1516456748,
+      "date": "2026-09-24"
+    },
+    "FR0014017NX3": {
+      "encours_fonds_eur": 63059392,
+      "date": "2026-09-24"
+    },
+    "FR0011871128": {
+      "encours_fonds_eur": 1477888515,
+      "date": "2026-09-24"
+    },
+    "FR0013412285": {
+      "encours_fonds_eur": 1318147631,
+      "date": "2026-09-24"
+    },
+    "FR0011871136": {
+      "encours_fonds_eur": 1477888515,
+      "date": "2026-09-24"
+    },
+    "FR0013412293": {
+      "encours_fonds_eur": 1318147631,
+      "date": "2026-09-24"
+    },
+    "LU1681042864": {
+      "encours_fonds_eur": 735322339,
+      "date": "2026-09-24"
+    },
+    "LU1681042948": {
+      "encours_fonds_eur": 735322339,
+      "date": "2026-09-24"
+    },
+    "FR0011871110": {
+      "encours_fonds_eur": 1278004973,
+      "date": "2026-09-24"
+    },
+    "FR0013412269": {
+      "encours_fonds_eur": 481800005,
+      "date": "2026-09-24"
+    },
+    "FR0011869270": {
+      "encours_fonds_eur": 86002959,
+      "date": "2026-09-24"
+    },
+    "FR001400KH45": {
+      "encours_fonds_eur": 39693207,
+      "date": "2026-09-24"
+    },
+    "LU1681038672": {
+      "encours_fonds_eur": 938524253,
+      "date": "2026-09-24"
+    },
+    "FR0013380607": {
+      "encours_fonds_eur": 4236577545,
+      "date": "2026-09-24"
+    },
+    "LU1681046931": {
+      "encours_fonds_eur": 698259653,
+      "date": "2026-09-24"
+    },
+    "LU1598689153": {
+      "encours_fonds_eur": 589648943,
+      "date": "2026-09-24"
+    },
+    "FR0010717090": {
+      "encours_fonds_eur": 388554910,
+      "date": "2026-09-24"
+    },
+    "LU1598690169": {
+      "encours_fonds_eur": 259802434,
+      "date": "2026-09-24"
+    },
+    "LU2195226068": {
+      "encours_fonds_eur": 3189403743,
+      "date": "2026-09-24"
+    },
+    "LU1829219390": {
+      "encours_fonds_eur": 6509927957,
+      "date": "2026-09-24"
+    },
+    "FR0013412038": {
+      "encours_fonds_eur": 375198055,
+      "date": "2026-09-24"
+    },
+    "LU1812092168": {
+      "encours_fonds_eur": 604317284,
+      "date": "2026-09-24"
+    },
+    "LU1834983477": {
+      "encours_fonds_eur": 3512582685,
+      "date": "2026-09-24"
+    },
+    "LU1834983634": {
+      "encours_fonds_eur": 39303200,
+      "date": "2026-09-24"
+    },
+    "LU1834983550": {
+      "encours_fonds_eur": 584532822,
+      "date": "2026-09-24"
+    },
+    "LU1834988781": {
+      "encours_fonds_eur": 88423275,
+      "date": "2026-09-24"
+    },
+    "LU1834985845": {
+      "encours_fonds_eur": 90371546,
+      "date": "2026-09-24"
+    },
+    "LU1834986900": {
+      "encours_fonds_eur": 916286052,
+      "date": "2026-09-24"
+    },
+    "LU1834987890": {
+      "encours_fonds_eur": 434604459,
+      "date": "2026-09-24"
+    },
+    "LU1834987973": {
+      "encours_fonds_eur": 169049986,
+      "date": "2026-09-24"
+    },
+    "LU1834988518": {
+      "encours_fonds_eur": 239126508,
+      "date": "2026-09-24"
+    },
+    "LU1834988609": {
+      "encours_fonds_eur": 41413244,
+      "date": "2026-09-24"
+    },
+    "LU1834988864": {
+      "encours_fonds_eur": 220141851,
+      "date": "2026-09-24"
+    },
+    "FR0010010827": {
+      "encours_fonds_eur": 814203297,
+      "date": "2026-09-24"
+    },
+    "FR0010655746": {
+      "encours_fonds_eur": 916271953,
+      "date": "2026-09-24"
+    },
+    "FR0010405431": {
+      "encours_fonds_eur": 454436827,
+      "date": "2026-09-24"
+    },
+    "FR0011869304": {
+      "encours_fonds_eur": 26976578,
+      "date": "2026-09-24"
+    },
+    "FR0013411980": {
+      "encours_fonds_eur": 193367882,
+      "date": "2026-09-24"
+    },
+    "FR0013411998": {
+      "encours_fonds_eur": 193367882,
+      "date": "2026-09-24"
+    },
+    "FR0013412020": {
+      "encours_fonds_eur": 937777718,
+      "date": "2026-09-24"
+    },
+    "FR0010429068": {
+      "encours_fonds_eur": 977223250,
+      "date": "2026-09-24"
+    },
+    "LU1900066207": {
+      "encours_fonds_eur": 398642522,
+      "date": "2026-09-24"
+    },
+    "FR0011440478": {
+      "encours_fonds_eur": 57541336,
+      "date": "2026-09-24"
+    },
+    "FR0013412004": {
+      "encours_fonds_eur": 230100390,
+      "date": "2026-09-24"
+    },
+    "FR0013412012": {
+      "encours_fonds_eur": 756837296,
+      "date": "2026-09-24"
+    },
+    "FR0011869312": {
+      "encours_fonds_eur": 189777488,
+      "date": "2026-09-24"
+    },
+    "FR0011871078": {
+      "encours_fonds_eur": 68793981,
+      "date": "2026-09-24"
+    },
+    "FR0011869320": {
+      "encours_fonds_eur": 150043066,
+      "date": "2026-09-24"
+    },
+    "LU3180074463": {
+      "encours_fonds_eur": 30211053,
+      "date": "2026-09-24"
+    },
+    "FR0011882364": {
+      "encours_fonds_eur": 100497949,
+      "date": "2026-09-24"
+    },
+    "FR001400S9V0": {
+      "encours_fonds_eur": 11965640,
+      "date": "2026-09-24"
+    }
+  }
+}

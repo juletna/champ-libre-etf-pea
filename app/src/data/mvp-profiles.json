@@ -1,5 +1,5 @@
 {
-  "description": "Expositions des indices (et non des paniers de titres détenus), relevées dans les reportings mensuels Amundi. Instantané du MVP.",
+  "description": "Expositions des indices (et non des paniers de titres détenus), relevées dans les reportings mensuels Amundi. Instantanés datés par ISIN.",
   "etfs": [
     {
       "isin": "LU1681043599",
@@ -11,8 +11,34 @@
       "couleur": "#8bd4a5",
       "reporting_date": "2026-08-31",
       "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1681043599/FRA/FRA/RETAIL/ETF/20260831",
-      "pays": {"États-Unis": 72.12, "Japon": 5.73, "Royaume-Uni": 3.52, "Canada": 3.47, "France": 2.37, "Suisse": 2.27, "Allemagne": 2.22, "Australie": 1.63, "Pays-Bas": 1.41, "Espagne": 0.99, "Suède": 0.87, "Italie": 0.82, "Autres pays": 2.59},
-      "secteurs": {"Technologie": 29.67, "Finance": 16.58, "Industrie": 11.21, "Santé": 9.29, "Consommation cyclique": 8.83, "Communication": 7.98, "Consommation défensive": 4.90, "Énergie": 4.01, "Matériaux": 3.49, "Services publics": 2.40, "Immobilier": 1.65}
+      "pays": {
+        "États-Unis": 72.12,
+        "Japon": 5.73,
+        "Royaume-Uni": 3.52,
+        "Canada": 3.47,
+        "France": 2.37,
+        "Suisse": 2.27,
+        "Allemagne": 2.22,
+        "Australie": 1.63,
+        "Pays-Bas": 1.41,
+        "Espagne": 0.99,
+        "Suède": 0.87,
+        "Italie": 0.82,
+        "Autres pays": 2.59
+      },
+      "secteurs": {
+        "Technologie": 29.67,
+        "Finance": 16.58,
+        "Industrie": 11.21,
+        "Santé": 9.29,
+        "Consommation cyclique": 8.83,
+        "Communication": 7.98,
+        "Consommation défensive": 4.9,
+        "Énergie": 4.01,
+        "Matériaux": 3.49,
+        "Services publics": 2.4,
+        "Immobilier": 1.65
+      }
     },
     {
       "isin": "FR0011871128",
@@ -24,8 +50,22 @@
       "couleur": "#f4bd77",
       "reporting_date": "2026-06-30",
       "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0011871128/FRA/FRA/RETAIL/ETF",
-      "pays": {"États-Unis": 100},
-      "secteurs": {"Technologie": 37.37, "Finance": 11.87, "Communication": 9.76, "Consommation cyclique": 9.38, "Santé": 9.07, "Industrie": 8.88, "Consommation défensive": 4.68, "Énergie": 3.02, "Services publics": 2.25, "Immobilier": 1.88, "Matériaux": 1.84}
+      "pays": {
+        "États-Unis": 100
+      },
+      "secteurs": {
+        "Technologie": 37.37,
+        "Finance": 11.87,
+        "Communication": 9.76,
+        "Consommation cyclique": 9.38,
+        "Santé": 9.07,
+        "Industrie": 8.88,
+        "Consommation défensive": 4.68,
+        "Énergie": 3.02,
+        "Services publics": 2.25,
+        "Immobilier": 1.88,
+        "Matériaux": 1.84
+      }
     },
     {
       "isin": "FR0011871110",
@@ -37,8 +77,26 @@
       "couleur": "#a9b8f2",
       "reporting_date": "2026-08-31",
       "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0011871110/FRA/FRA/RETAIL/ETF",
-      "pays": {"États-Unis": 94.78, "Irlande": 1.82, "Pays-Bas": 1.32, "Canada": 1.00, "Royaume-Uni": 0.66, "Autres pays": 0.42},
-      "secteurs": {"Technologie": 58.27, "Communication": 13.89, "Consommation cyclique": 11.13, "Consommation défensive": 6.22, "Santé": 4.01, "Industrie": 3.62, "Services publics": 1.14, "Matériaux": 1.00, "Énergie": 0.52, "Finance": 0.21}
+      "pays": {
+        "États-Unis": 94.78,
+        "Irlande": 1.82,
+        "Pays-Bas": 1.32,
+        "Canada": 1.0,
+        "Royaume-Uni": 0.66,
+        "Autres pays": 0.42
+      },
+      "secteurs": {
+        "Technologie": 58.27,
+        "Communication": 13.89,
+        "Consommation cyclique": 11.13,
+        "Consommation défensive": 6.22,
+        "Santé": 4.01,
+        "Industrie": 3.62,
+        "Services publics": 1.14,
+        "Matériaux": 1.0,
+        "Énergie": 0.52,
+        "Finance": 0.21
+      }
     },
     {
       "isin": "LU1829219390",
@@ -50,8 +108,21 @@
       "couleur": "#e6a7aa",
       "reporting_date": "2026-08-31",
       "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1829219390/FRA/FRA/RETAIL/ETF/20260831",
-      "pays": {"Espagne": 31.17, "Italie": 24.12, "France": 13.84, "Pays-Bas": 8.85, "Allemagne": 6.50, "Finlande": 4.60, "Autriche": 4.54, "Irlande": 3.11, "Belgique": 2.52, "Portugal": 0.76},
-      "secteurs": {"Finance": 100}
+      "pays": {
+        "Espagne": 31.17,
+        "Italie": 24.12,
+        "France": 13.84,
+        "Pays-Bas": 8.85,
+        "Allemagne": 6.5,
+        "Finlande": 4.6,
+        "Autriche": 4.54,
+        "Irlande": 3.11,
+        "Belgique": 2.52,
+        "Portugal": 0.76
+      },
+      "secteurs": {
+        "Finance": 100
+      }
     },
     {
       "isin": "FR0013412038",
@@ -63,8 +134,36 @@
       "couleur": "#73b8ad",
       "reporting_date": "2026-08-31",
       "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0013412038/FRA/FRA/INSTITUTIONNEL/ETF/20260831",
-      "pays": {"Royaume-Uni": 22.25, "France": 14.95, "Suisse": 14.32, "Allemagne": 14.04, "Pays-Bas": 8.89, "Espagne": 6.23, "Suède": 5.47, "Italie": 5.16, "Danemark": 2.60, "Finlande": 1.81, "Belgique": 1.74, "Norvège": 0.99, "Irlande": 0.64, "Autriche": 0.59, "Autres pays": 0.33},
-      "secteurs": {"Finance": 25.66, "Industrie": 19.01, "Santé": 12.71, "Technologie": 9.11, "Consommation défensive": 8.24, "Consommation cyclique": 6.30, "Matériaux": 5.53, "Énergie": 4.88, "Services publics": 4.69, "Communication": 3.26, "Immobilier": 0.61}
+      "pays": {
+        "Royaume-Uni": 22.25,
+        "France": 14.95,
+        "Suisse": 14.32,
+        "Allemagne": 14.04,
+        "Pays-Bas": 8.89,
+        "Espagne": 6.23,
+        "Suède": 5.47,
+        "Italie": 5.16,
+        "Danemark": 2.6,
+        "Finlande": 1.81,
+        "Belgique": 1.74,
+        "Norvège": 0.99,
+        "Irlande": 0.64,
+        "Autriche": 0.59,
+        "Autres pays": 0.33
+      },
+      "secteurs": {
+        "Finance": 25.66,
+        "Industrie": 19.01,
+        "Santé": 12.71,
+        "Technologie": 9.11,
+        "Consommation défensive": 8.24,
+        "Consommation cyclique": 6.3,
+        "Matériaux": 5.53,
+        "Énergie": 4.88,
+        "Services publics": 4.69,
+        "Communication": 3.26,
+        "Immobilier": 0.61
+      }
     },
     {
       "isin": "FR0013411980",
@@ -76,8 +175,22 @@
       "couleur": "#d4ad76",
       "reporting_date": "2026-08-31",
       "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0013411980/FRA/FRA/INSTITUTIONNEL/ETF/20260831",
-      "pays": {"Japon": 100},
-      "secteurs": {"Industrie": 25.94, "Finance": 18.74, "Technologie": 15.30, "Consommation cyclique": 14.66, "Communication": 6.25, "Matériaux": 5.36, "Santé": 5.11, "Consommation défensive": 4.80, "Immobilier": 1.64, "Services publics": 1.26, "Énergie": 0.94}
+      "pays": {
+        "Japon": 100
+      },
+      "secteurs": {
+        "Industrie": 25.94,
+        "Finance": 18.74,
+        "Technologie": 15.3,
+        "Consommation cyclique": 14.66,
+        "Communication": 6.25,
+        "Matériaux": 5.36,
+        "Santé": 5.11,
+        "Consommation défensive": 4.8,
+        "Immobilier": 1.64,
+        "Services publics": 1.26,
+        "Énergie": 0.94
+      }
     },
     {
       "isin": "FR0013412020",
@@ -89,8 +202,1096 @@
       "couleur": "#b99ae1",
       "reporting_date": "2026-08-31",
       "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0013412020/FRA/FRA/INSTITUTIONNEL/ETF/20260831",
-      "pays": {"Taïwan": 27.93, "Chine": 20.68, "Corée du Sud": 20.58, "Inde": 11.14, "Brésil": 3.68, "Afrique du Sud": 3.52, "Arabie saoudite": 2.45, "Mexique": 1.70, "Malaisie": 1.22, "Émirats arabes unis": 1.19, "Pologne": 1.16, "Thaïlande": 0.92, "Grèce": 0.57, "Autres pays": 3.26},
-      "secteurs": {"Technologie": 41.71, "Finance": 20.10, "Consommation cyclique": 8.23, "Industrie": 6.38, "Communication": 6.07, "Matériaux": 5.83, "Consommation défensive": 3.23, "Énergie": 3.02, "Santé": 2.65, "Services publics": 1.44, "Immobilier": 1.34}
+      "pays": {
+        "Taïwan": 27.93,
+        "Chine": 20.68,
+        "Corée du Sud": 20.58,
+        "Inde": 11.14,
+        "Brésil": 3.68,
+        "Afrique du Sud": 3.52,
+        "Arabie saoudite": 2.45,
+        "Mexique": 1.7,
+        "Malaisie": 1.22,
+        "Émirats arabes unis": 1.19,
+        "Pologne": 1.16,
+        "Thaïlande": 0.92,
+        "Grèce": 0.57,
+        "Autres pays": 3.26
+      },
+      "secteurs": {
+        "Technologie": 41.71,
+        "Finance": 20.1,
+        "Consommation cyclique": 8.23,
+        "Industrie": 6.38,
+        "Communication": 6.07,
+        "Matériaux": 5.83,
+        "Consommation défensive": 3.23,
+        "Énergie": 3.02,
+        "Santé": 2.65,
+        "Services publics": 1.44,
+        "Immobilier": 1.34
+      }
+    },
+    {
+      "isin": "LU2655993207",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU2655993207/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "États-Unis": 72.12,
+        "Japon": 5.73,
+        "Royaume-Uni": 3.52,
+        "Canada": 3.47,
+        "France": 2.37,
+        "Suisse": 2.27,
+        "Allemagne": 2.22,
+        "Australie": 1.63,
+        "Pays-Bas": 1.41,
+        "Espagne": 0.99,
+        "Suède": 0.87,
+        "Italie": 0.82,
+        "Autres pays": 2.59
+      },
+      "secteurs": {
+        "Technologie": 29.67,
+        "Finance": 16.58,
+        "Industrie": 11.21,
+        "Santé": 9.29,
+        "Consommation cyclique": 8.83,
+        "Communication": 7.98,
+        "Consommation défensive": 4.9,
+        "Énergie": 4.01,
+        "Matériaux": 3.49,
+        "Services publics": 2.4,
+        "Immobilier": 1.65
+      }
+    },
+    {
+      "isin": "FR001400U5Q4",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR001400U5Q4/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "États-Unis": 72.12,
+        "Japon": 5.73,
+        "Royaume-Uni": 3.52,
+        "Canada": 3.47,
+        "France": 2.37,
+        "Suisse": 2.27,
+        "Allemagne": 2.22,
+        "Australie": 1.63,
+        "Pays-Bas": 1.41,
+        "Espagne": 0.99,
+        "Suède": 0.87,
+        "Italie": 0.82,
+        "Autres pays": 2.59
+      },
+      "secteurs": {
+        "Technologie": 29.67,
+        "Finance": 16.58,
+        "Industrie": 11.21,
+        "Santé": 9.29,
+        "Consommation cyclique": 8.83,
+        "Communication": 7.98,
+        "Consommation défensive": 4.9,
+        "Énergie": 4.01,
+        "Matériaux": 3.49,
+        "Services publics": 2.4,
+        "Immobilier": 1.65
+      }
+    },
+    {
+      "isin": "FR0013412285",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0013412285/FRA/FRA/INSTITUTIONNEL/ETF",
+      "pays": {
+        "États-Unis": 100.0
+      },
+      "secteurs": {
+        "Technologie": 37.29,
+        "Finance": 13.6,
+        "Santé": 11.86,
+        "Communication": 11.4,
+        "Industrie": 8.61,
+        "Consommation défensive": 4.97,
+        "Consommation cyclique": 4.67,
+        "Immobilier": 2.23,
+        "Matériaux": 2.18,
+        "Énergie": 1.88,
+        "Services publics": 1.32
+      }
+    },
+    {
+      "isin": "FR0011871136",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0011871136/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "États-Unis": 100.0
+      },
+      "secteurs": {
+        "Technologie": 37.63,
+        "Finance": 12.34,
+        "Communication": 9.62,
+        "Santé": 9.29,
+        "Consommation cyclique": 9.18,
+        "Industrie": 8.38,
+        "Consommation défensive": 4.5,
+        "Énergie": 3.4,
+        "Services publics": 2.0,
+        "Matériaux": 1.84,
+        "Immobilier": 1.81
+      }
+    },
+    {
+      "isin": "FR0013412293",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0013412293/FRA/FRA/INSTITUTIONNEL/ETF",
+      "pays": {
+        "États-Unis": 100.0
+      },
+      "secteurs": {
+        "Technologie": 37.29,
+        "Finance": 13.6,
+        "Santé": 11.86,
+        "Communication": 11.4,
+        "Industrie": 8.61,
+        "Consommation défensive": 4.97,
+        "Consommation cyclique": 4.67,
+        "Immobilier": 2.23,
+        "Matériaux": 2.18,
+        "Énergie": 1.88,
+        "Services publics": 1.32
+      }
+    },
+    {
+      "isin": "LU1681042864",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1681042864/FRA/FRA/INSTITUTIONNEL/ETF",
+      "pays": {
+        "États-Unis": 100.0
+      },
+      "secteurs": {
+        "Technologie": 38.25,
+        "Communication": 13.2,
+        "Finance": 11.95,
+        "Santé": 9.43,
+        "Consommation cyclique": 8.49,
+        "Industrie": 8.46,
+        "Consommation défensive": 5.45,
+        "Matériaux": 2.19,
+        "Immobilier": 2.04,
+        "Services publics": 0.47,
+        "Énergie": 0.09
+      }
+    },
+    {
+      "isin": "LU1681042948",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1681042948/FRA/FRA/INSTITUTIONNEL/ETF",
+      "pays": {
+        "États-Unis": 100.0
+      },
+      "secteurs": {
+        "Technologie": 38.25,
+        "Communication": 13.2,
+        "Finance": 11.95,
+        "Santé": 9.43,
+        "Consommation cyclique": 8.49,
+        "Industrie": 8.46,
+        "Consommation défensive": 5.45,
+        "Matériaux": 2.19,
+        "Immobilier": 2.04,
+        "Services publics": 0.47,
+        "Énergie": 0.09
+      }
+    },
+    {
+      "isin": "FR0013412269",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0013412269/FRA/FRA/INSTITUTIONNEL/ETF",
+      "pays": {
+        "États-Unis": 98.12,
+        "Irlande": 1.66,
+        "Autres pays": 0.22
+      },
+      "secteurs": {
+        "Technologie": 65.61,
+        "Communication": 19.81,
+        "Consommation cyclique": 5.94,
+        "Santé": 4.09,
+        "Consommation défensive": 1.65,
+        "Industrie": 1.23,
+        "Matériaux": 1.11,
+        "Services publics": 0.3,
+        "Énergie": 0.26
+      }
+    },
+    {
+      "isin": "FR0011869270",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0011869270/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "États-Unis": 100.0
+      },
+      "secteurs": {
+        "Industrie": 100.0
+      }
+    },
+    {
+      "isin": "FR001400KH45",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR001400KH45/FRA/FRA/INSTITUTIONNEL/ETF",
+      "pays": {
+        "États-Unis": 100.0
+      },
+      "secteurs": {
+        "Technologie": 38.26,
+        "Finance": 15.86,
+        "Santé": 14.44,
+        "Communication": 12.4,
+        "Industrie": 6.32,
+        "Consommation cyclique": 5.4,
+        "Matériaux": 2.88,
+        "Immobilier": 1.92,
+        "Services publics": 1.87,
+        "Consommation défensive": 0.66
+      }
+    },
+    {
+      "isin": "LU1681038672",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1681038672/FRA/FRA/INSTITUTIONNEL/ETF",
+      "pays": {
+        "États-Unis": 100.0
+      },
+      "secteurs": {
+        "Santé": 20.67,
+        "Finance": 19.38,
+        "Industrie": 13.88,
+        "Technologie": 12.82,
+        "Consommation cyclique": 9.23,
+        "Énergie": 6.66,
+        "Immobilier": 5.75,
+        "Matériaux": 4.35,
+        "Services publics": 2.74,
+        "Communication": 2.39,
+        "Consommation défensive": 1.98
+      }
+    },
+    {
+      "isin": "FR0013380607",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0013380607/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "France": 98.53,
+        "Pays-Bas": 1.47
+      },
+      "secteurs": {
+        "Industrie": 31.24,
+        "Finance": 14.47,
+        "Consommation cyclique": 12.4,
+        "Consommation défensive": 8.47,
+        "Énergie": 8.18,
+        "Santé": 8.06,
+        "Matériaux": 7.24,
+        "Services publics": 3.43,
+        "Technologie": 3.16,
+        "Communication": 2.71,
+        "Immobilier": 0.64
+      }
+    },
+    {
+      "isin": "LU1681046931",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1681046931/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "France": 98.97,
+        "Pays-Bas": 1.03
+      },
+      "secteurs": {
+        "Industrie": 33.41,
+        "Finance": 14.74,
+        "Consommation cyclique": 13.59,
+        "Consommation défensive": 9.25,
+        "Santé": 8.93,
+        "Matériaux": 7.03,
+        "Technologie": 4.38,
+        "Services publics": 4.01,
+        "Communication": 3.57,
+        "Immobilier": 1.1
+      }
+    },
+    {
+      "isin": "LU1598689153",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1598689153/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "France": 21.9,
+        "Allemagne": 21.7,
+        "Italie": 15.66,
+        "Pays-Bas": 9.36,
+        "Espagne": 9.06,
+        "Belgique": 8.56,
+        "Finlande": 6.81,
+        "Autriche": 4.76,
+        "Irlande": 1.17,
+        "Portugal": 1.04
+      },
+      "secteurs": {
+        "Industrie": 27.21,
+        "Finance": 14.06,
+        "Consommation cyclique": 10.84,
+        "Immobilier": 10.62,
+        "Technologie": 9.34,
+        "Matériaux": 7.1,
+        "Énergie": 6.99,
+        "Santé": 5.7,
+        "Communication": 3.73,
+        "Services publics": 2.36,
+        "Consommation défensive": 2.06
+      }
+    },
+    {
+      "isin": "FR0010717090",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0010717090/FRA/FRA/INSTITUTIONNEL/ETF",
+      "pays": {
+        "France": 28.48,
+        "Allemagne": 23.91,
+        "Italie": 16.11,
+        "Espagne": 11.4,
+        "Pays-Bas": 9.37,
+        "Finlande": 3.57,
+        "Irlande": 2.88,
+        "Autriche": 1.75,
+        "Belgique": 1.4,
+        "Portugal": 1.14
+      },
+      "secteurs": {
+        "Finance": 42.29,
+        "Industrie": 14.94,
+        "Services publics": 9.91,
+        "Énergie": 9.35,
+        "Consommation cyclique": 7.41,
+        "Consommation défensive": 5.71,
+        "Communication": 5.54,
+        "Santé": 4.85
+      }
+    },
+    {
+      "isin": "LU1598690169",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1598690169/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "France": 27.75,
+        "Allemagne": 24.77,
+        "Espagne": 15.3,
+        "Italie": 13.82,
+        "Pays-Bas": 8.77,
+        "Finlande": 4.39,
+        "Belgique": 1.75,
+        "Irlande": 1.54,
+        "Autriche": 1.3,
+        "Portugal": 0.6
+      },
+      "secteurs": {
+        "Énergie": 6.02,
+        "Matériaux": 4.93,
+        "Industrie": 9.27,
+        "Consommation cyclique": 5.85,
+        "Consommation défensive": 5.74,
+        "Santé": 6.1,
+        "Finance": 45.71,
+        "Technologie": 2.2,
+        "Communication": 2.47,
+        "Services publics": 10.6,
+        "Immobilier": 1.1
+      }
+    },
+    {
+      "isin": "LU2195226068",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU2195226068/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "France": 26.02,
+        "Allemagne": 23.34,
+        "Pays-Bas": 15.51,
+        "Italie": 11.93,
+        "Espagne": 11.4,
+        "Finlande": 4.51,
+        "Belgique": 3.46,
+        "Irlande": 1.6,
+        "Autriche": 1.51,
+        "Portugal": 0.6,
+        "Autres pays": 0.13
+      },
+      "secteurs": {
+        "Finance": 34.38,
+        "Technologie": 17.26,
+        "Industrie": 15.41,
+        "Consommation cyclique": 10.24,
+        "Santé": 7.56,
+        "Consommation défensive": 5.8,
+        "Communication": 4.18,
+        "Services publics": 3.86,
+        "Matériaux": 0.64,
+        "Immobilier": 0.43,
+        "Énergie": 0.25
+      }
+    },
+    {
+      "isin": "LU1812092168",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1812092168/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "Royaume-Uni": 28.83,
+        "France": 24.29,
+        "Pays-Bas": 21.75,
+        "Allemagne": 7.13,
+        "Norvège": 4.35,
+        "Italie": 3.17,
+        "Belgique": 2.94,
+        "Pologne": 2.87,
+        "Danemark": 2.5,
+        "Suisse": 2.16
+      },
+      "secteurs": {
+        "Finance": 60.26,
+        "Consommation cyclique": 13.86,
+        "Industrie": 8.87,
+        "Énergie": 7.22,
+        "Immobilier": 2.82,
+        "Matériaux": 2.77,
+        "Services publics": 2.56,
+        "Communication": 1.65
+      }
+    },
+    {
+      "isin": "LU1834983477",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1834983477/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "Royaume-Uni": 27.56,
+        "Espagne": 19.21,
+        "Italie": 14.87,
+        "France": 8.53,
+        "Pays-Bas": 5.45,
+        "Suède": 4.12,
+        "Allemagne": 4.0,
+        "Finlande": 2.83,
+        "Autriche": 2.8,
+        "Pologne": 2.37,
+        "Danemark": 2.34,
+        "Irlande": 1.92,
+        "Belgique": 1.55,
+        "Norvège": 1.52,
+        "Autres pays": 0.9
+      },
+      "secteurs": {
+        "Finance": 100.0
+      }
+    },
+    {
+      "isin": "LU1834983634",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1834983634/FRA/FRA/INSTITUTIONNEL/ETF",
+      "pays": {
+        "Royaume-Uni": 39.65,
+        "France": 22.03,
+        "Allemagne": 14.5,
+        "Suède": 5.74,
+        "Suisse": 5.17,
+        "Norvège": 2.8,
+        "Pays-Bas": 2.53,
+        "Finlande": 2.31,
+        "Pologne": 2.24,
+        "Belgique": 1.7,
+        "Autriche": 0.81,
+        "Espagne": 0.53
+      },
+      "secteurs": {
+        "Matériaux": 94.89,
+        "Industrie": 3.3,
+        "Consommation défensive": 1.81
+      }
+    },
+    {
+      "isin": "LU1834983550",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1834983550/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "Royaume-Uni": 65.91,
+        "Suède": 10.25,
+        "France": 7.9,
+        "Pologne": 3.99,
+        "Finlande": 3.56,
+        "Norvège": 3.13,
+        "Belgique": 1.62,
+        "Autriche": 1.44,
+        "Allemagne": 1.25,
+        "Espagne": 0.94
+      },
+      "secteurs": {
+        "Matériaux": 97.64,
+        "Industrie": 2.36
+      }
+    },
+    {
+      "isin": "LU1834988781",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1834988781/FRA/FRA/INSTITUTIONNEL/ETF",
+      "pays": {
+        "France": 34.46,
+        "Royaume-Uni": 17.74,
+        "Allemagne": 14.28,
+        "Suisse": 11.51,
+        "Italie": 7.42,
+        "Espagne": 6.36,
+        "Pologne": 1.86,
+        "Irlande": 1.85,
+        "Suède": 1.76,
+        "Pays-Bas": 1.56,
+        "Danemark": 0.81,
+        "Autres pays": 0.37
+      },
+      "secteurs": {
+        "Consommation cyclique": 79.29,
+        "Consommation défensive": 9.07,
+        "Communication": 6.56,
+        "Industrie": 4.58,
+        "Services publics": 0.26,
+        "Énergie": 0.24
+      }
+    },
+    {
+      "isin": "LU1834985845",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1834985845/FRA/FRA/INSTITUTIONNEL/ETF",
+      "pays": {
+        "Royaume-Uni": 42.02,
+        "Suisse": 24.35,
+        "Pays-Bas": 8.28,
+        "Belgique": 7.85,
+        "France": 6.61,
+        "Norvège": 2.24,
+        "Suède": 2.1,
+        "Irlande": 1.87,
+        "Danemark": 1.4,
+        "Pologne": 0.81,
+        "Allemagne": 0.75,
+        "Finlande": 0.64,
+        "Portugal": 0.52,
+        "Autres pays": 0.58
+      },
+      "secteurs": {
+        "Consommation défensive": 97.84,
+        "Matériaux": 1.7,
+        "Santé": 0.47
+      }
+    },
+    {
+      "isin": "LU1834986900",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1834986900/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "Suisse": 41.17,
+        "Royaume-Uni": 21.76,
+        "Danemark": 11.21,
+        "France": 10.08,
+        "Allemagne": 7.31,
+        "Belgique": 5.21,
+        "Suède": 1.11,
+        "Pays-Bas": 1.09,
+        "Finlande": 0.53,
+        "Autres pays": 0.53
+      },
+      "secteurs": {
+        "Santé": 98.7,
+        "Matériaux": 1.3
+      }
+    },
+    {
+      "isin": "LU1834987890",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1834987890/FRA/FRA/INSTITUTIONNEL/ETF",
+      "pays": {
+        "France": 26.58,
+        "Allemagne": 17.11,
+        "Royaume-Uni": 15.96,
+        "Suisse": 13.2,
+        "Suède": 11.14,
+        "Pays-Bas": 2.9,
+        "Espagne": 2.88,
+        "Italie": 2.74,
+        "Finlande": 2.74,
+        "Danemark": 2.53,
+        "Norvège": 0.9,
+        "Irlande": 0.63,
+        "Autres pays": 0.69
+      },
+      "secteurs": {
+        "Industrie": 91.46,
+        "Matériaux": 4.99,
+        "Finance": 2.12,
+        "Technologie": 0.75,
+        "Énergie": 0.47,
+        "Services publics": 0.2
+      }
+    },
+    {
+      "isin": "LU1834987973",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1834987973/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "Allemagne": 32.16,
+        "Suisse": 23.13,
+        "Royaume-Uni": 13.69,
+        "France": 10.14,
+        "Italie": 7.27,
+        "Pays-Bas": 5.04,
+        "Finlande": 3.02,
+        "Norvège": 1.62,
+        "Belgique": 1.41,
+        "Pologne": 1.19,
+        "Danemark": 0.81,
+        "Espagne": 0.52
+      },
+      "secteurs": {
+        "Finance": 100.0
+      }
+    },
+    {
+      "isin": "LU1834988518",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1834988518/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "Pays-Bas": 42.3,
+        "Allemagne": 26.67,
+        "Royaume-Uni": 9.66,
+        "France": 5.11,
+        "Italie": 4.47,
+        "Suède": 3.89,
+        "Espagne": 3.82,
+        "Suisse": 2.37,
+        "Norvège": 0.87,
+        "Autres pays": 0.84
+      },
+      "secteurs": {
+        "Technologie": 81.93,
+        "Consommation cyclique": 9.12,
+        "Industrie": 7.07,
+        "Communication": 1.87
+      }
+    },
+    {
+      "isin": "LU1834988609",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1834988609/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "Allemagne": 28.18,
+        "Finlande": 13.99,
+        "Royaume-Uni": 13.24,
+        "Suède": 11.81,
+        "France": 8.84,
+        "Espagne": 7.3,
+        "Suisse": 6.38,
+        "Pays-Bas": 4.35,
+        "Italie": 3.71,
+        "Norvège": 2.19
+      },
+      "secteurs": {
+        "Communication": 79.71,
+        "Technologie": 19.47,
+        "Industrie": 0.82
+      }
+    },
+    {
+      "isin": "LU1834988864",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1834988864/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "Espagne": 26.34,
+        "Royaume-Uni": 23.78,
+        "Italie": 16.66,
+        "Allemagne": 13.01,
+        "France": 11.72,
+        "Portugal": 3.03,
+        "Finlande": 1.52,
+        "Danemark": 1.44,
+        "Belgique": 1.06,
+        "Autriche": 0.66,
+        "Autres pays": 0.78
+      },
+      "secteurs": {
+        "Services publics": 100.0
+      }
+    },
+    {
+      "isin": "FR0010010827",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0010010827/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "Italie": 100.0
+      },
+      "secteurs": {
+        "Finance": 52.39,
+        "Services publics": 14.49,
+        "Consommation cyclique": 9.7,
+        "Industrie": 8.08,
+        "Énergie": 7.56,
+        "Technologie": 3.68,
+        "Communication": 2.03,
+        "Santé": 1.18,
+        "Consommation défensive": 0.46,
+        "Matériaux": 0.44
+      }
+    },
+    {
+      "isin": "FR0010655746",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0010655746/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "Espagne": 100.0
+      },
+      "secteurs": {
+        "Finance": 43.78,
+        "Services publics": 19.17,
+        "Consommation cyclique": 13.17,
+        "Industrie": 12.78,
+        "Communication": 3.75,
+        "Énergie": 2.86,
+        "Matériaux": 1.51,
+        "Technologie": 1.08,
+        "Immobilier": 1.01,
+        "Santé": 0.6,
+        "Consommation défensive": 0.31
+      }
+    },
+    {
+      "isin": "FR0010405431",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0010405431/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "Grèce": 87.88,
+        "Royaume-Uni": 12.12
+      },
+      "secteurs": {
+        "Finance": 52.93,
+        "Consommation défensive": 12.53,
+        "Services publics": 8.79,
+        "Consommation cyclique": 7.01,
+        "Industrie": 6.41,
+        "Énergie": 5.76,
+        "Communication": 3.17,
+        "Matériaux": 2.94,
+        "Immobilier": 0.45
+      }
+    },
+    {
+      "isin": "FR0011869304",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0011869304/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "Royaume-Uni": 31.07,
+        "France": 15.68,
+        "Suède": 13.29,
+        "Suisse": 12.93,
+        "Allemagne": 12.08,
+        "Belgique": 8.24,
+        "Espagne": 3.92,
+        "Pays-Bas": 1.05,
+        "Finlande": 0.68,
+        "Autres pays": 1.06
+      },
+      "secteurs": {
+        "Immobilier": 99.84,
+        "Consommation cyclique": 0.16
+      }
+    },
+    {
+      "isin": "FR0013411998",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0013411998/FRA/FRA/INSTITUTIONNEL/ETF",
+      "pays": {
+        "Japon": 100.0
+      },
+      "secteurs": {
+        "Industrie": 25.94,
+        "Finance": 18.74,
+        "Technologie": 15.3,
+        "Consommation cyclique": 14.66,
+        "Communication": 6.25,
+        "Matériaux": 5.36,
+        "Santé": 5.11,
+        "Consommation défensive": 4.8,
+        "Immobilier": 1.64,
+        "Services publics": 1.26,
+        "Énergie": 0.94
+      }
+    },
+    {
+      "isin": "FR0010429068",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0010429068/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "Taïwan": 27.64,
+        "Corée du Sud": 20.62,
+        "Chine": 20.6,
+        "Inde": 11.23,
+        "Brésil": 3.88,
+        "Afrique du Sud": 3.3,
+        "Arabie saoudite": 2.53,
+        "Mexique": 1.68,
+        "Émirats arabes unis": 1.17,
+        "Pologne": 1.14,
+        "Malaisie": 0.95,
+        "Thaïlande": 0.94,
+        "Grèce": 0.58,
+        "Koweït": 0.54,
+        "Autres pays": 3.2
+      },
+      "secteurs": {
+        "Technologie": 41.56,
+        "Finance": 19.53,
+        "Consommation cyclique": 8.02,
+        "Industrie": 6.58,
+        "Matériaux": 6.37,
+        "Communication": 6.16,
+        "Énergie": 3.39,
+        "Santé": 2.77,
+        "Consommation défensive": 2.74,
+        "Services publics": 1.86,
+        "Immobilier": 1.01
+      }
+    },
+    {
+      "isin": "LU1900066207",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1900066207/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "Brésil": 100.0
+      },
+      "secteurs": {
+        "Finance": 39.08,
+        "Énergie": 16.82,
+        "Matériaux": 14.7,
+        "Services publics": 11.55,
+        "Industrie": 7.99,
+        "Consommation défensive": 5.0,
+        "Consommation cyclique": 2.42,
+        "Communication": 1.46,
+        "Santé": 0.98
+      }
+    },
+    {
+      "isin": "FR0011440478",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0011440478/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "Afrique du Sud": 31.91,
+        "Arabie saoudite": 24.45,
+        "Émirats arabes unis": 11.19,
+        "Pologne": 10.66,
+        "Koweït": 5.03,
+        "Grèce": 4.71,
+        "Qatar": 4.51,
+        "Turquie": 3.44,
+        "Hongrie": 3.25,
+        "République tchèque": 0.84
+      },
+      "secteurs": {
+        "Finance": 48.24,
+        "Matériaux": 16.71,
+        "Communication": 7.08,
+        "Consommation cyclique": 6.99,
+        "Immobilier": 5.9,
+        "Énergie": 5.8,
+        "Consommation défensive": 3.04,
+        "Industrie": 2.7,
+        "Santé": 1.89,
+        "Services publics": 1.27,
+        "Technologie": 0.39
+      }
+    },
+    {
+      "isin": "FR0013412004",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0013412004/FRA/FRA/INSTITUTIONNEL/ETF",
+      "pays": {
+        "Brésil": 40.09,
+        "Mexique": 35.77,
+        "Chili": 10.26,
+        "Pérou": 8.31,
+        "Colombie": 5.57
+      },
+      "secteurs": {
+        "Finance": 40.13,
+        "Matériaux": 14.12,
+        "Consommation défensive": 11.41,
+        "Services publics": 10.86,
+        "Industrie": 8.98,
+        "Communication": 4.73,
+        "Consommation cyclique": 3.31,
+        "Énergie": 2.6,
+        "Immobilier": 2.6,
+        "Santé": 1.26
+      }
+    },
+    {
+      "isin": "FR0013412012",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0013412012/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "Taïwan": 34.85,
+        "Corée du Sud": 25.23,
+        "Chine": 24.55,
+        "Inde": 12.27,
+        "Thaïlande": 1.19,
+        "Malaisie": 1.02,
+        "Indonésie": 0.56,
+        "Autres pays": 0.33
+      },
+      "secteurs": {
+        "Technologie": 52.25,
+        "Finance": 15.31,
+        "Consommation cyclique": 9.14,
+        "Communication": 6.57,
+        "Industrie": 6.02,
+        "Santé": 3.32,
+        "Matériaux": 2.31,
+        "Énergie": 1.93,
+        "Consommation défensive": 1.8,
+        "Immobilier": 0.7,
+        "Services publics": 0.65
+      }
+    },
+    {
+      "isin": "FR0011869312",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0011869312/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "Taïwan": 27.13,
+        "Corée du Sud": 20.24,
+        "Chine": 20.22,
+        "Australie": 11.92,
+        "Inde": 11.02,
+        "Singapour": 3.29,
+        "Hong Kong": 3.25,
+        "Malaisie": 0.94,
+        "Thaïlande": 0.92,
+        "Autres pays": 1.07
+      },
+      "secteurs": {
+        "Technologie": 40.85,
+        "Finance": 20.25,
+        "Consommation cyclique": 8.36,
+        "Industrie": 7.29,
+        "Matériaux": 6.19,
+        "Communication": 5.57,
+        "Santé": 3.42,
+        "Énergie": 2.4,
+        "Consommation défensive": 2.2,
+        "Immobilier": 1.81,
+        "Services publics": 1.66
+      }
+    },
+    {
+      "isin": "FR0011871078",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0011871078/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "Chine": 100.0
+      },
+      "secteurs": {
+        "Consommation cyclique": 25.16,
+        "Finance": 20.93,
+        "Communication": 19.32,
+        "Technologie": 11.34,
+        "Santé": 6.22,
+        "Industrie": 5.03,
+        "Matériaux": 4.06,
+        "Consommation défensive": 2.91,
+        "Énergie": 2.19,
+        "Immobilier": 1.68,
+        "Services publics": 1.17
+      }
+    },
+    {
+      "isin": "FR0011869320",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0011869320/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "Inde": 100.0
+      },
+      "secteurs": {
+        "Finance": 30.49,
+        "Consommation cyclique": 12.65,
+        "Industrie": 10.97,
+        "Matériaux": 8.82,
+        "Énergie": 8.1,
+        "Technologie": 7.2,
+        "Santé": 6.45,
+        "Consommation défensive": 5.21,
+        "Communication": 5.04,
+        "Services publics": 3.63,
+        "Immobilier": 1.44
+      }
+    },
+    {
+      "isin": "LU3180074463",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU3180074463/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "France": 30.45,
+        "Allemagne": 20.59,
+        "Pays-Bas": 12.24,
+        "Danemark": 8.84,
+        "Espagne": 8.47,
+        "Italie": 5.5,
+        "Norvège": 4.26,
+        "Suède": 3.47,
+        "Belgique": 2.35,
+        "Finlande": 2.2,
+        "Autriche": 0.82,
+        "Autres pays": 0.81
+      },
+      "secteurs": {
+        "Industrie": 32.48,
+        "Technologie": 23.72,
+        "Finance": 11.32,
+        "Santé": 8.03,
+        "Consommation défensive": 7.65,
+        "Services publics": 6.0,
+        "Énergie": 4.08,
+        "Matériaux": 3.95,
+        "Communication": 2.77
+      }
+    },
+    {
+      "isin": "FR0011882364",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0011882364/FRA/FRA/RETAIL/ETF",
+      "pays": {
+        "États-Unis": 58.49,
+        "Royaume-Uni": 9.44,
+        "Japon": 6.38,
+        "Suisse": 4.12,
+        "Chine": 3.38,
+        "Brésil": 3.04,
+        "Suède": 2.82,
+        "France": 2.59,
+        "Allemagne": 2.41,
+        "Canada": 2.19,
+        "Australie": 1.79,
+        "Taïwan": 1.04,
+        "Italie": 0.96,
+        "Malaisie": 0.91,
+        "Autres pays": 0.43
+      },
+      "secteurs": {
+        "Industrie": 74.13,
+        "Services publics": 20.33,
+        "Consommation défensive": 3.18,
+        "Technologie": 2.36
+      }
     }
   ]
 }

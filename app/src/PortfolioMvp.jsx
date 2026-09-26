@@ -4,6 +4,7 @@ import {
 } from "recharts";
 import profilesData from "./data/mvp-profiles.json";
 import pricesData from "./data/mvp-prices.json";
+import fundSizesData from "./data/mvp-fund-sizes.json";
 import catalogData from "./etf_pea_fortuneo_amundi.json";
 import "./portfolio-mvp.css";
 
@@ -24,7 +25,10 @@ const PROFILES = catalogData.etf.map((item) => ({
 }));
 const COMPOSITION_COUNT = profilesData.etfs.length;
 const HISTORY_COUNT = Object.keys(pricesData.par_isin).length;
+const LATEST_PRICE_MONTH = Object.values(pricesData.par_isin).map((item) => item.historique.at(-1)?.mois).filter(Boolean).sort().at(-1);
+const FUND_SIZE_DATE = Object.values(fundSizesData.par_isin).map((item) => item.date).filter(Boolean).sort().at(-1);
 const CATALOG = Object.fromEntries(catalogData.etf.map((item) => [item.isin, item]));
+const CATEGORIES = [...new Set(PROFILES.map((etf) => etf.famille))];
 const INITIAL = {
   LU1681043599: 60,
   FR0011871128: 25,
@@ -46,10 +50,10 @@ const EUROPE_OUTSIDE_EURO = new Set([
   "Danemark", "Hongrie", "Islande", "Norvège", "Pologne", "République tchèque", "Roumanie",
   "Royaume-Uni", "Suède", "Suisse",
 ]);
-const EAST_ASIA = new Set(["Chine", "Corée du Sud", "Taïwan"]);
-const SOUTH_SOUTHEAST_ASIA = new Set(["Inde", "Indonésie", "Malaisie", "Thaïlande"]);
-const AMERICAS_OUTSIDE_US = new Set(["Brésil", "Canada", "Mexique"]);
-const AFRICA_MIDDLE_EAST = new Set(["Afrique du Sud", "Arabie saoudite", "Égypte", "Émirats arabes unis", "Éthiopie", "Iran"]);
+const EAST_ASIA = new Set(["Chine", "Corée du Sud", "Hong Kong", "Taïwan"]);
+const SOUTH_SOUTHEAST_ASIA = new Set(["Inde", "Indonésie", "Malaisie", "Singapour", "Thaïlande"]);
+const AMERICAS_OUTSIDE_US = new Set(["Brésil", "Canada", "Chili", "Colombie", "Mexique", "Pérou"]);
+const AFRICA_MIDDLE_EAST = new Set(["Afrique du Sud", "Arabie saoudite", "Égypte", "Émirats arabes unis", "Éthiopie", "Iran", "Koweït", "Qatar"]);
 const BRICS_MEMBERS = new Set([
   "Afrique du Sud", "Arabie saoudite", "Brésil", "Chine", "Égypte", "Émirats arabes unis",
   "Éthiopie", "Inde", "Indonésie", "Iran", "Russie",
@@ -65,9 +69,33 @@ const LINE_COLORS = {
 };
 const nf = new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 1 });
 const pct = (value) => `${nf.format(value)} %`;
+const fundSizeLabel = (value) => value == null ? "—" : value >= 1e9 ? `${nf.format(value / 1e9)} Md€` : `${nf.format(value / 1e6)} M€`;
 const formatPoints = (value) => `${value > 0 ? "+" : ""}${nf.format(value)} pt${Math.abs(value) >= 2 ? "s" : ""}`;
 const monthsLabel = (month) => new Date(`${month}-01T12:00:00`).toLocaleDateString("fr-FR", { month: "short", year: "2-digit" });
 const dateLabel = (date) => new Date(`${date}T12:00:00`).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+
+function etfPeriodReturn(isin, months) {
+  const rows = pricesData.par_isin[isin]?.historique;
+  if (!rows?.length) return { value: null, title: "Historique indisponible" };
+  const end = rows.at(-1);
+  if (end.mois !== LATEST_PRICE_MONTH) return { value: null, title: "Dernier cours indisponible pour la période" };
+  const startIndex = Number(end.mois.slice(0, 4)) * 12 + Number(end.mois.slice(5)) - 1 - months;
+  const startMonth = months === Infinity
+    ? rows[0].mois
+    : `${Math.floor(startIndex / 12)}-${String(startIndex % 12 + 1).padStart(2, "0")}`;
+  const start = rows.find((row) => row.mois === startMonth);
+  if (!start || rows.length < 2) return { value: null, title: `Historique insuffisant pour ${months === Infinity ? "Max" : `${months / 12} an${months > 12 ? "s" : ""}`}` };
+  return {
+    value: (end.cours_ajuste / start.cours_ajuste - 1) * 100,
+    title: `Performance du ${monthsLabel(start.mois)} au ${monthsLabel(end.mois)}`,
+  };
+}
+
+function EtfPeriodBadge({ result }) {
+  return <span className={`etf-period-badge${result.value == null ? " unavailable" : result.value < 0 ? " negative" : ""}`} title={result.title} aria-label={result.value == null ? result.title : `${result.title} : ${result.value >= 0 ? "+" : ""}${pct(result.value)}`}>
+    {result.value == null ? "—" : `${result.value >= 0 ? "+" : ""}${pct(result.value)}`}
+  </span>;
+}
 
 function redistribute(weights, lockedIsins, isin, requested) {
   if (lockedIsins.includes(isin)) return weights;
@@ -299,8 +327,15 @@ export default function PortfolioMvp() {
   const [lockedIsins, setLockedIsins] = useState([]);
   const [visibleEtfIsins, setVisibleEtfIsins] = useState([]);
   const [period, setPeriod] = useState(36);
+  const etfReturns = useMemo(() => Object.fromEntries(PROFILES.map((etf) => [etf.isin, etfPeriodReturn(etf.isin, period)])), [period]);
   const [geoView, setGeoView] = useState("countries");
   const [catalogQuery, setCatalogQuery] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [distributionFilter, setDistributionFilter] = useState("");
+  const [minFundSize, setMinFundSize] = useState(0);
+  const [maxFee, setMaxFee] = useState("");
+  const [fullHistoryOnly, setFullHistoryOnly] = useState(false);
+  const [catalogSort, setCatalogSort] = useState("performance-desc");
   const selected = PROFILES.filter((etf) => selectedIsins.includes(etf.isin));
   const chartableEtfs = selected.filter((etf) => pricesData.par_isin[etf.isin]);
   const visibleEtfs = chartableEtfs.filter((etf) => visibleEtfIsins.includes(etf.isin));
@@ -332,7 +367,29 @@ export default function PortfolioMvp() {
   const oldestReport = reportDates[0] || null;
   const missingCompositions = active.filter((etf) => !etf.pays || !etf.secteurs);
   const availableEtfs = PROFILES.filter((etf) => !selectedIsins.includes(etf.isin));
-  const filteredEtfs = availableEtfs.filter((etf) => `${etf.nom} ${etf.isin} ${etf.famille}`.toLocaleLowerCase("fr-FR").includes(catalogQuery.trim().toLocaleLowerCase("fr-FR")));
+  const filteredEtfs = availableEtfs.filter((etf) => {
+    const catalog = CATALOG[etf.isin];
+    const size = fundSizesData.par_isin[etf.isin]?.encours_fonds_eur;
+    const queryMatches = `${etf.nom} ${etf.isin} ${etf.famille}`.toLocaleLowerCase("fr-FR").includes(catalogQuery.trim().toLocaleLowerCase("fr-FR"));
+    return queryMatches
+      && (!categoryFilter || etf.famille === categoryFilter)
+      && (!distributionFilter || catalog.distribution === distributionFilter)
+      && (!minFundSize || (size != null && size >= minFundSize))
+      && (!maxFee || catalog.frais_gestion_et_administration_pct_an <= Number(maxFee))
+      && (!fullHistoryOnly || etfReturns[etf.isin].value != null);
+  }).sort((a, b) => {
+    const aSize = fundSizesData.par_isin[a.isin]?.encours_fonds_eur;
+    const bSize = fundSizesData.par_isin[b.isin]?.encours_fonds_eur;
+    const aReturn = etfReturns[a.isin].value;
+    const bReturn = etfReturns[b.isin].value;
+    if (catalogSort === "performance-desc") return (aReturn == null) - (bReturn == null) || (bReturn ?? 0) - (aReturn ?? 0) || a.nom.localeCompare(b.nom, "fr");
+    if (catalogSort === "performance-asc") return (aReturn == null) - (bReturn == null) || (aReturn ?? 0) - (bReturn ?? 0) || a.nom.localeCompare(b.nom, "fr");
+    if (catalogSort === "size-desc") return (aSize == null) - (bSize == null) || (bSize ?? 0) - (aSize ?? 0) || a.nom.localeCompare(b.nom, "fr");
+    if (catalogSort === "size-asc") return (aSize == null) - (bSize == null) || (aSize ?? 0) - (bSize ?? 0) || a.nom.localeCompare(b.nom, "fr");
+    if (catalogSort === "fee-asc") return CATALOG[a.isin].frais_gestion_et_administration_pct_an - CATALOG[b.isin].frais_gestion_et_administration_pct_an || a.nom.localeCompare(b.nom, "fr");
+    if (catalogSort === "fee-desc") return CATALOG[b.isin].frais_gestion_et_administration_pct_an - CATALOG[a.isin].frais_gestion_et_administration_pct_an || a.nom.localeCompare(b.nom, "fr");
+    return a.nom.localeCompare(b.nom, "fr");
+  });
   const selectedCount = selected.length;
   const lockedTotal = lockedIsins.reduce((sum, isin) => sum + (weights[isin] || 0), 0);
   const availableForUnlocked = Math.max(0, Math.round((100 - lockedTotal) * 10) / 10);
@@ -348,7 +405,15 @@ export default function PortfolioMvp() {
   const selectEtf = (isin) => {
     setSelectedIsins((old) => [...old, isin]);
     setWeights((old) => addEtf(old, lockedIsins, isin));
+  };
+  const resetCatalogFilters = () => {
     setCatalogQuery("");
+    setCategoryFilter("");
+    setDistributionFilter("");
+    setMinFundSize(0);
+    setMaxFee("");
+    setFullHistoryOnly(false);
+    setCatalogSort("performance-desc");
   };
   const toggleEtfCurve = (isin) => setVisibleEtfIsins((old) => old.includes(isin) ? old.filter((item) => item !== isin) : [...old, isin]);
   const toggleAllEtfCurves = () => setVisibleEtfIsins(allEtfsVisible ? [] : chartableEtfs.map((etf) => etf.isin));
@@ -370,7 +435,7 @@ export default function PortfolioMvp() {
       </section>
       <div className="mvp-layout">
         <aside className="builder-panel">
-          <div className="builder-heading"><span className="card-kicker">01 — CONSTRUIRE</span><h2>Vos ETF</h2><p>Ajustez les poids et verrouillez ceux à préserver.</p></div>
+          <div className="builder-heading"><span className="card-kicker">01 — EXPLORER & CONSTRUIRE</span><h2>Vos ETF</h2><p>Recherchez, comparez et composez votre portefeuille.</p></div>
           <div className="weight-total"><span>Investi</span><strong>{pct(totalWeight)}</strong></div>
           {unallocated > 0 && <div className="unallocated-total">Non alloué : {pct(unallocated)}</div>}
           <div className="builder-scroll" role="region" aria-label="Liste des ETF" tabIndex={0}>
@@ -378,7 +443,7 @@ export default function PortfolioMvp() {
             {selected.length ? selected.map((etf) => <div className={`selected-etf${lockedIsins.includes(etf.isin) ? " locked" : ""}`} key={etf.isin}>
               <div className="etf-heading">
                 <span className="etf-dot" style={{ background: etf.couleur }}/>
-                <div><strong>{etf.nom_court}</strong><small>{etf.indice} · {etf.isin}</small></div>
+                <div><span className="etf-name-line"><strong>{etf.nom_court}</strong><EtfPeriodBadge result={etfReturns[etf.isin]}/></span><small>{etf.indice} · {etf.isin} · {fundSizeLabel(fundSizesData.par_isin[etf.isin]?.encours_fonds_eur)}</small></div>
                 {pricesData.par_isin[etf.isin] && <button type="button" className="eye-button" aria-label={`${visibleEtfIsins.includes(etf.isin) ? "Masquer" : "Afficher"} la courbe de ${etf.nom_court}`} aria-pressed={visibleEtfIsins.includes(etf.isin)} title={`${visibleEtfIsins.includes(etf.isin) ? "Masquer" : "Afficher"} la courbe de ${etf.nom_court}`} onClick={() => toggleEtfCurve(etf.isin)}><EyeIcon visible={visibleEtfIsins.includes(etf.isin)}/></button>}
                 <button type="button" className="lock-button" aria-label={`${lockedIsins.includes(etf.isin) ? "Déverrouiller" : "Verrouiller"} ${etf.nom_court}`} aria-pressed={lockedIsins.includes(etf.isin)} title={`${lockedIsins.includes(etf.isin) ? "Déverrouiller" : "Verrouiller"} le poids de ${etf.nom_court}`} onClick={() => setLockedIsins((old) => old.includes(etf.isin) ? old.filter((item) => item !== etf.isin) : [...old, etf.isin])}><LockIcon locked={lockedIsins.includes(etf.isin)}/></button>
                 <button type="button" className="icon-button" title={`Retirer ${etf.nom_court}`} aria-label={`Retirer ${etf.nom_court}`} onClick={() => removeEtf(etf.isin)}>×</button>
@@ -386,8 +451,21 @@ export default function PortfolioMvp() {
               <div className="weight-controls"><input aria-label={`Poids de ${etf.nom_court}`} type="range" min="0" max={lockedIsins.includes(etf.isin) ? 100 : availableForUnlocked} step="1" value={weights[etf.isin]} disabled={lockedIsins.includes(etf.isin)} onChange={(event) => setWeights((old) => redistribute(old, lockedIsins, etf.isin, event.target.value))} style={{ accentColor: etf.couleur }}/><div className="weight-number"><input aria-label={`Pourcentage de ${etf.nom_court}`} type="number" min="0" max={lockedIsins.includes(etf.isin) ? 100 : availableForUnlocked} step="0.1" value={Math.round(weights[etf.isin] * 10) / 10} disabled={lockedIsins.includes(etf.isin)} onChange={(event) => setWeights((old) => redistribute(old, lockedIsins, etf.isin, event.target.value))}/><span>%</span></div></div>
             </div>) : <p className="builder-empty">Votre portefeuille est vide. Ajoutez un ETF ci-dessous.</p>}
           </div>
-          <div className="add-section"><div className="add-section-heading"><span className="card-kicker">AJOUTER UN ETF</span><span>{availableEtfs.length} disponibles</span></div><input className="catalog-search" type="search" aria-label="Rechercher un ETF par nom, famille ou ISIN" placeholder="Rechercher un ETF ou un ISIN" value={catalogQuery} onChange={(event) => setCatalogQuery(event.target.value)}/>{filteredEtfs.map((etf) => <button className="add-row" type="button" key={etf.isin} onClick={() => selectEtf(etf.isin)} title={etf.nom}><span className="etf-dot" style={{ background: etf.couleur }}/><span><strong>{etf.nom_court}</strong><small>{etf.famille} · {etf.isin}{etf.reporting_date ? " · composition connue" : ""}</small></span><b>＋</b></button>)}{!filteredEtfs.length && <p className="builder-empty">Aucun ETF trouvé.</p>}</div>
-          <div className="builder-note">Historiques mensuels disponibles pour {HISTORY_COUNT} ETF. Compositions par pays et secteur vérifiées pour {COMPOSITION_COUNT} ETF.</div>
+          <div className="add-section">
+            <div className="add-section-heading"><span className="card-kicker">EXPLORER LES ETF</span><span>{filteredEtfs.length} / {availableEtfs.length}</span></div>
+            <input className="catalog-search" type="search" aria-label="Rechercher un ETF par nom, famille ou ISIN" placeholder="Nom, indice ou ISIN" value={catalogQuery} onChange={(event) => setCatalogQuery(event.target.value)}/>
+            <div className="catalog-controls">
+              <label>Catégorie<select value={categoryFilter} onChange={(event) => setCategoryFilter(event.target.value)}><option value="">Toutes</option>{CATEGORIES.map((category) => <option key={category} value={category}>{category}</option>)}</select></label>
+              <label>Distribution<select value={distributionFilter} onChange={(event) => setDistributionFilter(event.target.value)}><option value="">Toutes</option><option value="capitalisation">Capitalisation</option><option value="distribution">Distribution</option></select></label>
+              <label>Encours minimum<select value={minFundSize} onChange={(event) => setMinFundSize(Number(event.target.value))}><option value={0}>Tous</option><option value={100e6}>100 M€</option><option value={500e6}>500 M€</option><option value={1e9}>1 Md€</option></select></label>
+              <label>Frais maximum<select value={maxFee} onChange={(event) => setMaxFee(event.target.value)}><option value="">Tous</option><option value="0.2">0,20 %</option><option value="0.3">0,30 %</option><option value="0.5">0,50 %</option></select></label>
+              <label className="catalog-sort">Trier par<select value={catalogSort} onChange={(event) => setCatalogSort(event.target.value)}><option value="performance-desc">Performance ↓</option><option value="performance-asc">Performance ↑</option><option value="size-desc">Encours ↓</option><option value="size-asc">Encours ↑</option><option value="fee-asc">Frais ↑</option><option value="fee-desc">Frais ↓</option><option value="name">Nom A → Z</option></select></label>
+              <label className="catalog-checkbox"><input type="checkbox" checked={fullHistoryOnly} onChange={(event) => setFullHistoryOnly(event.target.checked)}/>Historique complet sur la période</label>
+            </div>
+            <div className="catalog-results"><span>{filteredEtfs.length} résultat{filteredEtfs.length > 1 ? "s" : ""}</span><button type="button" onClick={resetCatalogFilters}>Réinitialiser</button></div>
+            <div className="catalog-list">{filteredEtfs.map((etf) => <button className="add-row" type="button" key={etf.isin} onClick={() => selectEtf(etf.isin)} title={`Ajouter ${etf.nom}`}><span className="etf-dot" style={{ background: etf.couleur }}/><span className="etf-row-info"><span className="etf-name-line"><strong>{etf.nom_court}</strong><EtfPeriodBadge result={etfReturns[etf.isin]}/></span><small>{etf.famille} · {etf.isin}</small><small>Encours {fundSizeLabel(fundSizesData.par_isin[etf.isin]?.encours_fonds_eur)} · Frais {pct(CATALOG[etf.isin].frais_gestion_et_administration_pct_an)} · {CATALOG[etf.isin].distribution === "capitalisation" ? "Capitalisation" : "Distribution"}</small></span><b aria-hidden="true">＋</b></button>)}{!filteredEtfs.length && <p className="builder-empty">Aucun ETF ne correspond aux filtres.</p>}</div>
+          </div>
+          <div className="builder-note">Performance jusqu’à {monthsLabel(LATEST_PRICE_MONTH)} ; « — » indique un historique insuffisant. En Max, la date de début varie selon l’ETF. Encours du fonds toutes parts confondues, Amundi au {dateLabel(FUND_SIZE_DATE)}.</div>
           </div>
         </aside>
         <div className="dashboard">
@@ -451,7 +529,7 @@ export default function PortfolioMvp() {
             />
             <ExposureCard title="Par secteur" subtitle="Les activités qui font varier votre portefeuille." rows={sectorRows} color="#b88a58" date={oldestReport ? dateLabel(oldestReport) : "—"} periodLabel={periodLabel} showContributions={history.points.length > 0} note="Contribution indicative : rendement des ETF ventilé selon leur dernière composition publiée, supposée constante sur la période. Ce n’est pas un rendement historique propre à chaque secteur. La part sans composition vérifiée reste distincte."/>
           </div>
-          <section className="mvp-card source-card"><div><span className="card-kicker">03 — SOURCES & MÉTHODE</span><h2>Des chiffres datés, jamais devinés.</h2><p>La liste PEA et les frais proviennent du catalogue Fortuneo et des DIC Amundi. Les VL ajustées mensuelles viennent d’Amundi ; la part cotée en USD est convertie en EUR au taux de référence de la BCE. Les répartitions proviennent des reportings Amundi lorsqu’ils ont été vérifiés.</p></div><div className="source-list">{selected.map((etf) => <a key={etf.isin} href={etf.reporting_url || CATALOG[etf.isin].dic_amundi.url} target="_blank" rel="noreferrer"><span>{etf.nom_court}</span><small>{etf.reporting_date ? `Composition : ${dateLabel(etf.reporting_date)}` : "DIC Amundi · composition à compléter"}</small><b>↗</b></a>)}</div></section>
+          <section className="mvp-card source-card"><div><span className="card-kicker">03 — SOURCES & MÉTHODE</span><h2>Des chiffres datés, jamais devinés.</h2><p>La liste PEA et les frais proviennent du catalogue Fortuneo et des DIC Amundi. Les VL ajustées mensuelles viennent d’Amundi ; la part cotée en USD est convertie en EUR au taux de référence de la BCE. Les encours des fonds viennent d’Amundi, toutes parts confondues, au {dateLabel(FUND_SIZE_DATE)}. Les répartitions proviennent des reportings Amundi lorsqu’ils ont été vérifiés.</p></div><div className="source-list">{selected.map((etf) => <a key={etf.isin} href={etf.reporting_url || CATALOG[etf.isin].dic_amundi.url} target="_blank" rel="noreferrer"><span>{etf.nom_court}</span><small>{etf.reporting_date ? `Composition : ${dateLabel(etf.reporting_date)}` : "DIC Amundi · composition à compléter"}</small><b>↗</b></a>)}</div></section>
         </div>
       </div>
       <footer className="mvp-footer"><span>CHAMP LIBRE / PEA</span><p>Outil de simulation. Les performances passées ne préjugent pas des performances futures. Données de VL : {pricesData.source}, extraction du {dateLabel(pricesData.date_extraction)}.</p></footer>
