@@ -7,7 +7,22 @@ import pricesData from "./data/mvp-prices.json";
 import catalogData from "./etf_pea_fortuneo_amundi.json";
 import "./portfolio-mvp.css";
 
-const PROFILES = profilesData.etfs;
+const ANALYZED = Object.fromEntries(profilesData.etfs.map((item) => [item.isin, item]));
+const CATEGORY_COLORS = {
+  "Court terme": "#8caaa0", Monde: "#8bd4a5", US: "#f4bd77",
+  "France/EMU": "#e6a7aa", Europe: "#73b8ad", Japon: "#d4ad76",
+  Emergents: "#b99ae1", Asie: "#9ca9d8", "Thématiques": "#c9a884",
+};
+const PROFILES = catalogData.etf.map((item) => ({
+  isin: item.isin,
+  nom: item.nom,
+  nom_court: item.nom.replace(/^Amundi /, ""),
+  indice: item.categorie_fortuneo,
+  famille: item.categorie_fortuneo,
+  couleur: CATEGORY_COLORS[item.categorie_fortuneo] || "#8caaa0",
+  ...ANALYZED[item.isin],
+}));
+const ANALYZED_COUNT = profilesData.etfs.length;
 const CATALOG = Object.fromEntries(catalogData.etf.map((item) => [item.isin, item]));
 const INITIAL = {
   LU1681043599: 60,
@@ -49,6 +64,7 @@ const LINE_COLORS = {
 };
 const nf = new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 1 });
 const pct = (value) => `${nf.format(value)} %`;
+const formatPoints = (value) => `${value > 0 ? "+" : ""}${nf.format(value)} pt${Math.abs(value) >= 2 ? "s" : ""}`;
 const monthsLabel = (month) => new Date(`${month}-01T12:00:00`).toLocaleDateString("fr-FR", { month: "short", year: "2-digit" });
 const dateLabel = (date) => new Date(`${date}T12:00:00`).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
 
@@ -91,6 +107,10 @@ function aggregate(weights, key) {
     const weight = weights[etf.isin] || 0;
     if (!weight) return;
     const breakdown = etf[key];
+    if (!breakdown) {
+      map.set("Composition indisponible", (map.get("Composition indisponible") || 0) + weight);
+      return;
+    }
     const reportedSum = Object.values(breakdown).reduce((sum, value) => sum + value, 0);
     Object.entries(breakdown).forEach(([name, share]) => {
       map.set(name, (map.get(name) || 0) + weight * share / reportedSum);
@@ -99,7 +119,26 @@ function aggregate(weights, key) {
   return [...map.entries()].map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value);
 }
 
+function aggregateContributions(contributions, key) {
+  const map = new Map();
+  PROFILES.forEach((etf) => {
+    const contribution = contributions[etf.isin] || 0;
+    const breakdown = etf[key];
+    if (!breakdown) return;
+    const reportedSum = Object.values(breakdown).reduce((sum, value) => sum + value, 0);
+    Object.entries(breakdown).forEach(([name, share]) => {
+      map.set(name, (map.get(name) || 0) + contribution * share / reportedSum);
+    });
+  });
+  return map;
+}
+
+function withContributions(rows, contributions) {
+  return rows.map((row) => ({ ...row, contribution: contributions.get(row.name) || 0 }));
+}
+
 function geographicZone(name) {
+  if (name === "Composition indisponible") return name;
   if (name === "Non alloué") return "Non alloué";
   if (name === "Autres pays") return "Pays non détaillés";
   if (name === "États-Unis") return "États-Unis";
@@ -116,11 +155,12 @@ function geographicZone(name) {
 
 function aggregateZones(countries) {
   const zones = new Map();
-  countries.forEach(({ name, value }) => {
+  countries.forEach(({ name, value, contribution = 0 }) => {
     const zone = geographicZone(name);
-    zones.set(zone, (zones.get(zone) || 0) + value);
+    const previous = zones.get(zone) || { value: 0, contribution: 0 };
+    zones.set(zone, { value: previous.value + value, contribution: previous.contribution + contribution });
   });
-  return [...zones.entries()].map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value);
+  return [...zones.entries()].map(([name, totals]) => ({ name, ...totals })).sort((a, b) => b.value - a.value);
 }
 
 function compactBreakdown(rows, limit = 7) {
@@ -129,8 +169,8 @@ function compactBreakdown(rows, limit = 7) {
   if (allocated.length <= limit) return rows;
   const top = allocated.filter((row) => !row.name.startsWith("Autres ")).slice(0, limit);
   const names = new Set(top.map((row) => row.name));
-  const other = allocated.filter((row) => !names.has(row.name)).reduce((sum, row) => sum + row.value, 0);
-  return [...top, { name: "Autres", value: other }, ...(unallocated ? [unallocated] : [])];
+  const other = allocated.filter((row) => !names.has(row.name)).reduce((sum, row) => ({ value: sum.value + row.value, contribution: sum.contribution + (row.contribution || 0) }), { value: 0, contribution: 0 });
+  return [...top, { name: "Autres", ...other }, ...(unallocated ? [unallocated] : [])];
 }
 
 function compactCountries(rows, limit = 7) {
@@ -138,11 +178,11 @@ function compactCountries(rows, limit = 7) {
   const undetailed = rows.find((row) => row.name === "Autres pays");
   const unallocated = rows.find((row) => row.name === "Non alloué");
   const top = detailed.slice(0, limit);
-  const otherDetailed = detailed.slice(limit).reduce((sum, row) => sum + row.value, 0);
+  const otherDetailed = detailed.slice(limit).reduce((sum, row) => ({ value: sum.value + row.value, contribution: sum.contribution + (row.contribution || 0) }), { value: 0, contribution: 0 });
   return [
     ...top,
-    ...(otherDetailed ? [{ name: "Autres pays détaillés", value: otherDetailed }] : []),
-    ...(undetailed ? [{ name: "Pays non détaillés", value: undetailed.value }] : []),
+    ...(otherDetailed.value ? [{ name: "Autres pays détaillés", ...otherDetailed }] : []),
+    ...(undetailed ? [{ ...undetailed, name: "Pays non détaillés" }] : []),
     ...(unallocated ? [unallocated] : []),
   ];
 }
@@ -151,42 +191,48 @@ function performance(weights, selectedIsins, requestedMonths) {
   const active = PROFILES.filter((etf) => weights[etf.isin] > 0);
   const selected = PROFILES.filter((etf) => selectedIsins.includes(etf.isin));
   const forWindow = active.length ? active : selected;
-  if (!forWindow.length) return { points: [], usedMonths: 0, start: null, end: null };
-  const byEtf = Object.fromEntries(selected.map((etf) => [etf.isin, new Map(pricesData.par_isin[etf.isin].historique.map((row) => [row.mois, row.cours_ajuste]))]));
+  if (!forWindow.length) return { points: [], usedMonths: 0, start: null, end: null, etfContributions: {} };
+  const missingHistory = active.filter((etf) => !pricesData.par_isin[etf.isin]);
+  if (missingHistory.length) return { points: [], usedMonths: 0, start: null, end: null, etfContributions: {}, missingHistory };
+  const pricedSelected = selected.filter((etf) => pricesData.par_isin[etf.isin]);
+  const byEtf = Object.fromEntries(pricedSelected.map((etf) => [etf.isin, new Map(pricesData.par_isin[etf.isin].historique.map((row) => [row.mois, row.cours_ajuste]))]));
   const common = [...byEtf[forWindow[0].isin].keys()]
     .filter((month) => forWindow.every((etf) => byEtf[etf.isin].has(month)))
     .sort();
   const months = Math.min(requestedMonths, common.length - 1);
   const window = common.slice(-(months + 1));
-  if (window.length < 2) return { points: [], usedMonths: 0, start: null, end: null };
+  if (window.length < 2) return { points: [], usedMonths: 0, start: null, end: null, etfContributions: {} };
   const benchmark = new Map(pricesData.par_isin.LU1681043599.historique.map((row) => [row.mois, row.cours_ajuste]));
   const benchmarkStart = benchmark.get(window[0]);
-  const firstEtfPrice = Object.fromEntries(selected.map((etf) => [etf.isin, window.map((month) => byEtf[etf.isin].get(month)).find((price) => price != null)]));
+  const firstEtfPrice = Object.fromEntries(pricedSelected.map((etf) => [etf.isin, window.map((month) => byEtf[etf.isin].get(month)).find((price) => price != null)]));
   const makePoint = (month, portfolioValue) => ({
     month,
     portefeuille: Number(portfolioValue.toFixed(3)),
     monde: benchmarkStart && benchmark.get(month) ? Number((100 * benchmark.get(month) / benchmarkStart).toFixed(3)) : null,
-    ...Object.fromEntries(selected.map((etf) => {
+    ...Object.fromEntries(pricedSelected.map((etf) => {
       const price = byEtf[etf.isin].get(month);
       return [`etf_${etf.isin}`, price && firstEtfPrice[etf.isin] ? Number((100 * price / firstEtfPrice[etf.isin]).toFixed(3)) : null];
     })),
   });
   const points = [makePoint(window[0], 100)];
+  const etfContributions = Object.fromEntries(active.map((etf) => [etf.isin, 0]));
   let value = 100;
   for (let index = 1; index < window.length; index++) {
     const month = window[index];
     const previous = window[index - 1];
     const monthlyReturn = active.reduce((sum, etf) => {
       const prices = byEtf[etf.isin];
-      return sum + weights[etf.isin] / 100 * (prices.get(month) / prices.get(previous) - 1);
+      const etfReturn = prices.get(month) / prices.get(previous) - 1;
+      etfContributions[etf.isin] += value * weights[etf.isin] / 100 * etfReturn;
+      return sum + weights[etf.isin] / 100 * etfReturn;
     }, 0);
     value *= 1 + monthlyReturn;
     points.push(makePoint(month, value));
   }
-  return { points, usedMonths: window.length - 1, start: window[0], end: window.at(-1) };
+  return { points, usedMonths: window.length - 1, start: window[0], end: window.at(-1), etfContributions };
 }
 
-function ExposureCard({ title, subtitle, rows, color, date, controls, note, extra, countryView = false, showAll = false }) {
+function ExposureCard({ title, subtitle, rows, color, date, periodLabel, controls, note, extra, countryView = false, showAll = false }) {
   const visible = countryView ? compactCountries(rows) : showAll ? rows : compactBreakdown(rows);
   return (
     <section className="mvp-card exposure-card">
@@ -194,9 +240,10 @@ function ExposureCard({ title, subtitle, rows, color, date, controls, note, extr
       <h2>{title}</h2>
       <p className="card-description">{subtitle}</p>
       {controls}
+      <div className="exposure-columns"><span>Part actuelle</span><span>Contribution estimée · {periodLabel}</span></div>
       {visible.length ? <div className="exposure-list">
         {visible.map((row) => <div className="exposure-row" key={row.name}>
-          <div className="exposure-label"><span title={row.name}>{row.name}</span><strong>{pct(row.value)}</strong></div>
+          <div className="exposure-label"><span title={row.name}>{row.name}</span><strong>{pct(row.value)}</strong><b className={row.contribution < 0 ? "negative" : ""}>{formatPoints(row.contribution || 0)}</b></div>
           <div className="exposure-track"><span style={{ width: `${Math.max(row.value, 0.7)}%`, background: color }} /></div>
         </div>)}
       </div> : <div className="empty-chart">Ajoute un ETF pour afficher la répartition.</div>}
@@ -247,15 +294,22 @@ export default function PortfolioMvp() {
   const visibleEtfs = selected.filter((etf) => visibleEtfIsins.includes(etf.isin));
   const allEtfsVisible = selected.length > 0 && visibleEtfs.length === selected.length;
   const active = selected.filter((etf) => weights[etf.isin] > 0);
+  const history = useMemo(() => performance(weights, selectedIsins, period), [weights, selectedIsins, period]);
   const geo = useMemo(() => aggregate(weights, "pays"), [weights]);
+  const geoContributions = useMemo(() => aggregateContributions(history.etfContributions, "pays"), [history]);
+  const sectorContributions = useMemo(() => aggregateContributions(history.etfContributions, "secteurs"), [history]);
+  const geoWithContributions = useMemo(() => withContributions(geo, geoContributions), [geo, geoContributions]);
   const totalWeight = selected.reduce((sum, etf) => sum + (weights[etf.isin] || 0), 0);
   const unallocated = Math.max(0, Math.round((100 - totalWeight) * 10) / 10);
-  const geoRows = useMemo(() => geo.length && unallocated ? [...geo, { name: "Non alloué", value: unallocated }] : geo, [geo, unallocated]);
+  const geoRows = useMemo(() => geo.length && unallocated ? [...geoWithContributions, { name: "Non alloué", value: unallocated, contribution: 0 }] : geoWithContributions, [geoWithContributions, geo, unallocated]);
   const zones = useMemo(() => aggregateZones(geoRows), [geoRows]);
   const bricsShare = geo.filter((row) => BRICS_MEMBERS.has(row.name)).reduce((sum, row) => sum + row.value, 0);
+  const bricsContribution = geoWithContributions.filter((row) => BRICS_MEMBERS.has(row.name)).reduce((sum, row) => sum + row.contribution, 0);
   const sectors = useMemo(() => aggregate(weights, "secteurs"), [weights]);
-  const sectorRows = sectors.length && unallocated ? [...sectors, { name: "Non alloué", value: unallocated }] : sectors;
-  const history = useMemo(() => performance(weights, selectedIsins, period), [weights, selectedIsins, period]);
+  const sectorRows = useMemo(() => {
+    const rows = withContributions(sectors, sectorContributions);
+    return sectors.length && unallocated ? [...rows, { name: "Non alloué", value: unallocated, contribution: 0 }] : rows;
+  }, [sectors, sectorContributions, unallocated]);
   const totalReturn = history.points.length ? history.points.at(-1).portefeuille - 100 : null;
   const referenceReturn = history.points.length && history.points.at(-1).monde != null ? history.points.at(-1).monde - 100 : null;
   const performanceValue = totalReturn == null ? "—" : `${totalReturn >= 0 ? "+" : ""}${pct(totalReturn)}`;
@@ -267,6 +321,7 @@ export default function PortfolioMvp() {
   const lockedTotal = lockedIsins.reduce((sum, isin) => sum + (weights[isin] || 0), 0);
   const availableForUnlocked = Math.max(0, Math.round((100 - lockedTotal) * 10) / 10);
   const availableMonths = history.usedMonths;
+  const periodLabel = history.start && history.end ? `${monthsLabel(history.start)} → ${monthsLabel(history.end)}` : "—";
   const removeEtf = (isin) => {
     setSelectedIsins((old) => old.filter((item) => item !== isin));
     setVisibleEtfIsins((old) => old.filter((item) => item !== isin));
@@ -319,6 +374,7 @@ export default function PortfolioMvp() {
           </div>
         </aside>
         <div className="dashboard">
+          <div className="period-toolbar"><div><span className="card-kicker">PÉRIODE COMMUNE</span><small>Rendement et contributions · {periodLabel}</small></div><div className="period-tabs" role="group" aria-label="Période d’analyse">{PERIODS.map((option) => <button type="button" key={option.label} className={period === option.months ? "active" : ""} aria-pressed={period === option.months} onClick={() => setPeriod(option.months)}>{option.label}</button>)}</div></div>
           <section className="summary-grid">
             <div className="summary-card dark"><span>Performance sur la période</span><strong>{performanceValue}</strong><small>{performanceDates}</small></div>
             <div className="summary-card"><span>ETF sélectionnés</span><strong>{selectedCount}</strong><small>sur {PROFILES.length} disponibles</small></div>
@@ -327,7 +383,7 @@ export default function PortfolioMvp() {
           </section>
           <section className="mvp-card performance-card">
             <div className="card-topline"><span className="card-kicker">02 — ÉVOLUTION</span><span className="card-date">Cours arrêtés à {history.end ? monthsLabel(history.end) : "—"}</span></div>
-            <div className="performance-heading"><div><h2>Rendement historique</h2><p className="card-description">Base 100 · poids cibles rééquilibrés chaque mois · cours ajustés par la source{unallocated > 0 ? " · solde non alloué sans rendement" : ""}</p></div><div className="period-tabs" role="group" aria-label="Période de rendement">{PERIODS.map((option) => <button type="button" key={option.label} className={period === option.months ? "active" : ""} onClick={() => setPeriod(option.months)}>{option.label}</button>)}</div></div>
+            <div className="performance-heading"><div><h2>Rendement historique</h2><p className="card-description">Base 100 · poids cibles rééquilibrés chaque mois · cours ajustés par la source{unallocated > 0 ? " · solde non alloué sans rendement" : ""}</p></div></div>
             {history.points.length ? <>
               <div className="chart-controls">
                 <button type="button" onClick={toggleAllEtfCurves} disabled={!selected.length}>
@@ -362,19 +418,20 @@ export default function PortfolioMvp() {
               countryView={geoView === "countries"}
               color="#5bac7e"
               date={oldestReport ? dateLabel(oldestReport) : "—"}
+              periodLabel={periodLabel}
               showAll={geoView === "zones"}
               controls={<div className="exposure-switch" role="group" aria-label="Vue géographique">
                 <button type="button" aria-pressed={geoView === "countries"} onClick={() => setGeoView("countries")}>Pays</button>
                 <button type="button" aria-pressed={geoView === "zones"} onClick={() => setGeoView("zones")}>Zones</button>
               </div>}
               extra={geoView === "zones" && geo.length > 0 && <div className="cross-exposure">
-                <div className="exposure-label"><span>BRICS identifiés (<a href="https://brics.br/en/about-the-brics" target="_blank" rel="noreferrer">11 membres</a>)</span><strong>{pct(bricsShare)}</strong></div>
+                <div className="exposure-label"><span>BRICS identifiés (<a href="https://brics.br/en/about-the-brics" target="_blank" rel="noreferrer">11 membres</a>)</span><strong>{pct(bricsShare)}</strong><b className={bricsContribution < 0 ? "negative" : ""}>{formatPoints(bricsContribution)}</b></div>
                 <div className="exposure-track"><span style={{ width: `${bricsShare}%`, background: "#8f73b5" }}/></div>
                 <small>Inclus dans les zones ci-dessus ; les pays non détaillés sont exclus de ce calcul.</small>
               </div>}
-              note="Cette répartition ne décrit ni le lieu des ventes des sociétés ni précisément le risque de change. Les pays non détaillés restent séparés."
+              note="Contribution indicative : rendement des ETF ventilé selon leur dernière composition publiée, supposée constante sur la période. Ce n’est pas un rendement historique propre à chaque pays ou zone. Les pays non détaillés restent séparés."
             />
-            <ExposureCard title="Par secteur" subtitle="Les activités qui font varier votre portefeuille." rows={sectorRows} color="#b88a58" date={oldestReport ? dateLabel(oldestReport) : "—"}/>
+            <ExposureCard title="Par secteur" subtitle="Les activités qui font varier votre portefeuille." rows={sectorRows} color="#b88a58" date={oldestReport ? dateLabel(oldestReport) : "—"} periodLabel={periodLabel} note="Contribution indicative : rendement des ETF ventilé selon leur dernière composition publiée, supposée constante sur la période. Ce n’est pas un rendement historique propre à chaque secteur."/>
           </div>
           <section className="mvp-card source-card"><div><span className="card-kicker">03 — SOURCES & MÉTHODE</span><h2>Des chiffres datés, jamais devinés.</h2><p>Les répartitions proviennent des indices présentés dans les reportings Amundi ; les cours mensuels ajustés viennent de Yahoo Finance pour ce prototype. Les frais proviennent des DIC Amundi. Les répartitions sont des instantanés, pas un historique reconstitué.</p></div><div className="source-list">{selected.map((etf) => <a key={etf.isin} href={etf.reporting_url} target="_blank" rel="noreferrer"><span>{etf.nom_court}</span><small>Composition : {dateLabel(etf.reporting_date)}</small><b>↗</b></a>)}</div></section>
         </div>

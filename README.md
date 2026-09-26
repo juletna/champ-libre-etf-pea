@@ -14,4 +14,4 @@ npm ci
 npm run dev
 ```
 
-Voir [la documentation de l'application](app/README.md) pour les sources des données, les limites de la simulation et le rafraîchissement des cours.
+Voir [la documentation de l'application](app/README.md) pour les fonctions et les sources de données, et le [guide de reprise du projet](PROJECT.md) pour son architecture, ses calculs, ses limites et les vérifications à faire avant publication.
