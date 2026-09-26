@@ -1,0 +1,1048 @@
+{
+  "source": {
+    "nom": "Fortuneo – Freetrade Amundi : les ETF éligibles",
+    "url": "https://www.fortuneo.fr/bourse/freetrade-amundi/etf",
+    "date_consultation": "2026-09-26",
+    "methode": "Lignes marquées ✔ dans la colonne Eligible PEA du tableau Fortuneo."
+  },
+  "nombre_etf": 54,
+  "etf": [
+    {
+      "categorie_fortuneo": "Court terme",
+      "nom": "Amundi PEA Euro Court Terme UCITS ETF Acc",
+      "isin": "FR0013346681",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.25,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 1,
+      "horizon_recommande_ans": 1,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0013346681/FRA/FRA",
+        "date_document": "2026-06-12"
+      }
+    },
+    {
+      "categorie_fortuneo": "Monde",
+      "nom": "Amundi MSCI World Swap UCITS ETF EUR Acc",
+      "isin": "LU1681043599",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.38,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU1681043599/FRA/FRA",
+        "date_document": "2026-04-28"
+      }
+    },
+    {
+      "categorie_fortuneo": "Monde",
+      "nom": "Amundi MSCI World Swap UCITS ETF EUR Dist",
+      "isin": "LU2655993207",
+      "eligible_pea": true,
+      "distribution": "distribution",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.38,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU2655993207/FRA/FRA",
+        "date_document": "2026-04-28"
+      }
+    },
+    {
+      "categorie_fortuneo": "Monde",
+      "nom": "Amundi PEA Monde (MSCI World) UCITS ETF",
+      "isin": "FR001400U5Q4",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.2,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR001400U5Q4/FRA/FRA",
+        "date_document": "2026-04-28"
+      }
+    },
+    {
+      "categorie_fortuneo": "Monde",
+      "nom": "Amundi PEA Global (MSCI ACWI) UCITS ETF Acc",
+      "isin": "FR0014017NX3",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.3,
+      "frais_estimes_dans_dic": true,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0014017NX3/FRA/FRA",
+        "date_document": "2026-07-06"
+      }
+    },
+    {
+      "categorie_fortuneo": "US",
+      "nom": "Amundi PEA S&P 500 UCITS ETF Acc",
+      "isin": "FR0011871128",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.12,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0011871128/FRA/FRA",
+        "date_document": "2026-08-06"
+      }
+    },
+    {
+      "categorie_fortuneo": "US",
+      "nom": "Amundi PEA S&P 500 Screened UCITS ETF - Acc",
+      "isin": "FR0013412285",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.25,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": true,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0013412285/FRA/FRA",
+        "date_document": "2026-06-05"
+      }
+    },
+    {
+      "categorie_fortuneo": "US",
+      "nom": "Amundi PEA S&P 500 UCITS ETF EUR Hedged Acc",
+      "isin": "FR0011871136",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "oui",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.12,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0011871136/FRA/FRA",
+        "date_document": "2026-08-06"
+      }
+    },
+    {
+      "categorie_fortuneo": "US",
+      "nom": "Amundi PEA S&P 500 Screened UCITS ETF - EUR Hedged Acc",
+      "isin": "FR0013412293",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "oui",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.28,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": true,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0013412293/FRA/FRA",
+        "date_document": "2026-06-05"
+      }
+    },
+    {
+      "categorie_fortuneo": "US",
+      "nom": "Amundi PEA MSCI USA ESG Selection UCITS ETF - EUR",
+      "isin": "LU1681042864",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.35,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": true,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU1681042864/FRA/FRA",
+        "date_document": "2026-06-05"
+      }
+    },
+    {
+      "categorie_fortuneo": "US",
+      "nom": "Amundi PEA MSCI USA ESG Selection UCITS ETF - USD",
+      "isin": "LU1681042948",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "USD",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.35,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": true,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU1681042948/FRA/FRA",
+        "date_document": "2026-06-05"
+      }
+    },
+    {
+      "categorie_fortuneo": "US",
+      "nom": "Amundi PEA Nasdaq-100 UCITS ETF Acc",
+      "isin": "FR0011871110",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.3,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 5,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0011871110/FRA/FRA",
+        "date_document": "2026-06-12"
+      }
+    },
+    {
+      "categorie_fortuneo": "US",
+      "nom": "Amundi PEA US Tech Screened UCITS ETF - Acc",
+      "isin": "FR0013412269",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.3,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 5,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": true,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0013412269/FRA/FRA",
+        "date_document": "2026-06-05"
+      }
+    },
+    {
+      "categorie_fortuneo": "US",
+      "nom": "Amundi PEA S&P US Industrials Screened UCITS ETF - Acc",
+      "isin": "FR0011869270",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.5,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": true,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0011869270/FRA/FRA",
+        "date_document": "2026-06-12"
+      }
+    },
+    {
+      "categorie_fortuneo": "US",
+      "nom": "Amundi PEA MSCI USA Value Advanced UCITS ETF - Acc",
+      "isin": "FR001400KH45",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.5,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR001400KH45/FRA/FRA",
+        "date_document": "2026-06-05"
+      }
+    },
+    {
+      "categorie_fortuneo": "US",
+      "nom": "Amundi Russell 2000 UCITS ETF - EUR (C)",
+      "isin": "LU1681038672",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.35,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 5,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU1681038672/FRA/FRA",
+        "date_document": "2026-06-05"
+      }
+    },
+    {
+      "categorie_fortuneo": "France/EMU",
+      "nom": "Amundi CAC 40 UCITS ETF Acc",
+      "isin": "FR0013380607",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "physique",
+      "frais_gestion_et_administration_pct_an": 0.25,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0013380607/FRA/FRA",
+        "date_document": "2026-06-05"
+      }
+    },
+    {
+      "categorie_fortuneo": "France/EMU",
+      "nom": "Amundi CAC 40 ESG UCITS ETF Acc",
+      "isin": "LU1681046931",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "physique",
+      "frais_gestion_et_administration_pct_an": 0.25,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": true,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU1681046931/FRA/FRA",
+        "date_document": "2026-06-05"
+      }
+    },
+    {
+      "categorie_fortuneo": "France/EMU",
+      "nom": "Amundi MSCI EMU Small Cap ESG Broad Transition UCITS ETF Dist",
+      "isin": "LU1598689153",
+      "eligible_pea": true,
+      "distribution": "distribution",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "physique",
+      "frais_gestion_et_administration_pct_an": 0.4,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": true,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU1598689153/FRA/FRA",
+        "date_document": "2026-06-15"
+      }
+    },
+    {
+      "categorie_fortuneo": "France/EMU",
+      "nom": "Amundi MSCI EMU High Dividend UCITS ETF Acc",
+      "isin": "FR0010717090",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "physique",
+      "frais_gestion_et_administration_pct_an": 0.3,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0010717090/FRA/FRA",
+        "date_document": "2026-04-28"
+      }
+    },
+    {
+      "categorie_fortuneo": "France/EMU",
+      "nom": "Amundi MSCI EMU Value Factor UCITS ETF Dist",
+      "isin": "LU1598690169",
+      "eligible_pea": true,
+      "distribution": "distribution",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "physique",
+      "frais_gestion_et_administration_pct_an": 0.4,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU1598690169/FRA/FRA",
+        "date_document": "2026-06-08"
+      }
+    },
+    {
+      "categorie_fortuneo": "France/EMU",
+      "nom": "Amundi S&P Eurozone Climate Paris Aligned UCITS ETF Acc",
+      "isin": "LU2195226068",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "physique",
+      "frais_gestion_et_administration_pct_an": 0.2,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": true,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU2195226068/FRA/FRA",
+        "date_document": "2026-06-05"
+      }
+    },
+    {
+      "categorie_fortuneo": "France/EMU",
+      "nom": "Amundi Euro Stoxx Banks UCITS ETF Acc",
+      "isin": "LU1829219390",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "physique",
+      "frais_gestion_et_administration_pct_an": 0.3,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 5,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU1829219390/FRA/FRA",
+        "date_document": "2026-04-28"
+      }
+    },
+    {
+      "categorie_fortuneo": "Europe",
+      "nom": "Amundi PEA MSCI Europe UCITS ETF Acc",
+      "isin": "FR0013412038",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.15,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0013412038/FRA/FRA",
+        "date_document": "2026-06-05"
+      }
+    },
+    {
+      "categorie_fortuneo": "Europe",
+      "nom": "Amundi Stoxx Europe Select Dividend 30 - UCITS ETF Dist",
+      "isin": "LU1812092168",
+      "eligible_pea": true,
+      "distribution": "distribution",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.3,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU1812092168/FRA/FRA",
+        "date_document": "2026-04-28"
+      }
+    },
+    {
+      "categorie_fortuneo": "Europe",
+      "nom": "Amundi STOXX Europe 600 Banks UCITS ETF Acc",
+      "isin": "LU1834983477",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.3,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 5,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU1834983477/FRA/FRA",
+        "date_document": "2026-04-28"
+      }
+    },
+    {
+      "categorie_fortuneo": "Europe",
+      "nom": "Amundi STOXX Europe 600 Basic Materials UCITS ETF Acc",
+      "isin": "LU1834983634",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.3,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU1834983634/FRA/FRA",
+        "date_document": "2026-06-08"
+      }
+    },
+    {
+      "categorie_fortuneo": "Europe",
+      "nom": "Amundi STOXX Europe 600 Basic Resources UCITS ETF Acc",
+      "isin": "LU1834983550",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.3,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 5,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU1834983550/FRA/FRA",
+        "date_document": "2026-04-28"
+      }
+    },
+    {
+      "categorie_fortuneo": "Europe",
+      "nom": "Amundi STOXX Europe 600 Consumer Discretionary UCITS ETF Acc",
+      "isin": "LU1834988781",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.3,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU1834988781/FRA/FRA",
+        "date_document": "2026-06-08"
+      }
+    },
+    {
+      "categorie_fortuneo": "Europe",
+      "nom": "Amundi STOXX Europe 600 Consumer Staples UCITS ETF Acc",
+      "isin": "LU1834985845",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.3,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU1834985845/FRA/FRA",
+        "date_document": "2026-06-08"
+      }
+    },
+    {
+      "categorie_fortuneo": "Europe",
+      "nom": "Amundi STOXX Europe 600 Healthcare UCITS ETF Acc",
+      "isin": "LU1834986900",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.3,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU1834986900/FRA/FRA",
+        "date_document": "2026-06-08"
+      }
+    },
+    {
+      "categorie_fortuneo": "Europe",
+      "nom": "Amundi STOXX Europe 600 Industrials UCITS ETF Acc",
+      "isin": "LU1834987890",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.3,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU1834987890/FRA/FRA",
+        "date_document": "2026-04-28"
+      }
+    },
+    {
+      "categorie_fortuneo": "Europe",
+      "nom": "Amundi STOXX Europe 600 Insurance UCITS ETF Acc",
+      "isin": "LU1834987973",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.3,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU1834987973/FRA/FRA",
+        "date_document": "2026-04-28"
+      }
+    },
+    {
+      "categorie_fortuneo": "Europe",
+      "nom": "Amundi STOXX Europe 600 Technology UCITS ETF Acc",
+      "isin": "LU1834988518",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.3,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 5,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU1834988518/FRA/FRA",
+        "date_document": "2026-06-08"
+      }
+    },
+    {
+      "categorie_fortuneo": "Europe",
+      "nom": "Amundi STOXX Europe 600 Telecommunications UCITS ETF Acc",
+      "isin": "LU1834988609",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.3,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU1834988609/FRA/FRA",
+        "date_document": "2026-06-08"
+      }
+    },
+    {
+      "categorie_fortuneo": "Europe",
+      "nom": "Amundi STOXX Europe 600 Utilities UCITS ETF Acc",
+      "isin": "LU1834988864",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.3,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU1834988864/FRA/FRA",
+        "date_document": "2026-06-08"
+      }
+    },
+    {
+      "categorie_fortuneo": "Europe",
+      "nom": "Amundi FTSE MIB UCITS ETF Dist",
+      "isin": "FR0010010827",
+      "eligible_pea": true,
+      "distribution": "distribution",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "physique",
+      "frais_gestion_et_administration_pct_an": 0.35,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0010010827/FRA/FRA",
+        "date_document": "2026-06-05"
+      }
+    },
+    {
+      "categorie_fortuneo": "Europe",
+      "nom": "Amundi IBEX 35 UCITS ETF Acc",
+      "isin": "FR0010655746",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "physique",
+      "frais_gestion_et_administration_pct_an": 0.3,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0010655746/FRA/FRA",
+        "date_document": "2026-06-12"
+      }
+    },
+    {
+      "categorie_fortuneo": "Europe",
+      "nom": "Amundi MSCI Greece UCITS ETF Dist",
+      "isin": "FR0010405431",
+      "eligible_pea": true,
+      "distribution": "distribution",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "physique",
+      "frais_gestion_et_administration_pct_an": 0.55,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 5,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0010405431/FRA/FRA",
+        "date_document": "2026-09-10"
+      }
+    },
+    {
+      "categorie_fortuneo": "Europe",
+      "nom": "Amundi PEA Immobilier Europe (FTSE EPRA/NAREIT) UCITS ETF Acc",
+      "isin": "FR0011869304",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.4,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 5,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0011869304/FRA/FRA",
+        "date_document": "2026-06-12"
+      }
+    },
+    {
+      "categorie_fortuneo": "Japon",
+      "nom": "Amundi PEA Japon (TOPIX) UCITS ETF EUR Acc",
+      "isin": "FR0013411980",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.2,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0013411980/FRA/FRA",
+        "date_document": "2026-06-05"
+      }
+    },
+    {
+      "categorie_fortuneo": "Japon",
+      "nom": "Amundi PEA Japon (TOPIX) UCITS ETF EUR Hedged Acc",
+      "isin": "FR0013411998",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "oui",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.48,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0013411998/FRA/FRA",
+        "date_document": "2026-06-05"
+      }
+    },
+    {
+      "categorie_fortuneo": "Emergents",
+      "nom": "Amundi PEA Emergent (MSCI Emerging) ESG Transition UCITS ETF Acc",
+      "isin": "FR0013412020",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.3,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": true,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0013412020/FRA/FRA",
+        "date_document": "2026-07-13"
+      }
+    },
+    {
+      "categorie_fortuneo": "Emergents",
+      "nom": "Amundi MSCI Emerging Markets Swap II UCITS ETF EUR Acc",
+      "isin": "FR0010429068",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.55,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": true,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0010429068/FRA/FRA",
+        "date_document": "2026-06-12"
+      }
+    },
+    {
+      "categorie_fortuneo": "Emergents",
+      "nom": "Amundi MSCI Brazil UCITS ETF Acc",
+      "isin": "LU1900066207",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.65,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 5,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU1900066207/FRA/FRA",
+        "date_document": "2026-04-28"
+      }
+    },
+    {
+      "categorie_fortuneo": "Emergents",
+      "nom": "Amundi PEA Emergent EMEA (MSCI Emerging EMEA) ESG Transition UCITS ETF Acc",
+      "isin": "FR0011440478",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.55,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": true,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0011440478/FRA/FRA",
+        "date_document": "2026-07-13"
+      }
+    },
+    {
+      "categorie_fortuneo": "Emergents",
+      "nom": "Amundi PEA MSCI Emerging Latin America Selection UCITS ETF - Acc",
+      "isin": "FR0013412004",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.3,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": true,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0013412004/FRA/FRA",
+        "date_document": "2026-06-05"
+      }
+    },
+    {
+      "categorie_fortuneo": "Asie",
+      "nom": "Amundi PEA Asie Emergente (MSCI Emerging Asia) Screened UCITS ETF Acc",
+      "isin": "FR0013412012",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.3,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": true,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0013412012/FRA/FRA",
+        "date_document": "2026-06-05"
+      }
+    },
+    {
+      "categorie_fortuneo": "Asie",
+      "nom": "Amundi PEA Asie Pacifique (MSCI AC Asia Pacific Ex Japan) UCITS ETF Acc",
+      "isin": "FR0011869312",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.6,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0011869312/FRA/FRA",
+        "date_document": "2026-06-12"
+      }
+    },
+    {
+      "categorie_fortuneo": "Asie",
+      "nom": "Amundi PEA Chine (MSCI China) Screened UCITS ETF - Acc",
+      "isin": "FR0011871078",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.65,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 5,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": true,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0011871078/FRA/FRA",
+        "date_document": "2026-06-12"
+      }
+    },
+    {
+      "categorie_fortuneo": "Asie",
+      "nom": "Amundi PEA Inde (MSCI India) UCITS ETF Acc",
+      "isin": "FR0011869320",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.85,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0011869320/FRA/FRA",
+        "date_document": "2026-06-12"
+      }
+    },
+    {
+      "categorie_fortuneo": "Thématiques",
+      "nom": "Amundi European Strategic Autonomy UCITS ETF Acc",
+      "isin": "LU3180074463",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "physique",
+      "frais_gestion_et_administration_pct_an": 0.4,
+      "frais_estimes_dans_dic": true,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/LU3180074463/FRA/FRA",
+        "date_document": "2026-06-08"
+      }
+    },
+    {
+      "categorie_fortuneo": "Thématiques",
+      "nom": "Amundi PEA Eau (MSCI Water) UCITS ETF - Capi",
+      "isin": "FR0011882364",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.6,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR0011882364/FRA/FRA",
+        "date_document": "2026-06-12"
+      }
+    },
+    {
+      "categorie_fortuneo": "Thématiques",
+      "nom": "Amundi PEA Luxe Monde UCITS ETF Acc",
+      "isin": "FR001400S9V0",
+      "eligible_pea": true,
+      "distribution": "capitalisation",
+      "devise_part": "EUR",
+      "couverture_change": "non_precisee",
+      "replication": "synthetique",
+      "frais_gestion_et_administration_pct_an": 0.3,
+      "frais_estimes_dans_dic": false,
+      "risque_sri_sur_7": 4,
+      "horizon_recommande_ans": 5,
+      "marquage_article_sfdr_fortuneo": false,
+      "dic_amundi": {
+        "url": "https://www.amundietf.fr/pdfDocuments/kid-priips/FR001400S9V0/FRA/FRA",
+        "date_document": "2026-06-05"
+      }
+    }
+  ],
+  "definitions_champs": {
+    "distribution": "Politique de la part : capitalisation (Acc/Capi) ou distribution (Dist). Vérifiée dans le DIC Amundi lorsque le nom Fortuneo ne le précise pas.",
+    "devise_part": "Devise de la part indiquée dans le DIC ; elle ne mesure pas le risque de change des actifs sous-jacents.",
+    "couverture_change": "oui si Hedged figure dans le nom Fortuneo ; non_precisee signifie que le nom ne permet pas de conclure.",
+    "replication": "Méthode physique/directe ou synthétique/indirecte décrite dans le DIC.",
+    "frais_gestion_et_administration_pct_an": "Pourcentage annuel de la ligne « Frais de gestion et autres frais administratifs ou d’exploitation » du DIC ; hors courtage, spread et autres coûts éventuels.",
+    "frais_estimes_dans_dic": "Vrai lorsque le DIC qualifie ce pourcentage d’estimation.",
+    "risque_sri_sur_7": "Indicateur synthétique de risque du DIC, sur une échelle de 1 à 7 ; il peut évoluer.",
+    "horizon_recommande_ans": "Période de détention recommandée par le DIC ; ce n’est pas une durée minimale obligatoire.",
+    "marquage_article_sfdr_fortuneo": "Coche dans la colonne « Article SFDR » de Fortuneo ; la page ne précise pas ici le numéro exact de l’article."
+  }
+}

@@ -1,0 +1,3718 @@
+{
+  "source": "Yahoo Finance Chart API, clôtures mensuelles ajustées (source de démonstration)",
+  "date_extraction": "2026-09-26",
+  "methode": "Dernière clôture ajustée de chaque mois terminé ; les dividendes sont pris en compte dans l'ajustement fourni par la source.",
+  "par_isin": {
+    "LU1681043599": {
+      "nom_yahoo": "Amundi Index Solutions - Amundi MSCI World Swap UCITS ETF EUR Acc",
+      "historique": [
+        {
+          "mois": "2009-07",
+          "cours_ajuste": 89.589996
+        },
+        {
+          "mois": "2009-08",
+          "cours_ajuste": 92.129997
+        },
+        {
+          "mois": "2009-09",
+          "cours_ajuste": 94.029999
+        },
+        {
+          "mois": "2009-10",
+          "cours_ajuste": 91.470001
+        },
+        {
+          "mois": "2009-11",
+          "cours_ajuste": 93.540001
+        },
+        {
+          "mois": "2009-12",
+          "cours_ajuste": 99.610001
+        },
+        {
+          "mois": "2010-01",
+          "cours_ajuste": 98.540001
+        },
+        {
+          "mois": "2010-02",
+          "cours_ajuste": 101.75
+        },
+        {
+          "mois": "2010-03",
+          "cours_ajuste": 108.940002
+        },
+        {
+          "mois": "2010-04",
+          "cours_ajuste": 110.860001
+        },
+        {
+          "mois": "2010-05",
+          "cours_ajuste": 108.620003
+        },
+        {
+          "mois": "2010-06",
+          "cours_ajuste": 105.050003
+        },
+        {
+          "mois": "2010-07",
+          "cours_ajuste": 106.75
+        },
+        {
+          "mois": "2010-08",
+          "cours_ajuste": 105.300003
+        },
+        {
+          "mois": "2010-09",
+          "cours_ajuste": 107.139999
+        },
+        {
+          "mois": "2010-10",
+          "cours_ajuste": 109.129997
+        },
+        {
+          "mois": "2010-11",
+          "cours_ajuste": 113.970001
+        },
+        {
+          "mois": "2010-12",
+          "cours_ajuste": 118.68
+        },
+        {
+          "mois": "2011-01",
+          "cours_ajuste": 118.720001
+        },
+        {
+          "mois": "2011-02",
+          "cours_ajuste": 121.93
+        },
+        {
+          "mois": "2011-03",
+          "cours_ajuste": 117.470001
+        },
+        {
+          "mois": "2011-04",
+          "cours_ajuste": 117.120003
+        },
+        {
+          "mois": "2011-05",
+          "cours_ajuste": 118.349998
+        },
+        {
+          "mois": "2011-06",
+          "cours_ajuste": 115.470001
+        },
+        {
+          "mois": "2011-07",
+          "cours_ajuste": 114.349998
+        },
+        {
+          "mois": "2011-08",
+          "cours_ajuste": 106.050003
+        },
+        {
+          "mois": "2011-09",
+          "cours_ajuste": 103.949997
+        },
+        {
+          "mois": "2011-10",
+          "cours_ajuste": 110.300003
+        },
+        {
+          "mois": "2011-11",
+          "cours_ajuste": 111.470001
+        },
+        {
+          "mois": "2011-12",
+          "cours_ajuste": 115.489998
+        },
+        {
+          "mois": "2012-01",
+          "cours_ajuste": 120.239998
+        },
+        {
+          "mois": "2012-02",
+          "cours_ajuste": 123.379997
+        },
+        {
+          "mois": "2012-03",
+          "cours_ajuste": 125.489998
+        },
+        {
+          "mois": "2012-04",
+          "cours_ajuste": 124.809998
+        },
+        {
+          "mois": "2012-05",
+          "cours_ajuste": 122.059998
+        },
+        {
+          "mois": "2012-06",
+          "cours_ajuste": 124.949997
+        },
+        {
+          "mois": "2012-07",
+          "cours_ajuste": 130.369995
+        },
+        {
+          "mois": "2012-08",
+          "cours_ajuste": 130.570007
+        },
+        {
+          "mois": "2012-09",
+          "cours_ajuste": 131.410004
+        },
+        {
+          "mois": "2012-10",
+          "cours_ajuste": 129.539993
+        },
+        {
+          "mois": "2012-11",
+          "cours_ajuste": 130.860001
+        },
+        {
+          "mois": "2012-12",
+          "cours_ajuste": 131.470001
+        },
+        {
+          "mois": "2013-01",
+          "cours_ajuste": 134.139999
+        },
+        {
+          "mois": "2013-02",
+          "cours_ajuste": 139.490005
+        },
+        {
+          "mois": "2013-03",
+          "cours_ajuste": 145.330002
+        },
+        {
+          "mois": "2013-04",
+          "cours_ajuste": 146.009995
+        },
+        {
+          "mois": "2013-05",
+          "cours_ajuste": 148.630005
+        },
+        {
+          "mois": "2013-06",
+          "cours_ajuste": 144.539993
+        },
+        {
+          "mois": "2013-07",
+          "cours_ajuste": 148.929993
+        },
+        {
+          "mois": "2013-08",
+          "cours_ajuste": 146.800003
+        },
+        {
+          "mois": "2013-09",
+          "cours_ajuste": 150.149994
+        },
+        {
+          "mois": "2013-10",
+          "cours_ajuste": 155.339996
+        },
+        {
+          "mois": "2013-11",
+          "cours_ajuste": 157.880005
+        },
+        {
+          "mois": "2013-12",
+          "cours_ajuste": 159.300003
+        },
+        {
+          "mois": "2014-01",
+          "cours_ajuste": 156.740005
+        },
+        {
+          "mois": "2014-02",
+          "cours_ajuste": 160.710007
+        },
+        {
+          "mois": "2014-03",
+          "cours_ajuste": 161.279999
+        },
+        {
+          "mois": "2014-04",
+          "cours_ajuste": 161.929993
+        },
+        {
+          "mois": "2014-05",
+          "cours_ajuste": 167.789993
+        },
+        {
+          "mois": "2014-06",
+          "cours_ajuste": 170.179993
+        },
+        {
+          "mois": "2014-07",
+          "cours_ajuste": 171.300003
+        },
+        {
+          "mois": "2014-08",
+          "cours_ajuste": 177.789993
+        },
+        {
+          "mois": "2014-09",
+          "cours_ajuste": 180.297104
+        },
+        {
+          "mois": "2014-10",
+          "cours_ajuste": 182.886307
+        },
+        {
+          "mois": "2014-11",
+          "cours_ajuste": 187.441498
+        },
+        {
+          "mois": "2014-12",
+          "cours_ajuste": 189.930298
+        },
+        {
+          "mois": "2015-01",
+          "cours_ajuste": 200.430801
+        },
+        {
+          "mois": "2015-02",
+          "cours_ajuste": 213.457901
+        },
+        {
+          "mois": "2015-03",
+          "cours_ajuste": 219.437698
+        },
+        {
+          "mois": "2015-04",
+          "cours_ajuste": 215.260498
+        },
+        {
+          "mois": "2015-05",
+          "cours_ajuste": 220.780701
+        },
+        {
+          "mois": "2015-06",
+          "cours_ajuste": 212.203201
+        },
+        {
+          "mois": "2015-07",
+          "cours_ajuste": 217.826508
+        },
+        {
+          "mois": "2015-08",
+          "cours_ajuste": 200.492905
+        },
+        {
+          "mois": "2015-09",
+          "cours_ajuste": 193.7603
+        },
+        {
+          "mois": "2015-10",
+          "cours_ajuste": 211.302505
+        },
+        {
+          "mois": "2015-11",
+          "cours_ajuste": 219.966507
+        },
+        {
+          "mois": "2015-12",
+          "cours_ajuste": 210.159195
+        },
+        {
+          "mois": "2016-01",
+          "cours_ajuste": 198.412598
+        },
+        {
+          "mois": "2016-02",
+          "cours_ajuste": 196.138199
+        },
+        {
+          "mois": "2016-03",
+          "cours_ajuste": 199.7258
+        },
+        {
+          "mois": "2016-04",
+          "cours_ajuste": 201.870605
+        },
+        {
+          "mois": "2016-05",
+          "cours_ajuste": 208.832596
+        },
+        {
+          "mois": "2016-06",
+          "cours_ajuste": 206.895996
+        },
+        {
+          "mois": "2016-07",
+          "cours_ajuste": 214.199799
+        },
+        {
+          "mois": "2016-08",
+          "cours_ajuste": 215.202194
+        },
+        {
+          "mois": "2016-09",
+          "cours_ajuste": 214.373505
+        },
+        {
+          "mois": "2016-10",
+          "cours_ajuste": 215.479095
+        },
+        {
+          "mois": "2016-11",
+          "cours_ajuste": 225.832108
+        },
+        {
+          "mois": "2016-12",
+          "cours_ajuste": 232.556
+        },
+        {
+          "mois": "2017-01",
+          "cours_ajuste": 232.444107
+        },
+        {
+          "mois": "2017-02",
+          "cours_ajuste": 242.956802
+        },
+        {
+          "mois": "2017-03",
+          "cours_ajuste": 243.942398
+        },
+        {
+          "mois": "2017-04",
+          "cours_ajuste": 243.138702
+        },
+        {
+          "mois": "2017-05",
+          "cours_ajuste": 240.424301
+        },
+        {
+          "mois": "2017-06",
+          "cours_ajuste": 237.947006
+        },
+        {
+          "mois": "2017-07",
+          "cours_ajuste": 235.686203
+        },
+        {
+          "mois": "2017-08",
+          "cours_ajuste": 234.037003
+        },
+        {
+          "mois": "2017-09",
+          "cours_ajuste": 240.630707
+        },
+        {
+          "mois": "2017-10",
+          "cours_ajuste": 248.785706
+        },
+        {
+          "mois": "2017-11",
+          "cours_ajuste": 248.305298
+        },
+        {
+          "mois": "2017-12",
+          "cours_ajuste": 249.858093
+        },
+        {
+          "mois": "2018-01",
+          "cours_ajuste": 253.532104
+        },
+        {
+          "mois": "2018-02",
+          "cours_ajuste": 248.214798
+        },
+        {
+          "mois": "2018-03",
+          "cours_ajuste": 240.621704
+        },
+        {
+          "mois": "2018-04",
+          "cours_ajuste": 249.338196
+        },
+        {
+          "mois": "2018-05",
+          "cours_ajuste": 258.390015
+        },
+        {
+          "mois": "2018-06",
+          "cours_ajuste": 259.262207
+        },
+        {
+          "mois": "2018-07",
+          "cours_ajuste": 265.450012
+        },
+        {
+          "mois": "2018-08",
+          "cours_ajuste": 270.778015
+        },
+        {
+          "mois": "2018-09",
+          "cours_ajuste": 272.323486
+        },
+        {
+          "mois": "2018-10",
+          "cours_ajuste": 258.750885
+        },
+        {
+          "mois": "2018-11",
+          "cours_ajuste": 260.272003
+        },
+        {
+          "mois": "2018-12",
+          "cours_ajuste": 240.720001
+        },
+        {
+          "mois": "2019-01",
+          "cours_ajuste": 257.100189
+        },
+        {
+          "mois": "2019-02",
+          "cours_ajuste": 267.256989
+        },
+        {
+          "mois": "2019-03",
+          "cours_ajuste": 274.0
+        },
+        {
+          "mois": "2019-04",
+          "cours_ajuste": 283.614288
+        },
+        {
+          "mois": "2019-05",
+          "cours_ajuste": 270.073608
+        },
+        {
+          "mois": "2019-06",
+          "cours_ajuste": 280.629211
+        },
+        {
+          "mois": "2019-07",
+          "cours_ajuste": 290.920593
+        },
+        {
+          "mois": "2019-08",
+          "cours_ajuste": 285.796814
+        },
+        {
+          "mois": "2019-09",
+          "cours_ajuste": 295.109985
+        },
+        {
+          "mois": "2019-10",
+          "cours_ajuste": 294.686707
+        },
+        {
+          "mois": "2019-11",
+          "cours_ajuste": 307.833008
+        },
+        {
+          "mois": "2019-12",
+          "cours_ajuste": 309.341309
+        },
+        {
+          "mois": "2020-01",
+          "cours_ajuste": 313.299988
+        },
+        {
+          "mois": "2020-02",
+          "cours_ajuste": 285.852997
+        },
+        {
+          "mois": "2020-03",
+          "cours_ajuste": 254.979996
+        },
+        {
+          "mois": "2020-04",
+          "cours_ajuste": 279.245789
+        },
+        {
+          "mois": "2020-05",
+          "cours_ajuste": 285.837189
+        },
+        {
+          "mois": "2020-06",
+          "cours_ajuste": 290.749908
+        },
+        {
+          "mois": "2020-07",
+          "cours_ajuste": 290.0
+        },
+        {
+          "mois": "2020-08",
+          "cours_ajuste": 306.814606
+        },
+        {
+          "mois": "2020-09",
+          "cours_ajuste": 303.329102
+        },
+        {
+          "mois": "2020-10",
+          "cours_ajuste": 295.353394
+        },
+        {
+          "mois": "2020-11",
+          "cours_ajuste": 322.954712
+        },
+        {
+          "mois": "2020-12",
+          "cours_ajuste": 328.688507
+        },
+        {
+          "mois": "2021-01",
+          "cours_ajuste": 330.76181
+        },
+        {
+          "mois": "2021-02",
+          "cours_ajuste": 341.045685
+        },
+        {
+          "mois": "2021-03",
+          "cours_ajuste": 361.630005
+        },
+        {
+          "mois": "2021-04",
+          "cours_ajuste": 369.027893
+        },
+        {
+          "mois": "2021-05",
+          "cours_ajuste": 367.871307
+        },
+        {
+          "mois": "2021-06",
+          "cours_ajuste": 384.967804
+        },
+        {
+          "mois": "2021-07",
+          "cours_ajuste": 392.379089
+        },
+        {
+          "mois": "2021-08",
+          "cours_ajuste": 404.245514
+        },
+        {
+          "mois": "2021-09",
+          "cours_ajuste": 396.39621
+        },
+        {
+          "mois": "2021-10",
+          "cours_ajuste": 417.152008
+        },
+        {
+          "mois": "2021-11",
+          "cours_ajuste": 419.742706
+        },
+        {
+          "mois": "2021-12",
+          "cours_ajuste": 434.975494
+        },
+        {
+          "mois": "2022-01",
+          "cours_ajuste": 413.269897
+        },
+        {
+          "mois": "2022-02",
+          "cours_ajuste": 404.661499
+        },
+        {
+          "mois": "2022-03",
+          "cours_ajuste": 423.981506
+        },
+        {
+          "mois": "2022-04",
+          "cours_ajuste": 412.658295
+        },
+        {
+          "mois": "2022-05",
+          "cours_ajuste": 396.237915
+        },
+        {
+          "mois": "2022-06",
+          "cours_ajuste": 373.442902
+        },
+        {
+          "mois": "2022-07",
+          "cours_ajuste": 411.229492
+        },
+        {
+          "mois": "2022-08",
+          "cours_ajuste": 403.584686
+        },
+        {
+          "mois": "2022-09",
+          "cours_ajuste": 380.841492
+        },
+        {
+          "mois": "2022-10",
+          "cours_ajuste": 397.140015
+        },
+        {
+          "mois": "2022-11",
+          "cours_ajuste": 398.850006
+        },
+        {
+          "mois": "2022-12",
+          "cours_ajuste": 375.188812
+        },
+        {
+          "mois": "2023-01",
+          "cours_ajuste": 394.628815
+        },
+        {
+          "mois": "2023-02",
+          "cours_ajuste": 397.059692
+        },
+        {
+          "mois": "2023-03",
+          "cours_ajuste": 397.338501
+        },
+        {
+          "mois": "2023-04",
+          "cours_ajuste": 398.588287
+        },
+        {
+          "mois": "2023-05",
+          "cours_ajuste": 407.875793
+        },
+        {
+          "mois": "2023-06",
+          "cours_ajuste": 423.62851
+        },
+        {
+          "mois": "2023-07",
+          "cours_ajuste": 433.2966
+        },
+        {
+          "mois": "2023-08",
+          "cours_ajuste": 430.819092
+        },
+        {
+          "mois": "2023-09",
+          "cours_ajuste": 423.765991
+        },
+        {
+          "mois": "2023-10",
+          "cours_ajuste": 409.756287
+        },
+        {
+          "mois": "2023-11",
+          "cours_ajuste": 432.994293
+        },
+        {
+          "mois": "2023-12",
+          "cours_ajuste": 448.837097
+        },
+        {
+          "mois": "2024-01",
+          "cours_ajuste": 466.385315
+        },
+        {
+          "mois": "2024-02",
+          "cours_ajuste": 483.557495
+        },
+        {
+          "mois": "2024-03",
+          "cours_ajuste": 501.0
+        },
+        {
+          "mois": "2024-04",
+          "cours_ajuste": 490.903503
+        },
+        {
+          "mois": "2024-05",
+          "cours_ajuste": 497.002106
+        },
+        {
+          "mois": "2024-06",
+          "cours_ajuste": 521.623718
+        },
+        {
+          "mois": "2024-07",
+          "cours_ajuste": 522.543701
+        },
+        {
+          "mois": "2024-08",
+          "cours_ajuste": 521.01532
+        },
+        {
+          "mois": "2024-09",
+          "cours_ajuste": 528.017212
+        },
+        {
+          "mois": "2024-10",
+          "cours_ajuste": 534.417114
+        },
+        {
+          "mois": "2024-11",
+          "cours_ajuste": 574.011597
+        },
+        {
+          "mois": "2024-12",
+          "cours_ajuste": 570.448975
+        },
+        {
+          "mois": "2025-01",
+          "cours_ajuste": 592.144775
+        },
+        {
+          "mois": "2025-02",
+          "cours_ajuste": 576.571716
+        },
+        {
+          "mois": "2025-03",
+          "cours_ajuste": 530.820923
+        },
+        {
+          "mois": "2025-04",
+          "cours_ajuste": 510.171692
+        },
+        {
+          "mois": "2025-05",
+          "cours_ajuste": 543.034424
+        },
+        {
+          "mois": "2025-06",
+          "cours_ajuste": 546.768494
+        },
+        {
+          "mois": "2025-07",
+          "cours_ajuste": 573.035889
+        },
+        {
+          "mois": "2025-08",
+          "cours_ajuste": 570.929321
+        },
+        {
+          "mois": "2025-09",
+          "cours_ajuste": 585.072327
+        },
+        {
+          "mois": "2025-10",
+          "cours_ajuste": 609.374573
+        },
+        {
+          "mois": "2025-11",
+          "cours_ajuste": 607.690979
+        },
+        {
+          "mois": "2025-12",
+          "cours_ajuste": 608.190002
+        },
+        {
+          "mois": "2026-01",
+          "cours_ajuste": 611.11499
+        },
+        {
+          "mois": "2026-02",
+          "cours_ajuste": 618.426086
+        },
+        {
+          "mois": "2026-03",
+          "cours_ajuste": 589.22821
+        },
+        {
+          "mois": "2026-04",
+          "cours_ajuste": 637.163025
+        },
+        {
+          "mois": "2026-05",
+          "cours_ajuste": 671.99823
+        },
+        {
+          "mois": "2026-06",
+          "cours_ajuste": 681.22998
+        },
+        {
+          "mois": "2026-07",
+          "cours_ajuste": 675.909973
+        },
+        {
+          "mois": "2026-08",
+          "cours_ajuste": 689.52002
+        }
+      ]
+    },
+    "FR0011871128": {
+      "nom_yahoo": "Amundi PEA S&P 500 UCITS ETF Acc",
+      "historique": [
+        {
+          "mois": "2014-06",
+          "cours_ajuste": 10.4879
+        },
+        {
+          "mois": "2014-07",
+          "cours_ajuste": 10.65
+        },
+        {
+          "mois": "2014-08",
+          "cours_ajuste": 11.19
+        },
+        {
+          "mois": "2014-09",
+          "cours_ajuste": 11.57
+        },
+        {
+          "mois": "2014-10",
+          "cours_ajuste": 11.84
+        },
+        {
+          "mois": "2014-11",
+          "cours_ajuste": 12.3
+        },
+        {
+          "mois": "2014-12",
+          "cours_ajuste": 12.68
+        },
+        {
+          "mois": "2015-01",
+          "cours_ajuste": 13.13
+        },
+        {
+          "mois": "2015-02",
+          "cours_ajuste": 13.94
+        },
+        {
+          "mois": "2015-03",
+          "cours_ajuste": 14.35
+        },
+        {
+          "mois": "2015-04",
+          "cours_ajuste": 13.94
+        },
+        {
+          "mois": "2015-05",
+          "cours_ajuste": 14.28
+        },
+        {
+          "mois": "2015-06",
+          "cours_ajuste": 13.77
+        },
+        {
+          "mois": "2015-07",
+          "cours_ajuste": 14.27
+        },
+        {
+          "mois": "2015-08",
+          "cours_ajuste": 13.19
+        },
+        {
+          "mois": "2015-09",
+          "cours_ajuste": 12.83
+        },
+        {
+          "mois": "2015-10",
+          "cours_ajuste": 14.2
+        },
+        {
+          "mois": "2015-11",
+          "cours_ajuste": 14.83
+        },
+        {
+          "mois": "2015-12",
+          "cours_ajuste": 14.22
+        },
+        {
+          "mois": "2016-01",
+          "cours_ajuste": 13.34
+        },
+        {
+          "mois": "2016-02",
+          "cours_ajuste": 13.59
+        },
+        {
+          "mois": "2016-03",
+          "cours_ajuste": 13.7
+        },
+        {
+          "mois": "2016-04",
+          "cours_ajuste": 13.58
+        },
+        {
+          "mois": "2016-05",
+          "cours_ajuste": 14.28
+        },
+        {
+          "mois": "2016-06",
+          "cours_ajuste": 14.23
+        },
+        {
+          "mois": "2016-07",
+          "cours_ajuste": 14.8
+        },
+        {
+          "mois": "2016-08",
+          "cours_ajuste": 14.82
+        },
+        {
+          "mois": "2016-09",
+          "cours_ajuste": 14.72
+        },
+        {
+          "mois": "2016-10",
+          "cours_ajuste": 14.86
+        },
+        {
+          "mois": "2016-11",
+          "cours_ajuste": 15.96
+        },
+        {
+          "mois": "2016-12",
+          "cours_ajuste": 16.34
+        },
+        {
+          "mois": "2017-01",
+          "cours_ajuste": 16.15
+        },
+        {
+          "mois": "2017-02",
+          "cours_ajuste": 17.16
+        },
+        {
+          "mois": "2017-03",
+          "cours_ajuste": 17.09
+        },
+        {
+          "mois": "2017-04",
+          "cours_ajuste": 16.860001
+        },
+        {
+          "mois": "2017-05",
+          "cours_ajuste": 16.49
+        },
+        {
+          "mois": "2017-06",
+          "cours_ajuste": 16.450001
+        },
+        {
+          "mois": "2017-07",
+          "cours_ajuste": 16.26
+        },
+        {
+          "mois": "2017-08",
+          "cours_ajuste": 16.129999
+        },
+        {
+          "mois": "2017-09",
+          "cours_ajuste": 16.559999
+        },
+        {
+          "mois": "2017-10",
+          "cours_ajuste": 17.23
+        },
+        {
+          "mois": "2017-11",
+          "cours_ajuste": 17.33
+        },
+        {
+          "mois": "2017-12",
+          "cours_ajuste": 17.469999
+        },
+        {
+          "mois": "2018-01",
+          "cours_ajuste": 17.794001
+        },
+        {
+          "mois": "2018-02",
+          "cours_ajuste": 17.598
+        },
+        {
+          "mois": "2018-03",
+          "cours_ajuste": 16.799999
+        },
+        {
+          "mois": "2018-04",
+          "cours_ajuste": 17.41
+        },
+        {
+          "mois": "2018-05",
+          "cours_ajuste": 18.32
+        },
+        {
+          "mois": "2018-06",
+          "cours_ajuste": 18.497
+        },
+        {
+          "mois": "2018-07",
+          "cours_ajuste": 18.99
+        },
+        {
+          "mois": "2018-08",
+          "cours_ajuste": 19.737
+        },
+        {
+          "mois": "2018-09",
+          "cours_ajuste": 19.889
+        },
+        {
+          "mois": "2018-10",
+          "cours_ajuste": 19.032
+        },
+        {
+          "mois": "2018-11",
+          "cours_ajuste": 19.207001
+        },
+        {
+          "mois": "2018-12",
+          "cours_ajuste": 17.433001
+        },
+        {
+          "mois": "2019-01",
+          "cours_ajuste": 18.775999
+        },
+        {
+          "mois": "2019-02",
+          "cours_ajuste": 19.568001
+        },
+        {
+          "mois": "2019-03",
+          "cours_ajuste": 20.136
+        },
+        {
+          "mois": "2019-04",
+          "cours_ajuste": 20.943001
+        },
+        {
+          "mois": "2019-05",
+          "cours_ajuste": 19.902
+        },
+        {
+          "mois": "2019-06",
+          "cours_ajuste": 20.697001
+        },
+        {
+          "mois": "2019-07",
+          "cours_ajuste": 21.775
+        },
+        {
+          "mois": "2019-08",
+          "cours_ajuste": 21.417
+        },
+        {
+          "mois": "2019-09",
+          "cours_ajuste": 22.055
+        },
+        {
+          "mois": "2019-10",
+          "cours_ajuste": 21.945
+        },
+        {
+          "mois": "2019-11",
+          "cours_ajuste": 23.103001
+        },
+        {
+          "mois": "2019-12",
+          "cours_ajuste": 23.245001
+        },
+        {
+          "mois": "2020-01",
+          "cours_ajuste": 23.743999
+        },
+        {
+          "mois": "2020-02",
+          "cours_ajuste": 21.577999
+        },
+        {
+          "mois": "2020-03",
+          "cours_ajuste": 19.552999
+        },
+        {
+          "mois": "2020-04",
+          "cours_ajuste": 21.712
+        },
+        {
+          "mois": "2020-05",
+          "cours_ajuste": 22.141001
+        },
+        {
+          "mois": "2020-06",
+          "cours_ajuste": 22.396999
+        },
+        {
+          "mois": "2020-07",
+          "cours_ajuste": 22.493
+        },
+        {
+          "mois": "2020-08",
+          "cours_ajuste": 24.042999
+        },
+        {
+          "mois": "2020-09",
+          "cours_ajuste": 23.642
+        },
+        {
+          "mois": "2020-10",
+          "cours_ajuste": 23.083
+        },
+        {
+          "mois": "2020-11",
+          "cours_ajuste": 24.84
+        },
+        {
+          "mois": "2020-12",
+          "cours_ajuste": 25.107
+        },
+        {
+          "mois": "2021-01",
+          "cours_ajuste": 25.4
+        },
+        {
+          "mois": "2021-02",
+          "cours_ajuste": 26.257
+        },
+        {
+          "mois": "2021-03",
+          "cours_ajuste": 28.098
+        },
+        {
+          "mois": "2021-04",
+          "cours_ajuste": 28.815001
+        },
+        {
+          "mois": "2021-05",
+          "cours_ajuste": 28.487
+        },
+        {
+          "mois": "2021-06",
+          "cours_ajuste": 30.087999
+        },
+        {
+          "mois": "2021-07",
+          "cours_ajuste": 30.809999
+        },
+        {
+          "mois": "2021-08",
+          "cours_ajuste": 31.955
+        },
+        {
+          "mois": "2021-09",
+          "cours_ajuste": 31.302999
+        },
+        {
+          "mois": "2021-10",
+          "cours_ajuste": 33.174999
+        },
+        {
+          "mois": "2021-11",
+          "cours_ajuste": 33.960999
+        },
+        {
+          "mois": "2021-12",
+          "cours_ajuste": 35.268002
+        },
+        {
+          "mois": "2022-01",
+          "cours_ajuste": 33.344002
+        },
+        {
+          "mois": "2022-02",
+          "cours_ajuste": 32.650002
+        },
+        {
+          "mois": "2022-03",
+          "cours_ajuste": 34.695999
+        },
+        {
+          "mois": "2022-04",
+          "cours_ajuste": 33.640999
+        },
+        {
+          "mois": "2022-05",
+          "cours_ajuste": 32.293999
+        },
+        {
+          "mois": "2022-06",
+          "cours_ajuste": 30.372999
+        },
+        {
+          "mois": "2022-07",
+          "cours_ajuste": 33.806999
+        },
+        {
+          "mois": "2022-08",
+          "cours_ajuste": 33.374001
+        },
+        {
+          "mois": "2022-09",
+          "cours_ajuste": 31.605
+        },
+        {
+          "mois": "2022-10",
+          "cours_ajuste": 33.105
+        },
+        {
+          "mois": "2022-11",
+          "cours_ajuste": 32.449001
+        },
+        {
+          "mois": "2022-12",
+          "cours_ajuste": 30.306
+        },
+        {
+          "mois": "2023-01",
+          "cours_ajuste": 31.539
+        },
+        {
+          "mois": "2023-02",
+          "cours_ajuste": 31.865
+        },
+        {
+          "mois": "2023-03",
+          "cours_ajuste": 31.955999
+        },
+        {
+          "mois": "2023-04",
+          "cours_ajuste": 31.976
+        },
+        {
+          "mois": "2023-05",
+          "cours_ajuste": 33.272999
+        },
+        {
+          "mois": "2023-06",
+          "cours_ajuste": 34.678001
+        },
+        {
+          "mois": "2023-07",
+          "cours_ajuste": 35.43
+        },
+        {
+          "mois": "2023-08",
+          "cours_ajuste": 35.653999
+        },
+        {
+          "mois": "2023-09",
+          "cours_ajuste": 34.866001
+        },
+        {
+          "mois": "2023-10",
+          "cours_ajuste": 33.838001
+        },
+        {
+          "mois": "2023-11",
+          "cours_ajuste": 35.731998
+        },
+        {
+          "mois": "2023-12",
+          "cours_ajuste": 36.950001
+        },
+        {
+          "mois": "2024-01",
+          "cours_ajuste": 38.696999
+        },
+        {
+          "mois": "2024-02",
+          "cours_ajuste": 40.405998
+        },
+        {
+          "mois": "2024-03",
+          "cours_ajuste": 41.876999
+        },
+        {
+          "mois": "2024-04",
+          "cours_ajuste": 40.977001
+        },
+        {
+          "mois": "2024-05",
+          "cours_ajuste": 41.437
+        },
+        {
+          "mois": "2024-06",
+          "cours_ajuste": 44.332001
+        },
+        {
+          "mois": "2024-07",
+          "cours_ajuste": 44.148998
+        },
+        {
+          "mois": "2024-08",
+          "cours_ajuste": 43.778
+        },
+        {
+          "mois": "2024-09",
+          "cours_ajuste": 44.542999
+        },
+        {
+          "mois": "2024-10",
+          "cours_ajuste": 45.693001
+        },
+        {
+          "mois": "2024-11",
+          "cours_ajuste": 49.581001
+        },
+        {
+          "mois": "2024-12",
+          "cours_ajuste": 49.445999
+        },
+        {
+          "mois": "2025-01",
+          "cours_ajuste": 50.999001
+        },
+        {
+          "mois": "2025-02",
+          "cours_ajuste": 49.098999
+        },
+        {
+          "mois": "2025-03",
+          "cours_ajuste": 44.654999
+        },
+        {
+          "mois": "2025-04",
+          "cours_ajuste": 42.316002
+        },
+        {
+          "mois": "2025-05",
+          "cours_ajuste": 45.176998
+        },
+        {
+          "mois": "2025-06",
+          "cours_ajuste": 45.861
+        },
+        {
+          "mois": "2025-07",
+          "cours_ajuste": 48.661999
+        },
+        {
+          "mois": "2025-08",
+          "cours_ajuste": 48.097
+        },
+        {
+          "mois": "2025-09",
+          "cours_ajuste": 49.490002
+        },
+        {
+          "mois": "2025-10",
+          "cours_ajuste": 51.77
+        },
+        {
+          "mois": "2025-11",
+          "cours_ajuste": 51.5
+        },
+        {
+          "mois": "2025-12",
+          "cours_ajuste": 51.258999
+        },
+        {
+          "mois": "2026-01",
+          "cours_ajuste": 51.077999
+        },
+        {
+          "mois": "2026-02",
+          "cours_ajuste": 50.929001
+        },
+        {
+          "mois": "2026-03",
+          "cours_ajuste": 48.952
+        },
+        {
+          "mois": "2026-04",
+          "cours_ajuste": 53.573002
+        },
+        {
+          "mois": "2026-05",
+          "cours_ajuste": 56.973999
+        },
+        {
+          "mois": "2026-06",
+          "cours_ajuste": 57.490002
+        },
+        {
+          "mois": "2026-07",
+          "cours_ajuste": 56.73
+        },
+        {
+          "mois": "2026-08",
+          "cours_ajuste": 58.040001
+        }
+      ]
+    },
+    "FR0011871110": {
+      "nom_yahoo": "Amundi PEA Nasdaq-100 UCITS ETF Acc",
+      "historique": [
+        {
+          "mois": "2014-06",
+          "cours_ajuste": 10.71
+        },
+        {
+          "mois": "2014-07",
+          "cours_ajuste": 11.12
+        },
+        {
+          "mois": "2014-08",
+          "cours_ajuste": 11.83
+        },
+        {
+          "mois": "2014-09",
+          "cours_ajuste": 12.3
+        },
+        {
+          "mois": "2014-10",
+          "cours_ajuste": 12.64
+        },
+        {
+          "mois": "2014-11",
+          "cours_ajuste": 13.33
+        },
+        {
+          "mois": "2014-12",
+          "cours_ajuste": 13.48
+        },
+        {
+          "mois": "2015-01",
+          "cours_ajuste": 14.12
+        },
+        {
+          "mois": "2015-02",
+          "cours_ajuste": 15.18
+        },
+        {
+          "mois": "2015-03",
+          "cours_ajuste": 15.52
+        },
+        {
+          "mois": "2015-04",
+          "cours_ajuste": 15.22
+        },
+        {
+          "mois": "2015-05",
+          "cours_ajuste": 15.71
+        },
+        {
+          "mois": "2015-06",
+          "cours_ajuste": 15.07
+        },
+        {
+          "mois": "2015-07",
+          "cours_ajuste": 15.95
+        },
+        {
+          "mois": "2015-08",
+          "cours_ajuste": 14.71
+        },
+        {
+          "mois": "2015-09",
+          "cours_ajuste": 14.3
+        },
+        {
+          "mois": "2015-10",
+          "cours_ajuste": 16.219999
+        },
+        {
+          "mois": "2015-11",
+          "cours_ajuste": 16.940001
+        },
+        {
+          "mois": "2015-12",
+          "cours_ajuste": 16.370001
+        },
+        {
+          "mois": "2016-01",
+          "cours_ajuste": 15.0
+        },
+        {
+          "mois": "2016-02",
+          "cours_ajuste": 15.06
+        },
+        {
+          "mois": "2016-03",
+          "cours_ajuste": 15.16
+        },
+        {
+          "mois": "2016-04",
+          "cours_ajuste": 14.44
+        },
+        {
+          "mois": "2016-05",
+          "cours_ajuste": 15.61
+        },
+        {
+          "mois": "2016-06",
+          "cours_ajuste": 15.21
+        },
+        {
+          "mois": "2016-07",
+          "cours_ajuste": 16.32
+        },
+        {
+          "mois": "2016-08",
+          "cours_ajuste": 16.48
+        },
+        {
+          "mois": "2016-09",
+          "cours_ajuste": 16.73
+        },
+        {
+          "mois": "2016-10",
+          "cours_ajuste": 16.940001
+        },
+        {
+          "mois": "2016-11",
+          "cours_ajuste": 17.690001
+        },
+        {
+          "mois": "2016-12",
+          "cours_ajuste": 17.879999
+        },
+        {
+          "mois": "2017-01",
+          "cours_ajuste": 18.209999
+        },
+        {
+          "mois": "2017-02",
+          "cours_ajuste": 19.459999
+        },
+        {
+          "mois": "2017-03",
+          "cours_ajuste": 19.700001
+        },
+        {
+          "mois": "2017-04",
+          "cours_ajuste": 19.799999
+        },
+        {
+          "mois": "2017-05",
+          "cours_ajuste": 19.91
+        },
+        {
+          "mois": "2017-06",
+          "cours_ajuste": 19.200001
+        },
+        {
+          "mois": "2017-07",
+          "cours_ajuste": 19.35
+        },
+        {
+          "mois": "2017-08",
+          "cours_ajuste": 19.49
+        },
+        {
+          "mois": "2017-09",
+          "cours_ajuste": 19.6
+        },
+        {
+          "mois": "2017-10",
+          "cours_ajuste": 20.83
+        },
+        {
+          "mois": "2017-11",
+          "cours_ajuste": 20.73
+        },
+        {
+          "mois": "2017-12",
+          "cours_ajuste": 20.75
+        },
+        {
+          "mois": "2018-01",
+          "cours_ajuste": 21.745001
+        },
+        {
+          "mois": "2018-02",
+          "cours_ajuste": 22.030001
+        },
+        {
+          "mois": "2018-03",
+          "cours_ajuste": 20.674999
+        },
+        {
+          "mois": "2018-04",
+          "cours_ajuste": 21.514999
+        },
+        {
+          "mois": "2018-05",
+          "cours_ajuste": 23.34
+        },
+        {
+          "mois": "2018-06",
+          "cours_ajuste": 23.65
+        },
+        {
+          "mois": "2018-07",
+          "cours_ajuste": 24.105
+        },
+        {
+          "mois": "2018-08",
+          "cours_ajuste": 25.745001
+        },
+        {
+          "mois": "2018-09",
+          "cours_ajuste": 25.66
+        },
+        {
+          "mois": "2018-10",
+          "cours_ajuste": 24.059999
+        },
+        {
+          "mois": "2018-11",
+          "cours_ajuste": 23.815001
+        },
+        {
+          "mois": "2018-12",
+          "cours_ajuste": 21.715
+        },
+        {
+          "mois": "2019-01",
+          "cours_ajuste": 23.58
+        },
+        {
+          "mois": "2019-02",
+          "cours_ajuste": 24.469999
+        },
+        {
+          "mois": "2019-03",
+          "cours_ajuste": 25.695
+        },
+        {
+          "mois": "2019-04",
+          "cours_ajuste": 27.09
+        },
+        {
+          "mois": "2019-05",
+          "cours_ajuste": 25.235001
+        },
+        {
+          "mois": "2019-06",
+          "cours_ajuste": 26.41
+        },
+        {
+          "mois": "2019-07",
+          "cours_ajuste": 28.110001
+        },
+        {
+          "mois": "2019-08",
+          "cours_ajuste": 27.415001
+        },
+        {
+          "mois": "2019-09",
+          "cours_ajuste": 27.91
+        },
+        {
+          "mois": "2019-10",
+          "cours_ajuste": 28.434999
+        },
+        {
+          "mois": "2019-11",
+          "cours_ajuste": 30.065001
+        },
+        {
+          "mois": "2019-12",
+          "cours_ajuste": 30.49
+        },
+        {
+          "mois": "2020-01",
+          "cours_ajuste": 32.09
+        },
+        {
+          "mois": "2020-02",
+          "cours_ajuste": 29.91
+        },
+        {
+          "mois": "2020-03",
+          "cours_ajuste": 28.6
+        },
+        {
+          "mois": "2020-04",
+          "cours_ajuste": 32.380001
+        },
+        {
+          "mois": "2020-05",
+          "cours_ajuste": 33.419998
+        },
+        {
+          "mois": "2020-06",
+          "cours_ajuste": 35.395
+        },
+        {
+          "mois": "2020-07",
+          "cours_ajuste": 36.165001
+        },
+        {
+          "mois": "2020-08",
+          "cours_ajuste": 39.860001
+        },
+        {
+          "mois": "2020-09",
+          "cours_ajuste": 38.625
+        },
+        {
+          "mois": "2020-10",
+          "cours_ajuste": 37.599998
+        },
+        {
+          "mois": "2020-11",
+          "cours_ajuste": 40.215
+        },
+        {
+          "mois": "2020-12",
+          "cours_ajuste": 41.48
+        },
+        {
+          "mois": "2021-01",
+          "cours_ajuste": 42.375
+        },
+        {
+          "mois": "2021-02",
+          "cours_ajuste": 42.580002
+        },
+        {
+          "mois": "2021-03",
+          "cours_ajuste": 44.259998
+        },
+        {
+          "mois": "2021-04",
+          "cours_ajuste": 45.759998
+        },
+        {
+          "mois": "2021-05",
+          "cours_ajuste": 44.310001
+        },
+        {
+          "mois": "2021-06",
+          "cours_ajuste": 48.66
+        },
+        {
+          "mois": "2021-07",
+          "cours_ajuste": 49.904999
+        },
+        {
+          "mois": "2021-08",
+          "cours_ajuste": 52.34
+        },
+        {
+          "mois": "2021-09",
+          "cours_ajuste": 50.630001
+        },
+        {
+          "mois": "2021-10",
+          "cours_ajuste": 54.040001
+        },
+        {
+          "mois": "2021-11",
+          "cours_ajuste": 56.77
+        },
+        {
+          "mois": "2021-12",
+          "cours_ajuste": 57.549999
+        },
+        {
+          "mois": "2022-01",
+          "cours_ajuste": 52.130001
+        },
+        {
+          "mois": "2022-02",
+          "cours_ajuste": 50.389999
+        },
+        {
+          "mois": "2022-03",
+          "cours_ajuste": 53.779999
+        },
+        {
+          "mois": "2022-04",
+          "cours_ajuste": 49.705002
+        },
+        {
+          "mois": "2022-05",
+          "cours_ajuste": 46.645
+        },
+        {
+          "mois": "2022-06",
+          "cours_ajuste": 43.799999
+        },
+        {
+          "mois": "2022-07",
+          "cours_ajuste": 49.709999
+        },
+        {
+          "mois": "2022-08",
+          "cours_ajuste": 48.645
+        },
+        {
+          "mois": "2022-09",
+          "cours_ajuste": 45.755001
+        },
+        {
+          "mois": "2022-10",
+          "cours_ajuste": 45.919998
+        },
+        {
+          "mois": "2022-11",
+          "cours_ajuste": 44.535
+        },
+        {
+          "mois": "2022-12",
+          "cours_ajuste": 40.424999
+        },
+        {
+          "mois": "2023-01",
+          "cours_ajuste": 44.07
+        },
+        {
+          "mois": "2023-02",
+          "cours_ajuste": 45.299999
+        },
+        {
+          "mois": "2023-03",
+          "cours_ajuste": 47.965
+        },
+        {
+          "mois": "2023-04",
+          "cours_ajuste": 47.544998
+        },
+        {
+          "mois": "2023-05",
+          "cours_ajuste": 53.18
+        },
+        {
+          "mois": "2023-06",
+          "cours_ajuste": 55.41
+        },
+        {
+          "mois": "2023-07",
+          "cours_ajuste": 57.009998
+        },
+        {
+          "mois": "2023-08",
+          "cours_ajuste": 57.200001
+        },
+        {
+          "mois": "2023-09",
+          "cours_ajuste": 55.900002
+        },
+        {
+          "mois": "2023-10",
+          "cours_ajuste": 54.220001
+        },
+        {
+          "mois": "2023-11",
+          "cours_ajuste": 58.16
+        },
+        {
+          "mois": "2023-12",
+          "cours_ajuste": 60.66
+        },
+        {
+          "mois": "2024-01",
+          "cours_ajuste": 63.560001
+        },
+        {
+          "mois": "2024-02",
+          "cours_ajuste": 66.379997
+        },
+        {
+          "mois": "2024-03",
+          "cours_ajuste": 67.699997
+        },
+        {
+          "mois": "2024-04",
+          "cours_ajuste": 66.07
+        },
+        {
+          "mois": "2024-05",
+          "cours_ajuste": 67.449997
+        },
+        {
+          "mois": "2024-06",
+          "cours_ajuste": 74.290001
+        },
+        {
+          "mois": "2024-07",
+          "cours_ajuste": 71.660004
+        },
+        {
+          "mois": "2024-08",
+          "cours_ajuste": 70.32
+        },
+        {
+          "mois": "2024-09",
+          "cours_ajuste": 71.900002
+        },
+        {
+          "mois": "2024-10",
+          "cours_ajuste": 73.650002
+        },
+        {
+          "mois": "2024-11",
+          "cours_ajuste": 79.529999
+        },
+        {
+          "mois": "2024-12",
+          "cours_ajuste": 82.089996
+        },
+        {
+          "mois": "2025-01",
+          "cours_ajuste": 84.040001
+        },
+        {
+          "mois": "2025-02",
+          "cours_ajuste": 79.529999
+        },
+        {
+          "mois": "2025-03",
+          "cours_ajuste": 70.650002
+        },
+        {
+          "mois": "2025-04",
+          "cours_ajuste": 68.370003
+        },
+        {
+          "mois": "2025-05",
+          "cours_ajuste": 75.169998
+        },
+        {
+          "mois": "2025-06",
+          "cours_ajuste": 77.209999
+        },
+        {
+          "mois": "2025-07",
+          "cours_ajuste": 82.129997
+        },
+        {
+          "mois": "2025-08",
+          "cours_ajuste": 80.309998
+        },
+        {
+          "mois": "2025-09",
+          "cours_ajuste": 83.980003
+        },
+        {
+          "mois": "2025-10",
+          "cours_ajuste": 90.019997
+        },
+        {
+          "mois": "2025-11",
+          "cours_ajuste": 87.690002
+        },
+        {
+          "mois": "2025-12",
+          "cours_ajuste": 86.779999
+        },
+        {
+          "mois": "2026-01",
+          "cours_ajuste": 86.720001
+        },
+        {
+          "mois": "2026-02",
+          "cours_ajuste": 84.690002
+        },
+        {
+          "mois": "2026-03",
+          "cours_ajuste": 81.25
+        },
+        {
+          "mois": "2026-04",
+          "cours_ajuste": 93.290001
+        },
+        {
+          "mois": "2026-05",
+          "cours_ajuste": 104.260002
+        },
+        {
+          "mois": "2026-06",
+          "cours_ajuste": 105.959999
+        },
+        {
+          "mois": "2026-07",
+          "cours_ajuste": 97.860001
+        },
+        {
+          "mois": "2026-08",
+          "cours_ajuste": 101.379997
+        }
+      ]
+    },
+    "LU1829219390": {
+      "nom_yahoo": "Amundi Euro Stoxx Banks UCITS ETF Acc",
+      "historique": [
+        {
+          "mois": "2014-01",
+          "cours_ajuste": 110.900002
+        },
+        {
+          "mois": "2014-02",
+          "cours_ajuste": 117.259201
+        },
+        {
+          "mois": "2014-03",
+          "cours_ajuste": 118.289597
+        },
+        {
+          "mois": "2014-04",
+          "cours_ajuste": 117.699097
+        },
+        {
+          "mois": "2014-05",
+          "cours_ajuste": 118.493401
+        },
+        {
+          "mois": "2014-06",
+          "cours_ajuste": 113.175301
+        },
+        {
+          "mois": "2014-07",
+          "cours_ajuste": 111.510696
+        },
+        {
+          "mois": "2014-08",
+          "cours_ajuste": 113.212799
+        },
+        {
+          "mois": "2014-09",
+          "cours_ajuste": 115.781998
+        },
+        {
+          "mois": "2014-10",
+          "cours_ajuste": 109.815903
+        },
+        {
+          "mois": "2014-11",
+          "cours_ajuste": 112.309502
+        },
+        {
+          "mois": "2014-12",
+          "cours_ajuste": 104.778801
+        },
+        {
+          "mois": "2015-01",
+          "cours_ajuste": 101.252602
+        },
+        {
+          "mois": "2015-02",
+          "cours_ajuste": 116.100502
+        },
+        {
+          "mois": "2015-03",
+          "cours_ajuste": 123.3069
+        },
+        {
+          "mois": "2015-04",
+          "cours_ajuste": 121.138496
+        },
+        {
+          "mois": "2015-05",
+          "cours_ajuste": 122.072403
+        },
+        {
+          "mois": "2015-06",
+          "cours_ajuste": 118.960701
+        },
+        {
+          "mois": "2015-07",
+          "cours_ajuste": 125.166397
+        },
+        {
+          "mois": "2015-08",
+          "cours_ajuste": 113.684799
+        },
+        {
+          "mois": "2015-09",
+          "cours_ajuste": 104.539703
+        },
+        {
+          "mois": "2015-10",
+          "cours_ajuste": 109.762604
+        },
+        {
+          "mois": "2015-11",
+          "cours_ajuste": 110.045303
+        },
+        {
+          "mois": "2015-12",
+          "cours_ajuste": 101.971901
+        },
+        {
+          "mois": "2016-01",
+          "cours_ajuste": 84.913399
+        },
+        {
+          "mois": "2016-02",
+          "cours_ajuste": 81.0653
+        },
+        {
+          "mois": "2016-03",
+          "cours_ajuste": 81.089897
+        },
+        {
+          "mois": "2016-04",
+          "cours_ajuste": 86.436798
+        },
+        {
+          "mois": "2016-05",
+          "cours_ajuste": 86.639
+        },
+        {
+          "mois": "2016-06",
+          "cours_ajuste": 68.388802
+        },
+        {
+          "mois": "2016-07",
+          "cours_ajuste": 74.517502
+        },
+        {
+          "mois": "2016-08",
+          "cours_ajuste": 79.462799
+        },
+        {
+          "mois": "2016-09",
+          "cours_ajuste": 76.455101
+        },
+        {
+          "mois": "2016-10",
+          "cours_ajuste": 86.477203
+        },
+        {
+          "mois": "2016-11",
+          "cours_ajuste": 86.991203
+        },
+        {
+          "mois": "2016-12",
+          "cours_ajuste": 97.566597
+        },
+        {
+          "mois": "2017-01",
+          "cours_ajuste": 97.937401
+        },
+        {
+          "mois": "2017-02",
+          "cours_ajuste": 94.598099
+        },
+        {
+          "mois": "2017-03",
+          "cours_ajuste": 105.945602
+        },
+        {
+          "mois": "2017-04",
+          "cours_ajuste": 110.451401
+        },
+        {
+          "mois": "2017-05",
+          "cours_ajuste": 110.132401
+        },
+        {
+          "mois": "2017-06",
+          "cours_ajuste": 111.429001
+        },
+        {
+          "mois": "2017-07",
+          "cours_ajuste": 115.503899
+        },
+        {
+          "mois": "2017-08",
+          "cours_ajuste": 111.951103
+        },
+        {
+          "mois": "2017-09",
+          "cours_ajuste": 117.842499
+        },
+        {
+          "mois": "2017-10",
+          "cours_ajuste": 115.780403
+        },
+        {
+          "mois": "2017-11",
+          "cours_ajuste": 112.884598
+        },
+        {
+          "mois": "2017-12",
+          "cours_ajuste": 111.430603
+        },
+        {
+          "mois": "2018-01",
+          "cours_ajuste": 120.4384
+        },
+        {
+          "mois": "2018-02",
+          "cours_ajuste": 115.078697
+        },
+        {
+          "mois": "2018-03",
+          "cours_ajuste": 107.462303
+        },
+        {
+          "mois": "2018-04",
+          "cours_ajuste": 112.152298
+        },
+        {
+          "mois": "2018-05",
+          "cours_ajuste": 97.068497
+        },
+        {
+          "mois": "2018-06",
+          "cours_ajuste": 97.183403
+        },
+        {
+          "mois": "2018-07",
+          "cours_ajuste": 102.902496
+        },
+        {
+          "mois": "2018-08",
+          "cours_ajuste": 92.004303
+        },
+        {
+          "mois": "2018-09",
+          "cours_ajuste": 94.102501
+        },
+        {
+          "mois": "2018-10",
+          "cours_ajuste": 85.7808
+        },
+        {
+          "mois": "2018-11",
+          "cours_ajuste": 85.769997
+        },
+        {
+          "mois": "2018-12",
+          "cours_ajuste": 76.839996
+        },
+        {
+          "mois": "2019-01",
+          "cours_ajuste": 80.949997
+        },
+        {
+          "mois": "2019-02",
+          "cours_ajuste": 87.269997
+        },
+        {
+          "mois": "2019-03",
+          "cours_ajuste": 82.919998
+        },
+        {
+          "mois": "2019-04",
+          "cours_ajuste": 90.629997
+        },
+        {
+          "mois": "2019-05",
+          "cours_ajuste": 79.93
+        },
+        {
+          "mois": "2019-06",
+          "cours_ajuste": 81.660004
+        },
+        {
+          "mois": "2019-07",
+          "cours_ajuste": 79.970001
+        },
+        {
+          "mois": "2019-08",
+          "cours_ajuste": 74.860001
+        },
+        {
+          "mois": "2019-09",
+          "cours_ajuste": 81.519997
+        },
+        {
+          "mois": "2019-10",
+          "cours_ajuste": 83.650002
+        },
+        {
+          "mois": "2019-11",
+          "cours_ajuste": 87.059998
+        },
+        {
+          "mois": "2019-12",
+          "cours_ajuste": 90.610001
+        },
+        {
+          "mois": "2020-01",
+          "cours_ajuste": 85.410004
+        },
+        {
+          "mois": "2020-02",
+          "cours_ajuste": 78.5
+        },
+        {
+          "mois": "2020-03",
+          "cours_ajuste": 50.880001
+        },
+        {
+          "mois": "2020-04",
+          "cours_ajuste": 52.189999
+        },
+        {
+          "mois": "2020-05",
+          "cours_ajuste": 54.459999
+        },
+        {
+          "mois": "2020-06",
+          "cours_ajuste": 59.490002
+        },
+        {
+          "mois": "2020-07",
+          "cours_ajuste": 55.400002
+        },
+        {
+          "mois": "2020-08",
+          "cours_ajuste": 58.636002
+        },
+        {
+          "mois": "2020-09",
+          "cours_ajuste": 51.57
+        },
+        {
+          "mois": "2020-10",
+          "cours_ajuste": 50.630001
+        },
+        {
+          "mois": "2020-11",
+          "cours_ajuste": 69.851997
+        },
+        {
+          "mois": "2020-12",
+          "cours_ajuste": 70.110001
+        },
+        {
+          "mois": "2021-01",
+          "cours_ajuste": 66.580002
+        },
+        {
+          "mois": "2021-02",
+          "cours_ajuste": 79.389999
+        },
+        {
+          "mois": "2021-03",
+          "cours_ajuste": 83.300003
+        },
+        {
+          "mois": "2021-04",
+          "cours_ajuste": 87.120003
+        },
+        {
+          "mois": "2021-05",
+          "cours_ajuste": 93.917999
+        },
+        {
+          "mois": "2021-06",
+          "cours_ajuste": 89.546997
+        },
+        {
+          "mois": "2021-07",
+          "cours_ajuste": 88.861
+        },
+        {
+          "mois": "2021-08",
+          "cours_ajuste": 92.329002
+        },
+        {
+          "mois": "2021-09",
+          "cours_ajuste": 96.367996
+        },
+        {
+          "mois": "2021-10",
+          "cours_ajuste": 100.237
+        },
+        {
+          "mois": "2021-11",
+          "cours_ajuste": 91.797997
+        },
+        {
+          "mois": "2021-12",
+          "cours_ajuste": 98.032997
+        },
+        {
+          "mois": "2022-01",
+          "cours_ajuste": 104.413002
+        },
+        {
+          "mois": "2022-02",
+          "cours_ajuste": 91.776001
+        },
+        {
+          "mois": "2022-03",
+          "cours_ajuste": 89.379997
+        },
+        {
+          "mois": "2022-04",
+          "cours_ajuste": 86.040001
+        },
+        {
+          "mois": "2022-05",
+          "cours_ajuste": 93.710999
+        },
+        {
+          "mois": "2022-06",
+          "cours_ajuste": 81.952003
+        },
+        {
+          "mois": "2022-07",
+          "cours_ajuste": 81.620003
+        },
+        {
+          "mois": "2022-08",
+          "cours_ajuste": 80.760002
+        },
+        {
+          "mois": "2022-09",
+          "cours_ajuste": 80.331001
+        },
+        {
+          "mois": "2022-10",
+          "cours_ajuste": 89.879997
+        },
+        {
+          "mois": "2022-11",
+          "cours_ajuste": 97.916
+        },
+        {
+          "mois": "2022-12",
+          "cours_ajuste": 99.037003
+        },
+        {
+          "mois": "2023-01",
+          "cours_ajuste": 114.757004
+        },
+        {
+          "mois": "2023-02",
+          "cours_ajuste": 122.297997
+        },
+        {
+          "mois": "2023-03",
+          "cours_ajuste": 105.667
+        },
+        {
+          "mois": "2023-04",
+          "cours_ajuste": 108.935997
+        },
+        {
+          "mois": "2023-05",
+          "cours_ajuste": 105.745003
+        },
+        {
+          "mois": "2023-06",
+          "cours_ajuste": 115.496002
+        },
+        {
+          "mois": "2023-07",
+          "cours_ajuste": 122.555
+        },
+        {
+          "mois": "2023-08",
+          "cours_ajuste": 120.288002
+        },
+        {
+          "mois": "2023-09",
+          "cours_ajuste": 120.401001
+        },
+        {
+          "mois": "2023-10",
+          "cours_ajuste": 116.593002
+        },
+        {
+          "mois": "2023-11",
+          "cours_ajuste": 126.811996
+        },
+        {
+          "mois": "2023-12",
+          "cours_ajuste": 128.960999
+        },
+        {
+          "mois": "2024-01",
+          "cours_ajuste": 132.621002
+        },
+        {
+          "mois": "2024-02",
+          "cours_ajuste": 133.326996
+        },
+        {
+          "mois": "2024-03",
+          "cours_ajuste": 153.231003
+        },
+        {
+          "mois": "2024-04",
+          "cours_ajuste": 158.903
+        },
+        {
+          "mois": "2024-05",
+          "cours_ajuste": 167.354996
+        },
+        {
+          "mois": "2024-06",
+          "cours_ajuste": 156.082993
+        },
+        {
+          "mois": "2024-07",
+          "cours_ajuste": 164.972
+        },
+        {
+          "mois": "2024-08",
+          "cours_ajuste": 163.5
+        },
+        {
+          "mois": "2024-09",
+          "cours_ajuste": 166.042999
+        },
+        {
+          "mois": "2024-10",
+          "cours_ajuste": 166.893997
+        },
+        {
+          "mois": "2024-11",
+          "cours_ajuste": 161.589005
+        },
+        {
+          "mois": "2024-12",
+          "cours_ajuste": 170.153
+        },
+        {
+          "mois": "2025-01",
+          "cours_ajuste": 188.363998
+        },
+        {
+          "mois": "2025-02",
+          "cours_ajuste": 213.761993
+        },
+        {
+          "mois": "2025-03",
+          "cours_ajuste": 217.481003
+        },
+        {
+          "mois": "2025-04",
+          "cours_ajuste": 219.052002
+        },
+        {
+          "mois": "2025-05",
+          "cours_ajuste": 242.699997
+        },
+        {
+          "mois": "2025-06",
+          "cours_ajuste": 242.294006
+        },
+        {
+          "mois": "2025-07",
+          "cours_ajuste": 265.246002
+        },
+        {
+          "mois": "2025-08",
+          "cours_ajuste": 270.886993
+        },
+        {
+          "mois": "2025-09",
+          "cours_ajuste": 283.015015
+        },
+        {
+          "mois": "2025-10",
+          "cours_ajuste": 283.243011
+        },
+        {
+          "mois": "2025-11",
+          "cours_ajuste": 298.19101
+        },
+        {
+          "mois": "2025-12",
+          "cours_ajuste": 322.71701
+        },
+        {
+          "mois": "2026-01",
+          "cours_ajuste": 337.385986
+        },
+        {
+          "mois": "2026-02",
+          "cours_ajuste": 329.074005
+        },
+        {
+          "mois": "2026-03",
+          "cours_ajuste": 292.718994
+        },
+        {
+          "mois": "2026-04",
+          "cours_ajuste": 322.86499
+        },
+        {
+          "mois": "2026-05",
+          "cours_ajuste": 343.598999
+        },
+        {
+          "mois": "2026-06",
+          "cours_ajuste": 370.049988
+        },
+        {
+          "mois": "2026-07",
+          "cours_ajuste": 390.700012
+        },
+        {
+          "mois": "2026-08",
+          "cours_ajuste": 399.049988
+        }
+      ]
+    },
+    "FR0013412038": {
+      "nom_yahoo": "Amundi PEA MSCI Europe UCITS ETF Acc",
+      "historique": [
+        {
+          "mois": "2019-04",
+          "cours_ajuste": 20.069401
+        },
+        {
+          "mois": "2019-05",
+          "cours_ajuste": 19.128
+        },
+        {
+          "mois": "2019-06",
+          "cours_ajuste": 19.954
+        },
+        {
+          "mois": "2019-07",
+          "cours_ajuste": 19.601999
+        },
+        {
+          "mois": "2019-08",
+          "cours_ajuste": 19.775999
+        },
+        {
+          "mois": "2019-09",
+          "cours_ajuste": 19.806
+        },
+        {
+          "mois": "2019-10",
+          "cours_ajuste": 20.785
+        },
+        {
+          "mois": "2019-11",
+          "cours_ajuste": 21.215
+        },
+        {
+          "mois": "2019-12",
+          "cours_ajuste": 21.785
+        },
+        {
+          "mois": "2020-01",
+          "cours_ajuste": 21.360001
+        },
+        {
+          "mois": "2020-02",
+          "cours_ajuste": 19.598
+        },
+        {
+          "mois": "2020-03",
+          "cours_ajuste": 16.194
+        },
+        {
+          "mois": "2020-04",
+          "cours_ajuste": 17.784
+        },
+        {
+          "mois": "2020-05",
+          "cours_ajuste": 18.313999
+        },
+        {
+          "mois": "2020-06",
+          "cours_ajuste": 19.148001
+        },
+        {
+          "mois": "2020-07",
+          "cours_ajuste": 18.658001
+        },
+        {
+          "mois": "2020-08",
+          "cours_ajuste": 19.014
+        },
+        {
+          "mois": "2020-09",
+          "cours_ajuste": 18.976
+        },
+        {
+          "mois": "2020-10",
+          "cours_ajuste": 17.952
+        },
+        {
+          "mois": "2020-11",
+          "cours_ajuste": 20.719999
+        },
+        {
+          "mois": "2020-12",
+          "cours_ajuste": 20.92
+        },
+        {
+          "mois": "2021-01",
+          "cours_ajuste": 20.76
+        },
+        {
+          "mois": "2021-02",
+          "cours_ajuste": 21.299999
+        },
+        {
+          "mois": "2021-03",
+          "cours_ajuste": 22.870001
+        },
+        {
+          "mois": "2021-04",
+          "cours_ajuste": 23.209999
+        },
+        {
+          "mois": "2021-05",
+          "cours_ajuste": 24.120001
+        },
+        {
+          "mois": "2021-06",
+          "cours_ajuste": 24.365
+        },
+        {
+          "mois": "2021-07",
+          "cours_ajuste": 24.6
+        },
+        {
+          "mois": "2021-08",
+          "cours_ajuste": 25.15
+        },
+        {
+          "mois": "2021-09",
+          "cours_ajuste": 24.25
+        },
+        {
+          "mois": "2021-10",
+          "cours_ajuste": 25.485001
+        },
+        {
+          "mois": "2021-11",
+          "cours_ajuste": 24.870001
+        },
+        {
+          "mois": "2021-12",
+          "cours_ajuste": 26.235001
+        },
+        {
+          "mois": "2022-01",
+          "cours_ajuste": 25.035
+        },
+        {
+          "mois": "2022-02",
+          "cours_ajuste": 22.92
+        },
+        {
+          "mois": "2022-03",
+          "cours_ajuste": 24.969999
+        },
+        {
+          "mois": "2022-04",
+          "cours_ajuste": 24.695
+        },
+        {
+          "mois": "2022-05",
+          "cours_ajuste": 24.375
+        },
+        {
+          "mois": "2022-06",
+          "cours_ajuste": 22.67
+        },
+        {
+          "mois": "2022-07",
+          "cours_ajuste": 24.33
+        },
+        {
+          "mois": "2022-08",
+          "cours_ajuste": 23.200001
+        },
+        {
+          "mois": "2022-09",
+          "cours_ajuste": 21.674999
+        },
+        {
+          "mois": "2022-10",
+          "cours_ajuste": 23.309999
+        },
+        {
+          "mois": "2022-11",
+          "cours_ajuste": 24.795
+        },
+        {
+          "mois": "2022-12",
+          "cours_ajuste": 23.75
+        },
+        {
+          "mois": "2023-01",
+          "cours_ajuste": 25.805
+        },
+        {
+          "mois": "2023-02",
+          "cours_ajuste": 26.030001
+        },
+        {
+          "mois": "2023-03",
+          "cours_ajuste": 25.855
+        },
+        {
+          "mois": "2023-04",
+          "cours_ajuste": 26.49
+        },
+        {
+          "mois": "2023-05",
+          "cours_ajuste": 26.415001
+        },
+        {
+          "mois": "2023-06",
+          "cours_ajuste": 26.459999
+        },
+        {
+          "mois": "2023-07",
+          "cours_ajuste": 26.280001
+        },
+        {
+          "mois": "2023-08",
+          "cours_ajuste": 26.334999
+        },
+        {
+          "mois": "2023-09",
+          "cours_ajuste": 25.924999
+        },
+        {
+          "mois": "2023-10",
+          "cours_ajuste": 25.555
+        },
+        {
+          "mois": "2023-11",
+          "cours_ajuste": 26.809999
+        },
+        {
+          "mois": "2023-12",
+          "cours_ajuste": 27.525
+        },
+        {
+          "mois": "2024-01",
+          "cours_ajuste": 27.870001
+        },
+        {
+          "mois": "2024-02",
+          "cours_ajuste": 28.705
+        },
+        {
+          "mois": "2024-03",
+          "cours_ajuste": 29.695
+        },
+        {
+          "mois": "2024-04",
+          "cours_ajuste": 29.459999
+        },
+        {
+          "mois": "2024-05",
+          "cours_ajuste": 30.375
+        },
+        {
+          "mois": "2024-06",
+          "cours_ajuste": 30.07
+        },
+        {
+          "mois": "2024-07",
+          "cours_ajuste": 29.27
+        },
+        {
+          "mois": "2024-08",
+          "cours_ajuste": 30.9
+        },
+        {
+          "mois": "2024-09",
+          "cours_ajuste": 30.52
+        },
+        {
+          "mois": "2024-10",
+          "cours_ajuste": 30.094999
+        },
+        {
+          "mois": "2024-11",
+          "cours_ajuste": 30.115
+        },
+        {
+          "mois": "2024-12",
+          "cours_ajuste": 29.940001
+        },
+        {
+          "mois": "2025-01",
+          "cours_ajuste": 31.844999
+        },
+        {
+          "mois": "2025-02",
+          "cours_ajuste": 32.994999
+        },
+        {
+          "mois": "2025-03",
+          "cours_ajuste": 29.459999
+        },
+        {
+          "mois": "2025-04",
+          "cours_ajuste": 32.035
+        },
+        {
+          "mois": "2025-05",
+          "cours_ajuste": 32.970001
+        },
+        {
+          "mois": "2025-06",
+          "cours_ajuste": 32.514999
+        },
+        {
+          "mois": "2025-07",
+          "cours_ajuste": 32.009998
+        },
+        {
+          "mois": "2025-08",
+          "cours_ajuste": 33.130001
+        },
+        {
+          "mois": "2025-09",
+          "cours_ajuste": 34.415001
+        },
+        {
+          "mois": "2025-10",
+          "cours_ajuste": 34.535
+        },
+        {
+          "mois": "2025-11",
+          "cours_ajuste": 34.814999
+        },
+        {
+          "mois": "2025-12",
+          "cours_ajuste": 36.025002
+        },
+        {
+          "mois": "2026-01",
+          "cours_ajuste": 36.895
+        },
+        {
+          "mois": "2026-02",
+          "cours_ajuste": 38.355
+        },
+        {
+          "mois": "2026-03",
+          "cours_ajuste": 36.220001
+        },
+        {
+          "mois": "2026-04",
+          "cours_ajuste": 37.25
+        },
+        {
+          "mois": "2026-05",
+          "cours_ajuste": 38.435001
+        },
+        {
+          "mois": "2026-06",
+          "cours_ajuste": 40.23
+        },
+        {
+          "mois": "2026-07",
+          "cours_ajuste": 40.009998
+        },
+        {
+          "mois": "2026-08",
+          "cours_ajuste": 40.119999
+        }
+      ]
+    },
+    "FR0013411980": {
+      "nom_yahoo": "Amundi PEA Japon (TOPIX) UCITS ETF EUR Acc",
+      "historique": [
+        {
+          "mois": "2019-04",
+          "cours_ajuste": 19.927401
+        },
+        {
+          "mois": "2019-05",
+          "cours_ajuste": 19.049
+        },
+        {
+          "mois": "2019-06",
+          "cours_ajuste": 19.445
+        },
+        {
+          "mois": "2019-07",
+          "cours_ajuste": 19.554001
+        },
+        {
+          "mois": "2019-08",
+          "cours_ajuste": 19.791
+        },
+        {
+          "mois": "2019-09",
+          "cours_ajuste": 20.797001
+        },
+        {
+          "mois": "2019-10",
+          "cours_ajuste": 21.431999
+        },
+        {
+          "mois": "2019-11",
+          "cours_ajuste": 21.826
+        },
+        {
+          "mois": "2019-12",
+          "cours_ajuste": 21.826
+        },
+        {
+          "mois": "2020-01",
+          "cours_ajuste": 21.306999
+        },
+        {
+          "mois": "2020-02",
+          "cours_ajuste": 19.233999
+        },
+        {
+          "mois": "2020-03",
+          "cours_ajuste": 17.587999
+        },
+        {
+          "mois": "2020-04",
+          "cours_ajuste": 19.375999
+        },
+        {
+          "mois": "2020-05",
+          "cours_ajuste": 20.299
+        },
+        {
+          "mois": "2020-06",
+          "cours_ajuste": 20.030001
+        },
+        {
+          "mois": "2020-07",
+          "cours_ajuste": 18.863001
+        },
+        {
+          "mois": "2020-08",
+          "cours_ajuste": 19.997
+        },
+        {
+          "mois": "2020-09",
+          "cours_ajuste": 20.764
+        },
+        {
+          "mois": "2020-10",
+          "cours_ajuste": 20.643999
+        },
+        {
+          "mois": "2020-11",
+          "cours_ajuste": 22.245001
+        },
+        {
+          "mois": "2020-12",
+          "cours_ajuste": 22.594
+        },
+        {
+          "mois": "2021-01",
+          "cours_ajuste": 22.629
+        },
+        {
+          "mois": "2021-02",
+          "cours_ajuste": 23.077
+        },
+        {
+          "mois": "2021-03",
+          "cours_ajuste": 23.989
+        },
+        {
+          "mois": "2021-04",
+          "cours_ajuste": 22.976999
+        },
+        {
+          "mois": "2021-05",
+          "cours_ajuste": 23.379999
+        },
+        {
+          "mois": "2021-06",
+          "cours_ajuste": 23.496
+        },
+        {
+          "mois": "2021-07",
+          "cours_ajuste": 23.363001
+        },
+        {
+          "mois": "2021-08",
+          "cours_ajuste": 24.768999
+        },
+        {
+          "mois": "2021-09",
+          "cours_ajuste": 24.700001
+        },
+        {
+          "mois": "2021-10",
+          "cours_ajuste": 24.334999
+        },
+        {
+          "mois": "2021-11",
+          "cours_ajuste": 24.301001
+        },
+        {
+          "mois": "2021-12",
+          "cours_ajuste": 24.414
+        },
+        {
+          "mois": "2022-01",
+          "cours_ajuste": 23.205999
+        },
+        {
+          "mois": "2022-02",
+          "cours_ajuste": 23.379999
+        },
+        {
+          "mois": "2022-03",
+          "cours_ajuste": 23.287001
+        },
+        {
+          "mois": "2022-04",
+          "cours_ajuste": 22.74
+        },
+        {
+          "mois": "2022-05",
+          "cours_ajuste": 22.139
+        },
+        {
+          "mois": "2022-06",
+          "cours_ajuste": 21.364
+        },
+        {
+          "mois": "2022-07",
+          "cours_ajuste": 23.041
+        },
+        {
+          "mois": "2022-08",
+          "cours_ajuste": 22.341999
+        },
+        {
+          "mois": "2022-09",
+          "cours_ajuste": 21.41
+        },
+        {
+          "mois": "2022-10",
+          "cours_ajuste": 21.606001
+        },
+        {
+          "mois": "2022-11",
+          "cours_ajuste": 22.479
+        },
+        {
+          "mois": "2022-12",
+          "cours_ajuste": 21.75
+        },
+        {
+          "mois": "2023-01",
+          "cours_ajuste": 22.753
+        },
+        {
+          "mois": "2023-02",
+          "cours_ajuste": 22.929001
+        },
+        {
+          "mois": "2023-03",
+          "cours_ajuste": 23.013
+        },
+        {
+          "mois": "2023-04",
+          "cours_ajuste": 22.615999
+        },
+        {
+          "mois": "2023-05",
+          "cours_ajuste": 24.396999
+        },
+        {
+          "mois": "2023-06",
+          "cours_ajuste": 24.184
+        },
+        {
+          "mois": "2023-07",
+          "cours_ajuste": 24.003
+        },
+        {
+          "mois": "2023-08",
+          "cours_ajuste": 24.589001
+        },
+        {
+          "mois": "2023-09",
+          "cours_ajuste": 24.531
+        },
+        {
+          "mois": "2023-10",
+          "cours_ajuste": 24.799
+        },
+        {
+          "mois": "2023-11",
+          "cours_ajuste": 24.701
+        },
+        {
+          "mois": "2023-12",
+          "cours_ajuste": 25.158001
+        },
+        {
+          "mois": "2024-01",
+          "cours_ajuste": 26.485001
+        },
+        {
+          "mois": "2024-02",
+          "cours_ajuste": 27.739
+        },
+        {
+          "mois": "2024-03",
+          "cours_ajuste": 28.372999
+        },
+        {
+          "mois": "2024-04",
+          "cours_ajuste": 27.556
+        },
+        {
+          "mois": "2024-05",
+          "cours_ajuste": 27.223
+        },
+        {
+          "mois": "2024-06",
+          "cours_ajuste": 27.649
+        },
+        {
+          "mois": "2024-07",
+          "cours_ajuste": 25.628
+        },
+        {
+          "mois": "2024-08",
+          "cours_ajuste": 28.247999
+        },
+        {
+          "mois": "2024-09",
+          "cours_ajuste": 28.368
+        },
+        {
+          "mois": "2024-10",
+          "cours_ajuste": 27.377001
+        },
+        {
+          "mois": "2024-11",
+          "cours_ajuste": 28.607
+        },
+        {
+          "mois": "2024-12",
+          "cours_ajuste": 28.848
+        },
+        {
+          "mois": "2025-01",
+          "cours_ajuste": 29.306
+        },
+        {
+          "mois": "2025-02",
+          "cours_ajuste": 29.157
+        },
+        {
+          "mois": "2025-03",
+          "cours_ajuste": 25.302
+        },
+        {
+          "mois": "2025-04",
+          "cours_ajuste": 28.169001
+        },
+        {
+          "mois": "2025-05",
+          "cours_ajuste": 29.033001
+        },
+        {
+          "mois": "2025-06",
+          "cours_ajuste": 28.402
+        },
+        {
+          "mois": "2025-07",
+          "cours_ajuste": 28.98
+        },
+        {
+          "mois": "2025-08",
+          "cours_ajuste": 30.288
+        },
+        {
+          "mois": "2025-09",
+          "cours_ajuste": 31.357
+        },
+        {
+          "mois": "2025-10",
+          "cours_ajuste": 32.166
+        },
+        {
+          "mois": "2025-11",
+          "cours_ajuste": 32.044998
+        },
+        {
+          "mois": "2025-12",
+          "cours_ajuste": 32.209999
+        },
+        {
+          "mois": "2026-01",
+          "cours_ajuste": 33.535
+        },
+        {
+          "mois": "2026-02",
+          "cours_ajuste": 36.639999
+        },
+        {
+          "mois": "2026-03",
+          "cours_ajuste": 34.57
+        },
+        {
+          "mois": "2026-04",
+          "cours_ajuste": 35.207001
+        },
+        {
+          "mois": "2026-05",
+          "cours_ajuste": 36.827
+        },
+        {
+          "mois": "2026-06",
+          "cours_ajuste": 38.325001
+        },
+        {
+          "mois": "2026-07",
+          "cours_ajuste": 37.52
+        },
+        {
+          "mois": "2026-08",
+          "cours_ajuste": 39.525002
+        }
+      ]
+    },
+    "FR0013412020": {
+      "nom_yahoo": "Amundi PEA Émergent (MSCI Emerging) ESG Transition UCITS ETF Acc",
+      "historique": [
+        {
+          "mois": "2019-04",
+          "cours_ajuste": 20.039499
+        },
+        {
+          "mois": "2019-05",
+          "cours_ajuste": 18.608
+        },
+        {
+          "mois": "2019-06",
+          "cours_ajuste": 19.325001
+        },
+        {
+          "mois": "2019-07",
+          "cours_ajuste": 18.712999
+        },
+        {
+          "mois": "2019-08",
+          "cours_ajuste": 18.684
+        },
+        {
+          "mois": "2019-09",
+          "cours_ajuste": 19.056
+        },
+        {
+          "mois": "2019-10",
+          "cours_ajuste": 19.802999
+        },
+        {
+          "mois": "2019-11",
+          "cours_ajuste": 19.813999
+        },
+        {
+          "mois": "2019-12",
+          "cours_ajuste": 21.216
+        },
+        {
+          "mois": "2020-01",
+          "cours_ajuste": 19.848
+        },
+        {
+          "mois": "2020-02",
+          "cours_ajuste": 19.01
+        },
+        {
+          "mois": "2020-03",
+          "cours_ajuste": 16.153
+        },
+        {
+          "mois": "2020-04",
+          "cours_ajuste": 17.749001
+        },
+        {
+          "mois": "2020-05",
+          "cours_ajuste": 17.52
+        },
+        {
+          "mois": "2020-06",
+          "cours_ajuste": 19.458
+        },
+        {
+          "mois": "2020-07",
+          "cours_ajuste": 19.285999
+        },
+        {
+          "mois": "2020-08",
+          "cours_ajuste": 19.573999
+        },
+        {
+          "mois": "2020-09",
+          "cours_ajuste": 19.872
+        },
+        {
+          "mois": "2020-10",
+          "cours_ajuste": 20.209999
+        },
+        {
+          "mois": "2020-11",
+          "cours_ajuste": 22.075001
+        },
+        {
+          "mois": "2020-12",
+          "cours_ajuste": 22.68
+        },
+        {
+          "mois": "2021-01",
+          "cours_ajuste": 23.611
+        },
+        {
+          "mois": "2021-02",
+          "cours_ajuste": 23.865
+        },
+        {
+          "mois": "2021-03",
+          "cours_ajuste": 24.459999
+        },
+        {
+          "mois": "2021-04",
+          "cours_ajuste": 23.895
+        },
+        {
+          "mois": "2021-05",
+          "cours_ajuste": 24.469999
+        },
+        {
+          "mois": "2021-06",
+          "cours_ajuste": 24.658001
+        },
+        {
+          "mois": "2021-07",
+          "cours_ajuste": 23.336
+        },
+        {
+          "mois": "2021-08",
+          "cours_ajuste": 23.988001
+        },
+        {
+          "mois": "2021-09",
+          "cours_ajuste": 23.219999
+        },
+        {
+          "mois": "2021-10",
+          "cours_ajuste": 23.694
+        },
+        {
+          "mois": "2021-11",
+          "cours_ajuste": 23.346001
+        },
+        {
+          "mois": "2021-12",
+          "cours_ajuste": 23.683001
+        },
+        {
+          "mois": "2022-01",
+          "cours_ajuste": 23.235001
+        },
+        {
+          "mois": "2022-02",
+          "cours_ajuste": 22.299999
+        },
+        {
+          "mois": "2022-03",
+          "cours_ajuste": 22.681999
+        },
+        {
+          "mois": "2022-04",
+          "cours_ajuste": 22.329
+        },
+        {
+          "mois": "2022-05",
+          "cours_ajuste": 21.649
+        },
+        {
+          "mois": "2022-06",
+          "cours_ajuste": 21.139999
+        },
+        {
+          "mois": "2022-07",
+          "cours_ajuste": 21.556
+        },
+        {
+          "mois": "2022-08",
+          "cours_ajuste": 21.645
+        },
+        {
+          "mois": "2022-09",
+          "cours_ajuste": 19.957001
+        },
+        {
+          "mois": "2022-10",
+          "cours_ajuste": 20.108999
+        },
+        {
+          "mois": "2022-11",
+          "cours_ajuste": 20.877001
+        },
+        {
+          "mois": "2022-12",
+          "cours_ajuste": 20.056
+        },
+        {
+          "mois": "2023-01",
+          "cours_ajuste": 21.398001
+        },
+        {
+          "mois": "2023-02",
+          "cours_ajuste": 20.884001
+        },
+        {
+          "mois": "2023-03",
+          "cours_ajuste": 20.531
+        },
+        {
+          "mois": "2023-04",
+          "cours_ajuste": 20.033001
+        },
+        {
+          "mois": "2023-05",
+          "cours_ajuste": 20.816999
+        },
+        {
+          "mois": "2023-06",
+          "cours_ajuste": 20.695
+        },
+        {
+          "mois": "2023-07",
+          "cours_ajuste": 21.065001
+        },
+        {
+          "mois": "2023-08",
+          "cours_ajuste": 20.851
+        },
+        {
+          "mois": "2023-09",
+          "cours_ajuste": 20.459999
+        },
+        {
+          "mois": "2023-10",
+          "cours_ajuste": 20.325001
+        },
+        {
+          "mois": "2023-11",
+          "cours_ajuste": 20.329
+        },
+        {
+          "mois": "2023-12",
+          "cours_ajuste": 20.708
+        },
+        {
+          "mois": "2024-01",
+          "cours_ajuste": 20.188999
+        },
+        {
+          "mois": "2024-02",
+          "cours_ajuste": 21.035
+        },
+        {
+          "mois": "2024-03",
+          "cours_ajuste": 21.259001
+        },
+        {
+          "mois": "2024-04",
+          "cours_ajuste": 21.961
+        },
+        {
+          "mois": "2024-05",
+          "cours_ajuste": 21.263
+        },
+        {
+          "mois": "2024-06",
+          "cours_ajuste": 22.052999
+        },
+        {
+          "mois": "2024-07",
+          "cours_ajuste": 21.344
+        },
+        {
+          "mois": "2024-08",
+          "cours_ajuste": 22.054001
+        },
+        {
+          "mois": "2024-09",
+          "cours_ajuste": 24.405001
+        },
+        {
+          "mois": "2024-10",
+          "cours_ajuste": 23.475
+        },
+        {
+          "mois": "2024-11",
+          "cours_ajuste": 23.327
+        },
+        {
+          "mois": "2024-12",
+          "cours_ajuste": 23.693001
+        },
+        {
+          "mois": "2025-01",
+          "cours_ajuste": 24.306999
+        },
+        {
+          "mois": "2025-02",
+          "cours_ajuste": 24.643999
+        },
+        {
+          "mois": "2025-03",
+          "cours_ajuste": 22.135
+        },
+        {
+          "mois": "2025-04",
+          "cours_ajuste": 23.851999
+        },
+        {
+          "mois": "2025-05",
+          "cours_ajuste": 24.011
+        },
+        {
+          "mois": "2025-06",
+          "cours_ajuste": 24.99
+        },
+        {
+          "mois": "2025-07",
+          "cours_ajuste": 25.305
+        },
+        {
+          "mois": "2025-08",
+          "cours_ajuste": 25.700001
+        },
+        {
+          "mois": "2025-09",
+          "cours_ajuste": 28.091
+        },
+        {
+          "mois": "2025-10",
+          "cours_ajuste": 28.976999
+        },
+        {
+          "mois": "2025-11",
+          "cours_ajuste": 28.309
+        },
+        {
+          "mois": "2025-12",
+          "cours_ajuste": 29.299999
+        },
+        {
+          "mois": "2026-01",
+          "cours_ajuste": 30.450001
+        },
+        {
+          "mois": "2026-02",
+          "cours_ajuste": 32.345001
+        },
+        {
+          "mois": "2026-03",
+          "cours_ajuste": 29.909
+        },
+        {
+          "mois": "2026-04",
+          "cours_ajuste": 32.952999
+        },
+        {
+          "mois": "2026-05",
+          "cours_ajuste": 36.131001
+        },
+        {
+          "mois": "2026-06",
+          "cours_ajuste": 36.605
+        },
+        {
+          "mois": "2026-07",
+          "cours_ajuste": 34.384998
+        },
+        {
+          "mois": "2026-08",
+          "cours_ajuste": 36.439999
+        }
+      ]
+    }
+  }
+}

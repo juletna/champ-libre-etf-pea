@@ -1,0 +1,96 @@
+{
+  "description": "Expositions des indices (et non des paniers de titres détenus), relevées dans les reportings mensuels Amundi. Instantané du MVP.",
+  "etfs": [
+    {
+      "isin": "LU1681043599",
+      "nom_court": "MSCI World",
+      "nom": "Amundi MSCI World Swap UCITS ETF EUR Acc",
+      "ticker_yahoo": "CW8.PA",
+      "indice": "MSCI World",
+      "famille": "Monde",
+      "couleur": "#8bd4a5",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1681043599/FRA/FRA/RETAIL/ETF/20260831",
+      "pays": {"États-Unis": 72.12, "Japon": 5.73, "Royaume-Uni": 3.52, "Canada": 3.47, "France": 2.37, "Suisse": 2.27, "Allemagne": 2.22, "Australie": 1.63, "Pays-Bas": 1.41, "Espagne": 0.99, "Suède": 0.87, "Italie": 0.82, "Autres pays": 2.59},
+      "secteurs": {"Technologie": 29.67, "Finance": 16.58, "Industrie": 11.21, "Santé": 9.29, "Consommation cyclique": 8.83, "Communication": 7.98, "Consommation défensive": 4.90, "Énergie": 4.01, "Matériaux": 3.49, "Services publics": 2.40, "Immobilier": 1.65}
+    },
+    {
+      "isin": "FR0011871128",
+      "nom_court": "S&P 500",
+      "nom": "Amundi PEA S&P 500 UCITS ETF Acc",
+      "ticker_yahoo": "PSP5.PA",
+      "indice": "S&P 500",
+      "famille": "États-Unis",
+      "couleur": "#f4bd77",
+      "reporting_date": "2026-06-30",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0011871128/FRA/FRA/RETAIL/ETF",
+      "pays": {"États-Unis": 100},
+      "secteurs": {"Technologie": 37.37, "Finance": 11.87, "Communication": 9.76, "Consommation cyclique": 9.38, "Santé": 9.07, "Industrie": 8.88, "Consommation défensive": 4.68, "Énergie": 3.02, "Services publics": 2.25, "Immobilier": 1.88, "Matériaux": 1.84}
+    },
+    {
+      "isin": "FR0011871110",
+      "nom_court": "Nasdaq-100",
+      "nom": "Amundi PEA Nasdaq-100 UCITS ETF Acc",
+      "ticker_yahoo": "PUST.PA",
+      "indice": "Nasdaq-100",
+      "famille": "États-Unis",
+      "couleur": "#a9b8f2",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0011871110/FRA/FRA/RETAIL/ETF",
+      "pays": {"États-Unis": 94.78, "Irlande": 1.82, "Pays-Bas": 1.32, "Canada": 1.00, "Royaume-Uni": 0.66, "Autres pays": 0.42},
+      "secteurs": {"Technologie": 58.27, "Communication": 13.89, "Consommation cyclique": 11.13, "Consommation défensive": 6.22, "Santé": 4.01, "Industrie": 3.62, "Services publics": 1.14, "Matériaux": 1.00, "Énergie": 0.52, "Finance": 0.21}
+    },
+    {
+      "isin": "LU1829219390",
+      "nom_court": "Banques zone euro",
+      "nom": "Amundi Euro Stoxx Banks UCITS ETF Acc",
+      "ticker_yahoo": "BNKE.PA",
+      "indice": "EURO STOXX Banks",
+      "famille": "Europe · secteur",
+      "couleur": "#e6a7aa",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/LU1829219390/FRA/FRA/RETAIL/ETF/20260831",
+      "pays": {"Espagne": 31.17, "Italie": 24.12, "France": 13.84, "Pays-Bas": 8.85, "Allemagne": 6.50, "Finlande": 4.60, "Autriche": 4.54, "Irlande": 3.11, "Belgique": 2.52, "Portugal": 0.76},
+      "secteurs": {"Finance": 100}
+    },
+    {
+      "isin": "FR0013412038",
+      "nom_court": "MSCI Europe",
+      "nom": "Amundi PEA MSCI Europe UCITS ETF Acc",
+      "ticker_yahoo": "PCEU.PA",
+      "indice": "MSCI Europe",
+      "famille": "Europe",
+      "couleur": "#73b8ad",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0013412038/FRA/FRA/INSTITUTIONNEL/ETF/20260831",
+      "pays": {"Royaume-Uni": 22.25, "France": 14.95, "Suisse": 14.32, "Allemagne": 14.04, "Pays-Bas": 8.89, "Espagne": 6.23, "Suède": 5.47, "Italie": 5.16, "Danemark": 2.60, "Finlande": 1.81, "Belgique": 1.74, "Norvège": 0.99, "Irlande": 0.64, "Autriche": 0.59, "Autres pays": 0.33},
+      "secteurs": {"Finance": 25.66, "Industrie": 19.01, "Santé": 12.71, "Technologie": 9.11, "Consommation défensive": 8.24, "Consommation cyclique": 6.30, "Matériaux": 5.53, "Énergie": 4.88, "Services publics": 4.69, "Communication": 3.26, "Immobilier": 0.61}
+    },
+    {
+      "isin": "FR0013411980",
+      "nom_court": "Japon TOPIX",
+      "nom": "Amundi PEA Japon (TOPIX) UCITS ETF EUR Acc",
+      "ticker_yahoo": "PTPXE.PA",
+      "indice": "TOPIX",
+      "famille": "Japon",
+      "couleur": "#d4ad76",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0013411980/FRA/FRA/INSTITUTIONNEL/ETF/20260831",
+      "pays": {"Japon": 100},
+      "secteurs": {"Industrie": 25.94, "Finance": 18.74, "Technologie": 15.30, "Consommation cyclique": 14.66, "Communication": 6.25, "Matériaux": 5.36, "Santé": 5.11, "Consommation défensive": 4.80, "Immobilier": 1.64, "Services publics": 1.26, "Énergie": 0.94}
+    },
+    {
+      "isin": "FR0013412020",
+      "nom_court": "Marchés émergents",
+      "nom": "Amundi PEA Emergent (MSCI Emerging) ESG Transition UCITS ETF Acc",
+      "ticker_yahoo": "PAEEM.PA",
+      "indice": "MSCI EM ex Egypt ESG Broad CTB Select",
+      "famille": "Marchés émergents",
+      "couleur": "#b99ae1",
+      "reporting_date": "2026-08-31",
+      "reporting_url": "https://www.amundietf.fr/pdfDocuments/monthly-factsheet/FR0013412020/FRA/FRA/INSTITUTIONNEL/ETF/20260831",
+      "pays": {"Taïwan": 27.93, "Chine": 20.68, "Corée du Sud": 20.58, "Inde": 11.14, "Brésil": 3.68, "Afrique du Sud": 3.52, "Arabie saoudite": 2.45, "Mexique": 1.70, "Malaisie": 1.22, "Émirats arabes unis": 1.19, "Pologne": 1.16, "Thaïlande": 0.92, "Grèce": 0.57, "Autres pays": 3.26},
+      "secteurs": {"Technologie": 41.71, "Finance": 20.10, "Consommation cyclique": 8.23, "Industrie": 6.38, "Communication": 6.07, "Matériaux": 5.83, "Consommation défensive": 3.23, "Énergie": 3.02, "Santé": 2.65, "Services publics": 1.44, "Immobilier": 1.34}
+    }
+  ]
+}
