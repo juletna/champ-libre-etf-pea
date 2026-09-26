@@ -2,6 +2,8 @@
 
 Tableau de bord local pour composer un portefeuille virtuel et visualiser ses expositions géographiques et sectorielles, ainsi que son rendement historique mensuel.
 
+**[Ouvrir l'outil en ligne](https://juletna.github.io/champ-libre-etf-pea/)**
+
 Sur grand écran, la liste des ETF défile dans le panneau de gauche : les graphiques à droite restent en place pendant le réglage des poids.
 
 Chaque position peut être verrouillée : les autres curseurs ne modifient alors pas son poids. Si aucun ETF libre ne peut recevoir un solde, celui-ci apparaît comme « Non alloué » ; il n'a ni exposition géographique ou sectorielle ni rendement dans la simulation.
