@@ -4,7 +4,7 @@ Outil de simulation d'un portefeuille virtuel d'ETF éligibles au PEA.
 
 **[Ouvrir l'outil en ligne](https://juletna.github.io/champ-libre-etf-pea/)**
 
-Le code source et les données de démonstration sont conservés dans ce dépôt public. Chaque mise à jour de `main` reconstruit et publie automatiquement le site avec GitHub Pages.
+Le code source et les données mensuelles sont conservés dans ce dépôt public. Les 54 ETF PEA Amundi du catalogue ont un historique de valeur liquidative ajustée ; 7 ont aussi une composition par pays et secteur vérifiée. Chaque mise à jour de `main` reconstruit et publie automatiquement le site avec GitHub Pages.
 
 Pour lancer l'application localement :
 

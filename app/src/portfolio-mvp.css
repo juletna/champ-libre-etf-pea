@@ -38,6 +38,7 @@
 .lock-button:hover,.lock-button:focus-visible{background:#eaf3eb;color:#356f4e}
 .lock-button[aria-pressed="true"]{background:#e4f0e7;color:#286c45}
 .selected-etf.locked .weight-controls{opacity:.55}
+.catalog-search{display:block;width:calc(100% - 34px);margin:10px 17px 7px;padding:10px 12px;border:1px solid #dce7dc;border-radius:9px;background:#fff;color:#244332;font-size:12px;outline:none}.catalog-search:focus{border-color:#478568;box-shadow:0 0 0 2px rgba(71,133,104,.13)}
 .weight-controls input:disabled{cursor:not-allowed}
 .unallocated-total{flex:none;margin:-5px 20px 12px;color:#8b7856;font-size:11px;font-weight:700}
 

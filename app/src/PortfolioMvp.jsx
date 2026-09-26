@@ -22,7 +22,8 @@ const PROFILES = catalogData.etf.map((item) => ({
   couleur: CATEGORY_COLORS[item.categorie_fortuneo] || "#8caaa0",
   ...ANALYZED[item.isin],
 }));
-const ANALYZED_COUNT = profilesData.etfs.length;
+const COMPOSITION_COUNT = profilesData.etfs.length;
+const HISTORY_COUNT = Object.keys(pricesData.par_isin).length;
 const CATALOG = Object.fromEntries(catalogData.etf.map((item) => [item.isin, item]));
 const INITIAL = {
   LU1681043599: 60,
@@ -165,17 +166,19 @@ function aggregateZones(countries) {
 
 function compactBreakdown(rows, limit = 7) {
   const unallocated = rows.find((row) => row.name === "Non alloué");
-  const allocated = rows.filter((row) => row.name !== "Non alloué");
+  const unavailable = rows.find((row) => row.name === "Composition indisponible");
+  const allocated = rows.filter((row) => row.name !== "Non alloué" && row.name !== "Composition indisponible");
   if (allocated.length <= limit) return rows;
   const top = allocated.filter((row) => !row.name.startsWith("Autres ")).slice(0, limit);
   const names = new Set(top.map((row) => row.name));
   const other = allocated.filter((row) => !names.has(row.name)).reduce((sum, row) => ({ value: sum.value + row.value, contribution: sum.contribution + (row.contribution || 0) }), { value: 0, contribution: 0 });
-  return [...top, { name: "Autres", ...other }, ...(unallocated ? [unallocated] : [])];
+  return [...top, { name: "Autres", ...other }, ...(unavailable ? [unavailable] : []), ...(unallocated ? [unallocated] : [])];
 }
 
 function compactCountries(rows, limit = 7) {
-  const detailed = rows.filter((row) => row.name !== "Autres pays" && row.name !== "Non alloué");
+  const detailed = rows.filter((row) => row.name !== "Autres pays" && row.name !== "Non alloué" && row.name !== "Composition indisponible");
   const undetailed = rows.find((row) => row.name === "Autres pays");
+  const unavailable = rows.find((row) => row.name === "Composition indisponible");
   const unallocated = rows.find((row) => row.name === "Non alloué");
   const top = detailed.slice(0, limit);
   const otherDetailed = detailed.slice(limit).reduce((sum, row) => ({ value: sum.value + row.value, contribution: sum.contribution + (row.contribution || 0) }), { value: 0, contribution: 0 });
@@ -183,6 +186,7 @@ function compactCountries(rows, limit = 7) {
     ...top,
     ...(otherDetailed.value ? [{ name: "Autres pays détaillés", ...otherDetailed }] : []),
     ...(undetailed ? [{ ...undetailed, name: "Pays non détaillés" }] : []),
+    ...(unavailable ? [unavailable] : []),
     ...(unallocated ? [unallocated] : []),
   ];
 }
@@ -190,7 +194,7 @@ function compactCountries(rows, limit = 7) {
 function performance(weights, selectedIsins, requestedMonths) {
   const active = PROFILES.filter((etf) => weights[etf.isin] > 0);
   const selected = PROFILES.filter((etf) => selectedIsins.includes(etf.isin));
-  const forWindow = active.length ? active : selected;
+  const forWindow = active.length ? active : selected.filter((etf) => pricesData.par_isin[etf.isin]);
   if (!forWindow.length) return { points: [], usedMonths: 0, start: null, end: null, etfContributions: {} };
   const missingHistory = active.filter((etf) => !pricesData.par_isin[etf.isin]);
   if (missingHistory.length) return { points: [], usedMonths: 0, start: null, end: null, etfContributions: {}, missingHistory };
@@ -199,8 +203,14 @@ function performance(weights, selectedIsins, requestedMonths) {
   const common = [...byEtf[forWindow[0].isin].keys()]
     .filter((month) => forWindow.every((etf) => byEtf[etf.isin].has(month)))
     .sort();
-  const months = Math.min(requestedMonths, common.length - 1);
-  const window = common.slice(-(months + 1));
+  const monthIndex = (month) => Number(month.slice(0, 4)) * 12 + Number(month.slice(5));
+  let contiguousStart = common.length - 1;
+  while (contiguousStart > 0 && monthIndex(common[contiguousStart]) - monthIndex(common[contiguousStart - 1]) === 1) {
+    contiguousStart--;
+  }
+  const contiguous = common.slice(contiguousStart);
+  const months = Math.min(requestedMonths, contiguous.length - 1);
+  const window = contiguous.slice(-(months + 1));
   if (window.length < 2) return { points: [], usedMonths: 0, start: null, end: null, etfContributions: {} };
   const benchmark = new Map(pricesData.par_isin.LU1681043599.historique.map((row) => [row.mois, row.cours_ajuste]));
   const benchmarkStart = benchmark.get(window[0]);
@@ -232,7 +242,7 @@ function performance(weights, selectedIsins, requestedMonths) {
   return { points, usedMonths: window.length - 1, start: window[0], end: window.at(-1), etfContributions };
 }
 
-function ExposureCard({ title, subtitle, rows, color, date, periodLabel, controls, note, extra, countryView = false, showAll = false }) {
+function ExposureCard({ title, subtitle, rows, color, date, periodLabel, showContributions, controls, note, extra, countryView = false, showAll = false }) {
   const visible = countryView ? compactCountries(rows) : showAll ? rows : compactBreakdown(rows);
   return (
     <section className="mvp-card exposure-card">
@@ -243,7 +253,7 @@ function ExposureCard({ title, subtitle, rows, color, date, periodLabel, control
       <div className="exposure-columns"><span>Part actuelle</span><span>Contribution estimée · {periodLabel}</span></div>
       {visible.length ? <div className="exposure-list">
         {visible.map((row) => <div className="exposure-row" key={row.name}>
-          <div className="exposure-label"><span title={row.name}>{row.name}</span><strong>{pct(row.value)}</strong><b className={row.contribution < 0 ? "negative" : ""}>{formatPoints(row.contribution || 0)}</b></div>
+          <div className="exposure-label"><span title={row.name}>{row.name}</span><strong>{pct(row.value)}</strong><b className={row.contribution < 0 ? "negative" : ""}>{showContributions && row.name !== "Composition indisponible" ? formatPoints(row.contribution || 0) : "—"}</b></div>
           <div className="exposure-track"><span style={{ width: `${Math.max(row.value, 0.7)}%`, background: color }} /></div>
         </div>)}
       </div> : <div className="empty-chart">Ajoute un ETF pour afficher la répartition.</div>}
@@ -290,9 +300,11 @@ export default function PortfolioMvp() {
   const [visibleEtfIsins, setVisibleEtfIsins] = useState([]);
   const [period, setPeriod] = useState(36);
   const [geoView, setGeoView] = useState("countries");
+  const [catalogQuery, setCatalogQuery] = useState("");
   const selected = PROFILES.filter((etf) => selectedIsins.includes(etf.isin));
-  const visibleEtfs = selected.filter((etf) => visibleEtfIsins.includes(etf.isin));
-  const allEtfsVisible = selected.length > 0 && visibleEtfs.length === selected.length;
+  const chartableEtfs = selected.filter((etf) => pricesData.par_isin[etf.isin]);
+  const visibleEtfs = chartableEtfs.filter((etf) => visibleEtfIsins.includes(etf.isin));
+  const allEtfsVisible = chartableEtfs.length > 0 && visibleEtfs.length === chartableEtfs.length;
   const active = selected.filter((etf) => weights[etf.isin] > 0);
   const history = useMemo(() => performance(weights, selectedIsins, period), [weights, selectedIsins, period]);
   const geo = useMemo(() => aggregate(weights, "pays"), [weights]);
@@ -314,9 +326,13 @@ export default function PortfolioMvp() {
   const referenceReturn = history.points.length && history.points.at(-1).monde != null ? history.points.at(-1).monde - 100 : null;
   const performanceValue = totalReturn == null ? "—" : `${totalReturn >= 0 ? "+" : ""}${pct(totalReturn)}`;
   const referenceValue = referenceReturn == null ? "—" : `${referenceReturn >= 0 ? "+" : ""}${pct(referenceReturn)}`;
-  const performanceDates = history.start && history.end ? `${monthsLabel(history.start)} → ${monthsLabel(history.end)}` : "Sélectionnez un ETF";
+  const performanceDates = history.start && history.end ? `${monthsLabel(history.start)} → ${monthsLabel(history.end)}` : history.missingHistory?.length ? "Historique indisponible" : "Sélectionnez un ETF";
   const cost = active.reduce((sum, etf) => sum + weights[etf.isin] / 100 * CATALOG[etf.isin].frais_gestion_et_administration_pct_an, 0);
-  const oldestReport = active.length ? active.map((etf) => etf.reporting_date).sort()[0] : null;
+  const reportDates = active.map((etf) => etf.reporting_date).filter(Boolean).sort();
+  const oldestReport = reportDates[0] || null;
+  const missingCompositions = active.filter((etf) => !etf.pays || !etf.secteurs);
+  const availableEtfs = PROFILES.filter((etf) => !selectedIsins.includes(etf.isin));
+  const filteredEtfs = availableEtfs.filter((etf) => `${etf.nom} ${etf.isin} ${etf.famille}`.toLocaleLowerCase("fr-FR").includes(catalogQuery.trim().toLocaleLowerCase("fr-FR")));
   const selectedCount = selected.length;
   const lockedTotal = lockedIsins.reduce((sum, isin) => sum + (weights[isin] || 0), 0);
   const availableForUnlocked = Math.max(0, Math.round((100 - lockedTotal) * 10) / 10);
@@ -332,16 +348,17 @@ export default function PortfolioMvp() {
   const selectEtf = (isin) => {
     setSelectedIsins((old) => [...old, isin]);
     setWeights((old) => addEtf(old, lockedIsins, isin));
+    setCatalogQuery("");
   };
   const toggleEtfCurve = (isin) => setVisibleEtfIsins((old) => old.includes(isin) ? old.filter((item) => item !== isin) : [...old, isin]);
-  const toggleAllEtfCurves = () => setVisibleEtfIsins(allEtfsVisible ? [] : selected.map((etf) => etf.isin));
+  const toggleAllEtfCurves = () => setVisibleEtfIsins(allEtfsVisible ? [] : chartableEtfs.map((etf) => etf.isin));
 
   return <div className="mvp-page">
     <header className="mvp-header">
       <div className="mvp-header-inner">
         <div className="mvp-logo"><span className="mvp-logo-mark">◈</span> Champ libre <span className="mvp-logo-sub">/ PEA</span></div>
         <div className="mvp-header-actions">
-          <span className="mvp-header-tag">Prototype · {PROFILES.length} ETF analysables sur {catalogData.nombre_etf}</span>
+          <span className="mvp-header-tag">{PROFILES.length} ETF disponibles · {HISTORY_COUNT} historiques · {COMPOSITION_COUNT} compositions</span>
           <div className="mvp-header-performance"><span>Performance sur la période<small>{performanceDates}</small></span><div className="mvp-header-values"><strong className={totalReturn != null && totalReturn < 0 ? "negative" : ""}>{performanceValue}</strong><small>MSCI World <b>{referenceValue}</b></small></div></div>
         </div>
       </div>
@@ -362,15 +379,15 @@ export default function PortfolioMvp() {
               <div className="etf-heading">
                 <span className="etf-dot" style={{ background: etf.couleur }}/>
                 <div><strong>{etf.nom_court}</strong><small>{etf.indice} · {etf.isin}</small></div>
-                <button type="button" className="eye-button" aria-label={`${visibleEtfIsins.includes(etf.isin) ? "Masquer" : "Afficher"} la courbe de ${etf.nom_court}`} aria-pressed={visibleEtfIsins.includes(etf.isin)} title={`${visibleEtfIsins.includes(etf.isin) ? "Masquer" : "Afficher"} la courbe de ${etf.nom_court}`} onClick={() => toggleEtfCurve(etf.isin)}><EyeIcon visible={visibleEtfIsins.includes(etf.isin)}/></button>
+                {pricesData.par_isin[etf.isin] && <button type="button" className="eye-button" aria-label={`${visibleEtfIsins.includes(etf.isin) ? "Masquer" : "Afficher"} la courbe de ${etf.nom_court}`} aria-pressed={visibleEtfIsins.includes(etf.isin)} title={`${visibleEtfIsins.includes(etf.isin) ? "Masquer" : "Afficher"} la courbe de ${etf.nom_court}`} onClick={() => toggleEtfCurve(etf.isin)}><EyeIcon visible={visibleEtfIsins.includes(etf.isin)}/></button>}
                 <button type="button" className="lock-button" aria-label={`${lockedIsins.includes(etf.isin) ? "Déverrouiller" : "Verrouiller"} ${etf.nom_court}`} aria-pressed={lockedIsins.includes(etf.isin)} title={`${lockedIsins.includes(etf.isin) ? "Déverrouiller" : "Verrouiller"} le poids de ${etf.nom_court}`} onClick={() => setLockedIsins((old) => old.includes(etf.isin) ? old.filter((item) => item !== etf.isin) : [...old, etf.isin])}><LockIcon locked={lockedIsins.includes(etf.isin)}/></button>
                 <button type="button" className="icon-button" title={`Retirer ${etf.nom_court}`} aria-label={`Retirer ${etf.nom_court}`} onClick={() => removeEtf(etf.isin)}>×</button>
               </div>
               <div className="weight-controls"><input aria-label={`Poids de ${etf.nom_court}`} type="range" min="0" max={lockedIsins.includes(etf.isin) ? 100 : availableForUnlocked} step="1" value={weights[etf.isin]} disabled={lockedIsins.includes(etf.isin)} onChange={(event) => setWeights((old) => redistribute(old, lockedIsins, etf.isin, event.target.value))} style={{ accentColor: etf.couleur }}/><div className="weight-number"><input aria-label={`Pourcentage de ${etf.nom_court}`} type="number" min="0" max={lockedIsins.includes(etf.isin) ? 100 : availableForUnlocked} step="0.1" value={Math.round(weights[etf.isin] * 10) / 10} disabled={lockedIsins.includes(etf.isin)} onChange={(event) => setWeights((old) => redistribute(old, lockedIsins, etf.isin, event.target.value))}/><span>%</span></div></div>
             </div>) : <p className="builder-empty">Votre portefeuille est vide. Ajoutez un ETF ci-dessous.</p>}
           </div>
-          <div className="add-section"><div className="add-section-heading"><span className="card-kicker">AJOUTER UN ETF</span><span>{PROFILES.length - selectedCount} disponibles</span></div>{PROFILES.filter((etf) => !selectedIsins.includes(etf.isin)).map((etf) => <button className="add-row" type="button" key={etf.isin} onClick={() => selectEtf(etf.isin)}><span className="etf-dot" style={{ background: etf.couleur }}/><span><strong>{etf.nom_court}</strong><small>{etf.famille}</small></span><b>＋</b></button>)}</div>
-          <div className="builder-note">Ce prototype couvre {PROFILES.length} ETF. Les {catalogData.nombre_etf - PROFILES.length} autres seront ajoutés après validation de leurs historiques et compositions.</div>
+          <div className="add-section"><div className="add-section-heading"><span className="card-kicker">AJOUTER UN ETF</span><span>{availableEtfs.length} disponibles</span></div><input className="catalog-search" type="search" aria-label="Rechercher un ETF par nom, famille ou ISIN" placeholder="Rechercher un ETF ou un ISIN" value={catalogQuery} onChange={(event) => setCatalogQuery(event.target.value)}/>{filteredEtfs.map((etf) => <button className="add-row" type="button" key={etf.isin} onClick={() => selectEtf(etf.isin)} title={etf.nom}><span className="etf-dot" style={{ background: etf.couleur }}/><span><strong>{etf.nom_court}</strong><small>{etf.famille} · {etf.isin}{etf.reporting_date ? " · composition connue" : ""}</small></span><b>＋</b></button>)}{!filteredEtfs.length && <p className="builder-empty">Aucun ETF trouvé.</p>}</div>
+          <div className="builder-note">Historiques mensuels disponibles pour {HISTORY_COUNT} ETF. Compositions par pays et secteur vérifiées pour {COMPOSITION_COUNT} ETF.</div>
           </div>
         </aside>
         <div className="dashboard">
@@ -383,17 +400,17 @@ export default function PortfolioMvp() {
           </section>
           <section className="mvp-card performance-card">
             <div className="card-topline"><span className="card-kicker">02 — ÉVOLUTION</span><span className="card-date">Cours arrêtés à {history.end ? monthsLabel(history.end) : "—"}</span></div>
-            <div className="performance-heading"><div><h2>Rendement historique</h2><p className="card-description">Base 100 · poids cibles rééquilibrés chaque mois · cours ajustés par la source{unallocated > 0 ? " · solde non alloué sans rendement" : ""}</p></div></div>
+            <div className="performance-heading"><div><h2>Rendement historique</h2><p className="card-description">Base 100 · poids cibles rééquilibrés chaque mois · VL ajustées Amundi en EUR{unallocated > 0 ? " · solde non alloué sans rendement" : ""}</p></div></div>
             {history.points.length ? <>
               <div className="chart-controls">
-                <button type="button" onClick={toggleAllEtfCurves} disabled={!selected.length}>
+                <button type="button" onClick={toggleAllEtfCurves} disabled={!chartableEtfs.length}>
                   <EyeIcon visible={allEtfsVisible}/>{allEtfsVisible ? "Masquer les courbes ETF" : "Afficher toutes les courbes ETF"}
                 </button>
               </div>
               <div className="chart-legend">
                 <span><i className="legend-line green"/>Votre portefeuille</span>
                 <span><i className="legend-line blue"/>MSCI World (repère)</span>
-                {visibleEtfs.map((etf) => <span key={etf.isin}><i className="legend-line" style={{ borderColor: LINE_COLORS[etf.isin] }}/>{etf.nom_court}</span>)}
+                {visibleEtfs.map((etf) => <span key={etf.isin}><i className="legend-line" style={{ borderColor: LINE_COLORS[etf.isin] || etf.couleur }}/>{etf.nom_court}</span>)}
               </div>
               <div className="performance-chart"><ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={history.points} margin={{ top: 12, right: 5, left: -17, bottom: 2 }}>
@@ -402,12 +419,12 @@ export default function PortfolioMvp() {
                   <XAxis dataKey="month" tick={{ fill: "#7a8881", fontSize: 11 }} tickLine={false} axisLine={false} minTickGap={35} tickFormatter={monthsLabel}/>
                   <YAxis tick={{ fill: "#7a8881", fontSize: 11 }} tickLine={false} axisLine={false} domain={["auto", "auto"]} tickFormatter={(value) => Math.round(value)}/>
                   <Tooltip content={<PerformanceTooltip visibleEtfs={visibleEtfs}/>}/>
-                  {visibleEtfs.map((etf) => <Area key={etf.isin} type="monotone" dataKey={`etf_${etf.isin}`} stroke={LINE_COLORS[etf.isin]} strokeWidth={1.9} fill="transparent" dot={false} connectNulls={false} isAnimationActive={false}/>)}
+                  {visibleEtfs.map((etf) => <Area key={etf.isin} type="monotone" dataKey={`etf_${etf.isin}`} stroke={LINE_COLORS[etf.isin] || etf.couleur} strokeWidth={1.9} fill="transparent" dot={false} connectNulls={false} isAnimationActive={false}/>)}
                   <Area type="monotone" dataKey="monde" stroke="#a1aacd" strokeWidth={1.7} strokeDasharray="5 5" fill="transparent" dot={false}/>
                   <Area type="monotone" dataKey="portefeuille" stroke="#317b54" strokeWidth={2.7} fill="url(#mixGradient)" dot={false} activeDot={{ r: 4 }}/>
                 </AreaChart>
               </ResponsiveContainer></div>
-            </> : <div className="empty-chart">Ajoutez un ETF pour afficher l’historique.</div>}
+            </> : <div className="empty-chart">{history.missingHistory?.length ? `Historique indisponible pour ${history.missingHistory.map((etf) => etf.nom_court).join(", ")}.` : "Ajoutez un ETF pour afficher l’historique."}</div>}
             {period !== Infinity && availableMonths < period && history.points.length > 0 && <p className="chart-footnote">Historique commun limité à {availableMonths} mois pour cette sélection.</p>}
           </section>
           <div className="exposure-grid">
@@ -419,24 +436,25 @@ export default function PortfolioMvp() {
               color="#5bac7e"
               date={oldestReport ? dateLabel(oldestReport) : "—"}
               periodLabel={periodLabel}
+              showContributions={history.points.length > 0}
               showAll={geoView === "zones"}
               controls={<div className="exposure-switch" role="group" aria-label="Vue géographique">
                 <button type="button" aria-pressed={geoView === "countries"} onClick={() => setGeoView("countries")}>Pays</button>
                 <button type="button" aria-pressed={geoView === "zones"} onClick={() => setGeoView("zones")}>Zones</button>
               </div>}
               extra={geoView === "zones" && geo.length > 0 && <div className="cross-exposure">
-                <div className="exposure-label"><span>BRICS identifiés (<a href="https://brics.br/en/about-the-brics" target="_blank" rel="noreferrer">11 membres</a>)</span><strong>{pct(bricsShare)}</strong><b className={bricsContribution < 0 ? "negative" : ""}>{formatPoints(bricsContribution)}</b></div>
+                <div className="exposure-label"><span>BRICS identifiés (<a href="https://brics.br/en/about-the-brics" target="_blank" rel="noreferrer">11 membres</a>)</span><strong>{pct(bricsShare)}</strong><b className={bricsContribution < 0 ? "negative" : ""}>{history.points.length ? formatPoints(bricsContribution) : "—"}</b></div>
                 <div className="exposure-track"><span style={{ width: `${bricsShare}%`, background: "#8f73b5" }}/></div>
                 <small>Inclus dans les zones ci-dessus ; les pays non détaillés sont exclus de ce calcul.</small>
               </div>}
-              note="Contribution indicative : rendement des ETF ventilé selon leur dernière composition publiée, supposée constante sur la période. Ce n’est pas un rendement historique propre à chaque pays ou zone. Les pays non détaillés restent séparés."
+              note={`Contribution indicative : rendement des ETF ventilé selon leur dernière composition publiée, supposée constante sur la période. Ce n’est pas un rendement historique propre à chaque pays ou zone. Les pays non détaillés restent séparés.${missingCompositions.length ? " La part sans composition vérifiée est indiquée séparément." : ""}`}
             />
-            <ExposureCard title="Par secteur" subtitle="Les activités qui font varier votre portefeuille." rows={sectorRows} color="#b88a58" date={oldestReport ? dateLabel(oldestReport) : "—"} periodLabel={periodLabel} note="Contribution indicative : rendement des ETF ventilé selon leur dernière composition publiée, supposée constante sur la période. Ce n’est pas un rendement historique propre à chaque secteur."/>
+            <ExposureCard title="Par secteur" subtitle="Les activités qui font varier votre portefeuille." rows={sectorRows} color="#b88a58" date={oldestReport ? dateLabel(oldestReport) : "—"} periodLabel={periodLabel} showContributions={history.points.length > 0} note="Contribution indicative : rendement des ETF ventilé selon leur dernière composition publiée, supposée constante sur la période. Ce n’est pas un rendement historique propre à chaque secteur. La part sans composition vérifiée reste distincte."/>
           </div>
-          <section className="mvp-card source-card"><div><span className="card-kicker">03 — SOURCES & MÉTHODE</span><h2>Des chiffres datés, jamais devinés.</h2><p>Les répartitions proviennent des indices présentés dans les reportings Amundi ; les cours mensuels ajustés viennent de Yahoo Finance pour ce prototype. Les frais proviennent des DIC Amundi. Les répartitions sont des instantanés, pas un historique reconstitué.</p></div><div className="source-list">{selected.map((etf) => <a key={etf.isin} href={etf.reporting_url} target="_blank" rel="noreferrer"><span>{etf.nom_court}</span><small>Composition : {dateLabel(etf.reporting_date)}</small><b>↗</b></a>)}</div></section>
+          <section className="mvp-card source-card"><div><span className="card-kicker">03 — SOURCES & MÉTHODE</span><h2>Des chiffres datés, jamais devinés.</h2><p>La liste PEA et les frais proviennent du catalogue Fortuneo et des DIC Amundi. Les VL ajustées mensuelles viennent d’Amundi ; la part cotée en USD est convertie en EUR au taux de référence de la BCE. Les répartitions proviennent des reportings Amundi lorsqu’ils ont été vérifiés.</p></div><div className="source-list">{selected.map((etf) => <a key={etf.isin} href={etf.reporting_url || CATALOG[etf.isin].dic_amundi.url} target="_blank" rel="noreferrer"><span>{etf.nom_court}</span><small>{etf.reporting_date ? `Composition : ${dateLabel(etf.reporting_date)}` : "DIC Amundi · composition à compléter"}</small><b>↗</b></a>)}</div></section>
         </div>
       </div>
-      <footer className="mvp-footer"><span>CHAMP LIBRE / PEA</span><p>Outil de simulation. Les performances passées ne préjugent pas des performances futures. Données de cours : {pricesData.source}, extraction du {dateLabel(pricesData.date_extraction)}.</p></footer>
+      <footer className="mvp-footer"><span>CHAMP LIBRE / PEA</span><p>Outil de simulation. Les performances passées ne préjugent pas des performances futures. Données de VL : {pricesData.source}, extraction du {dateLabel(pricesData.date_extraction)}.</p></footer>
     </main>
   </div>;
 }
