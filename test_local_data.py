@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from local_data import DataError, household, import_legacy, preview_legacy, save_item, snapshot
+from local_data import DataError, household, import_legacy, preview_legacy, save_item, save_items, snapshot
 from local_server import connect, initialize
 
 
@@ -47,6 +47,32 @@ class HouseholdTests(unittest.TestCase):
     def test_invalid_schedule_does_not_import(self):
         with self.assertRaises(DataError):
             preview_legacy(CSV, SCHEDULE.replace("49000;48806.16", "48000;48806.16"), CREDIT)
+
+    def test_linked_debt_requires_companion_files(self):
+        with self.assertRaisesRegex(DataError, r"amortissement\.csv et credit\.json"):
+            preview_legacy(CSV)
+
+    def test_table_save_is_atomic_and_keeps_unchanged_valuation_source(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "champ-libre.sqlite"
+            initialize(path)
+            with connect(path) as db:
+                import_legacy(db, preview_legacy(CSV, SCHEDULE, CREDIT))
+                cash = next(item for item in snapshot(db, "2026-02-06")["items"] if item["label"] == "Compte")
+                values = {key: cash[key] for key in ("id", "kind", "category", "label", "owner", "status", "usage", "asset_class", "schedule_id", "account_id", "day", "verified_on", "value_eur")}
+                values["category"] = "Épargne disponible"
+                save_items(db, [values])
+                source = db.execute("SELECT source,original_json FROM valuations WHERE item_id=? AND day=?", (cash["id"], cash["day"])).fetchone()
+                self.assertEqual(source["source"], "patrimoine.csv")
+                self.assertIsNotNone(source["original_json"])
+                count = db.execute("SELECT COUNT(*) FROM items").fetchone()[0]
+                new = {**values, "label": "Nouveau poste", "category": "Liquidités", "day": "2026-02-06"}
+                new.pop("id")
+                with self.assertRaises(DataError):
+                    save_items(db, [new, {**new, "label": ""}])
+                self.assertEqual(db.execute("SELECT COUNT(*) FROM items").fetchone()[0], count)
+                self.assertEqual(len(save_items(db, [new])), 1)
+                self.assertEqual(db.execute("SELECT COUNT(*) FROM items").fetchone()[0], count + 1)
 
 
 if __name__ == "__main__":

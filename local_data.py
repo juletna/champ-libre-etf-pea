@@ -138,7 +138,7 @@ def preview_legacy(text: str, schedule_text: str = "", credit_text: str = "") ->
         raise DataError("Métadonnées de crédit invalides.")
     linked = {entry["schedule_id"] for entry in entries if entry["schedule_id"]}
     if linked and (not credit or linked != {credit["id"]} or not rows):
-        raise DataError("La dette liée exige son échéancier et ses métadonnées correspondantes.")
+        raise DataError("Dette liée détectée : sélectionnez aussi amortissement.csv et credit.json, puis prévisualisez à nouveau. Vérifiez que les trois fichiers correspondent.")
     positions = {(e["kind"], e["category"], e["label"]) for e in entries}
     duplicate_dates = len(entries) - len({(e["kind"], e["category"], e["label"], e["day"]) for e in entries})
     return {"entries": entries, "schedule": rows, "credit": credit,
@@ -175,6 +175,23 @@ def import_legacy(db: sqlite3.Connection, parsed: dict) -> dict:
 
 
 def save_item(db: sqlite3.Connection, value: dict) -> str:
+    with db:
+        return _save_item(db, value)
+
+
+def save_items(db: sqlite3.Connection, values: list[dict]) -> list[str]:
+    if not isinstance(values, list) or not 1 <= len(values) <= 500 or any(not isinstance(value, dict) for value in values):
+        raise DataError("Liste de postes invalide (1 à 500 lignes attendues).")
+    explicit_ids = [value["id"] for value in values if value.get("id")]
+    if any(not isinstance(identifier, str) for identifier in explicit_ids):
+        raise DataError("Identifiant de poste invalide.")
+    if len(explicit_ids) != len(set(explicit_ids)):
+        raise DataError("Le même poste apparaît plusieurs fois dans l'enregistrement.")
+    with db:
+        return [_save_item(db, value) for value in values]
+
+
+def _save_item(db: sqlite3.Connection, value: dict) -> str:
     identifier = value.get("id") or str(uuid.uuid4())
     if not isinstance(identifier, str) or len(identifier) > 80:
         raise DataError("Identifiant invalide.")
@@ -195,14 +212,15 @@ def save_item(db: sqlite3.Connection, value: dict) -> str:
         raise DataError("Échéancier inconnu ou lié à un actif.")
     if schedule_id and value.get("value_eur") not in (None, ""):
         raise DataError("Une dette liée n'a pas de valeur manuelle.")
-    with db:
-        exists = db.execute("SELECT id FROM items WHERE id=?", (identifier,)).fetchone()
-        if exists:
-            db.execute("UPDATE items SET kind=?, category=?, label=?, owner=?, status=?, usage=?, asset_class=?, schedule_id=?, account_id=? WHERE id=?",
-                       (kind, category.strip(), label.strip(), owner, status, usage, asset_class, schedule_id, account_id, identifier))
-        else:
-            db.execute("INSERT INTO items (id,kind,category,label,owner,status,usage,asset_class,schedule_id,created_on,account_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
-                       (identifier, kind, category.strip(), label.strip(), owner, status, usage, asset_class, schedule_id, when, account_id))
+    exists = db.execute("SELECT id FROM items WHERE id=?", (identifier,)).fetchone()
+    if exists:
+        db.execute("UPDATE items SET kind=?, category=?, label=?, owner=?, status=?, usage=?, asset_class=?, schedule_id=?, account_id=? WHERE id=?",
+                   (kind, category.strip(), label.strip(), owner, status, usage, asset_class, schedule_id, account_id, identifier))
+    else:
+        db.execute("INSERT INTO items (id,kind,category,label,owner,status,usage,asset_class,schedule_id,created_on,account_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+                   (identifier, kind, category.strip(), label.strip(), owner, status, usage, asset_class, schedule_id, when, account_id))
+    previous = db.execute("SELECT value_cents,verified_on FROM valuations WHERE item_id=? AND day=?", (identifier, when)).fetchone()
+    if not previous or previous["value_cents"] != amount or previous["verified_on"] != verified:
         db.execute("INSERT INTO valuations VALUES (?,?,?,?,?,?) ON CONFLICT(item_id,day) DO UPDATE SET value_cents=excluded.value_cents,verified_on=excluded.verified_on,source=excluded.source,original_json=excluded.original_json",
                    (identifier, when, amount, verified, "saisie manuelle", None))
     return identifier

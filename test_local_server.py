@@ -86,6 +86,18 @@ class StorageTests(unittest.TestCase):
                 self.assertEqual(exported["format"], "champ-libre-json-export")
                 self.assertEqual(exported["schema_version"], 4)
                 self.assertIn("pea_positions", exported["tables"])
+                item = {"id": "test-inline-row", "day": "2026-01-01", "kind": "actif", "category": "Liquidités", "label": "Compte fictif", "value_eur": "100", "owner": "non_precise", "status": "actuel", "usage": "libre", "asset_class": "liquidite", "verified_on": "2026-01-01"}
+                headers = {"Content-Type": "application/json", "Origin": f"http://127.0.0.1:{port}", "X-Champ-Local": "1"}
+                connection.request("POST", "/api/items", json.dumps({"items": [item]}), headers)
+                response = connection.getresponse()
+                self.assertEqual(response.status, 200)
+                self.assertEqual(json.loads(response.read())["ids"], [item["id"]])
+                connection.request("POST", "/api/items", json.dumps({"items": [item]}), headers)
+                response = connection.getresponse()
+                self.assertEqual(response.status, 200)
+                response.read()
+                connection.request("GET", "/api/household")
+                self.assertEqual(len(json.loads(connection.getresponse().read())["snapshot"]["items"]), 1)
                 connection.close()
             finally:
                 server.shutdown()

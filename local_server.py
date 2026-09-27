@@ -17,7 +17,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
-from local_data import DataError, household, import_legacy, migrate_v2, preview_legacy, save_item
+from local_data import DataError, household, import_legacy, migrate_v2, preview_legacy, save_item, save_items
 from local_pea import account_state, apply_statement, include_without_aggregate, link_aggregate, migrate_v3, preview_statement, undo_latest, update_account
 from local_budget import activate_target, budget_state, migrate_v4, save_account, save_project, save_settings, select_source
 
@@ -268,7 +268,7 @@ class Handler(BaseHTTPRequestHandler):
             self.json(HTTPStatus.FORBIDDEN, {"error": "Écriture locale uniquement."})
             return
         path = urlsplit(self.path).path
-        if path not in ("/api/browser-data", "/api/restore.sqlite", "/api/legacy-preview", "/api/legacy-import", "/api/item", "/api/pea-preview", "/api/pea-import", "/api/pea-undo", "/api/pea-link", "/api/pea-include", "/api/pea-browser-import", "/api/pea-account", "/api/account", "/api/project", "/api/funding", "/api/budget-settings", "/api/target"):
+        if path not in ("/api/browser-data", "/api/restore.sqlite", "/api/legacy-preview", "/api/legacy-import", "/api/item", "/api/items", "/api/pea-preview", "/api/pea-import", "/api/pea-undo", "/api/pea-link", "/api/pea-include", "/api/pea-browser-import", "/api/pea-account", "/api/account", "/api/project", "/api/funding", "/api/budget-settings", "/api/target"):
             self.json(HTTPStatus.NOT_FOUND, {"error": "API inconnue."})
             return
         try:
@@ -285,7 +285,7 @@ class Handler(BaseHTTPRequestHandler):
                 with LOCK:
                     previous = restore_database(self.server.db_path, raw)
                 self.json(HTTPStatus.OK, {"restored": True, "previous_backup": previous.name})
-            elif path in ("/api/legacy-preview", "/api/legacy-import", "/api/item", "/api/pea-preview", "/api/pea-import", "/api/pea-undo", "/api/pea-link", "/api/pea-include", "/api/pea-browser-import", "/api/pea-account", "/api/account", "/api/project", "/api/funding", "/api/budget-settings", "/api/target"):
+            elif path in ("/api/legacy-preview", "/api/legacy-import", "/api/item", "/api/items", "/api/pea-preview", "/api/pea-import", "/api/pea-undo", "/api/pea-link", "/api/pea-include", "/api/pea-browser-import", "/api/pea-account", "/api/account", "/api/project", "/api/funding", "/api/budget-settings", "/api/target"):
                 if self.headers.get_content_type() != "application/json":
                     raise DataError("JSON attendu.")
                 value = json.loads(raw)
@@ -295,6 +295,10 @@ class Handler(BaseHTTPRequestHandler):
                     with LOCK, closing(connect(self.server.db_path)) as db:
                         identifier = save_item(db, value)
                     self.json(HTTPStatus.OK, {"id": identifier})
+                elif path == "/api/items":
+                    with LOCK, closing(connect(self.server.db_path)) as db:
+                        identifiers = save_items(db, value.get("items"))
+                    self.json(HTTPStatus.OK, {"ids": identifiers})
                 elif path in ("/api/account", "/api/project", "/api/funding", "/api/budget-settings", "/api/target"):
                     with LOCK, closing(connect(self.server.db_path)) as db:
                         if path == "/api/account":
