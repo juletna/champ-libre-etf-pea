@@ -276,3 +276,16 @@ def household(db: sqlite3.Connection, when: str | None = None) -> dict:
                           "last_due": last["due_on"] if last else None, "final_balance_eur": euro(last["after_cents"]) if last else None})
     return {"dates": sorted(dates), "snapshot": snapshot(db, selected), "schedules": schedules,
             "history": [{"day": selected_day, "net_eur": snapshot(db, selected_day)["net_eur"]} for selected_day in sorted(dates)]}
+
+
+def schedule_detail(db: sqlite3.Connection, schedule_id: str) -> dict:
+    schedule = db.execute("SELECT * FROM schedules WHERE id=?", (schedule_id,)).fetchone()
+    if not schedule:
+        raise DataError("Échéancier introuvable.")
+    rows = db.execute("SELECT * FROM schedule_rows WHERE schedule_id=? ORDER BY due_on", (schedule_id,)).fetchall()
+    return {"id": schedule["id"], "label": schedule["label"],
+            "metadata": json.loads(schedule["metadata_json"]),
+            "rows": [{"due_on": row["due_on"], "before_eur": euro(row["before_cents"]),
+                      "repay_eur": euro(row["repay_cents"]), "interest_eur": euro(row["interest_cents"]),
+                      "insurance_eur": euro(row["insurance_cents"]), "payment_eur": euro(row["payment_cents"]),
+                      "after_eur": euro(row["after_cents"])} for row in rows]}

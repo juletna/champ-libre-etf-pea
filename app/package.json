@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint",
-    "test": "node --test src/allocation/engine.test.js src/portfolio/storage.test.js src/portfolio/portrait.test.js src/migration/engine.test.js src/local/investment.test.js",
+    "test": "node --test src/allocation/engine.test.js src/portfolio/storage.test.js src/portfolio/portrait.test.js src/migration/engine.test.js src/local/investment.test.js src/local/household-view.test.js",
     "preview": "vite preview"
   },
   "dependencies": {

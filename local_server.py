@@ -17,7 +17,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
-from local_data import DataError, household, import_legacy, migrate_v2, preview_legacy, save_item, save_items
+from local_data import DataError, household, import_legacy, migrate_v2, preview_legacy, save_item, save_items, schedule_detail
 from local_pea import account_state, apply_statement, include_without_aggregate, link_aggregate, migrate_v3, preview_statement, undo_latest, update_account
 from local_budget import activate_target, budget_state, migrate_v4, save_account, save_project, save_settings, select_source
 
@@ -239,6 +239,13 @@ class Handler(BaseHTTPRequestHandler):
                         self.json(HTTPStatus.OK, household(db, requested))
                 except DataError as exc:
                     self.json(HTTPStatus.BAD_REQUEST, {"error": str(exc)})
+            elif path == "/api/schedule":
+                schedule_id = parse_qs(urlsplit(self.path).query).get("id", [""])[0]
+                try:
+                    with LOCK, closing(connect(self.server.db_path)) as db:
+                        self.json(HTTPStatus.OK, schedule_detail(db, schedule_id))
+                except DataError as exc:
+                    self.json(HTTPStatus.NOT_FOUND, {"error": str(exc)})
             elif path == "/api/pea":
                 with LOCK, closing(connect(self.server.db_path)) as db:
                     self.json(HTTPStatus.OK, account_state(db))

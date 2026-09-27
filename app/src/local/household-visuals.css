@@ -1,0 +1,31 @@
+.household-charts { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 1rem; max-width: 75rem; margin: 1rem auto; }
+.household-chart-panel { min-width: 0; margin: 0; }
+.household-chart-panel h2, .household-ownership h2, .household-credits h2 { font-size: 1.2rem; }
+.household-muted { color: #617167; font-size: .85rem; margin: .3rem 0 .8rem; }
+.household-chart { width: 100%; height: 240px; }
+.household-asset-total { font-size: 1.5rem; font-weight: 750; margin: 1.2rem 0; }
+.household-asset-total small { display: block; color: #617167; font-size: .78rem; font-weight: 400; }
+.household-category-bar { height: .7rem; border-radius: 1rem; background: #e6ece7; overflow: hidden; }
+.household-category-list, .household-amount-list { list-style: none; padding: 0; margin: .8rem 0 0; }
+.household-category-list li { display: inline-flex; align-items: center; gap: .3rem; margin: 0 .8rem .35rem 0; color: #42554a; font-size: .78rem; }
+.household-category-list strong { font-variant-numeric: tabular-nums; }
+.household-swatch { display: inline-block; width: .65rem; height: .65rem; border-radius: .15rem; flex: none; }
+.household-amount-list li { display: flex; justify-content: space-between; gap: 1rem; padding: .3rem 0; border-bottom: 1px solid #e9eee9; font-size: .88rem; }
+.household-amount-list strong { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.household-owner-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; margin-top: 1rem; }
+.household-owner-grid article { padding: .9rem; border: 1px solid #e1e9e2; border-radius: .55rem; min-width: 0; }
+.household-owner-grid article.household-owner-separated { background: #faf9f3; }
+.household-owner-grid h3 { font-size: .9rem; margin: 0 0 .2rem; }
+.household-owner-net { display: block; font-size: 1.2rem; font-variant-numeric: tabular-nums; }
+.household-owner-debt { color: #895148; font-size: .8rem; margin: .2rem 0 0; }
+.household-credit { border-top: 1px solid #e2e9e3; padding: .7rem 0; }
+.household-credit summary { cursor: pointer; font-weight: 700; }
+.household-credit summary span { color: #617167; font-size: .83rem; font-weight: 400; margin-left: .5rem; }
+.household-schedule-table { max-width: none; max-height: 32rem; overflow: auto; margin: .8rem 0; }
+.household-schedule-table table { min-width: 830px; font-variant-numeric: tabular-nums; }
+.household-schedule-table th { position: sticky; top: 0; background: #f5f8f5; z-index: 1; }
+.household-schedule-table td:not(:first-child), .household-schedule-table th:not(:first-child) { text-align: right; white-space: nowrap; }
+.household-past-due { background: #f1f7f1; }
+.household-next-due { background: #fff5de; }
+@media (max-width: 900px) { .household-charts { grid-template-columns: 1fr; } .household-owner-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .household-owner-grid { grid-template-columns: 1fr; } .household-credit summary span { display: block; margin: .2rem 0 0 1rem; } }

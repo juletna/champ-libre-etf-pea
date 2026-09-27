@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from local_data import DataError, household, import_legacy, preview_legacy, save_item, save_items, snapshot
+from local_data import DataError, household, import_legacy, preview_legacy, save_item, save_items, schedule_detail, snapshot
 from local_server import connect, initialize
 
 
@@ -36,6 +36,10 @@ class HouseholdTests(unittest.TestCase):
                 after = snapshot(db, "2026-02-06")
                 self.assertEqual((after["assets_eur"], after["debts_eur"], after["net_eur"]), (104000, 49000, 55000))
                 self.assertEqual(snapshot(db, "2026-04-01")["debts_eur"], 193.84)
+                detail = schedule_detail(db, "pret")
+                self.assertEqual(len(detail["rows"]), 2)
+                self.assertEqual(detail["rows"][0]["payment_eur"], 1110)
+                self.assertEqual(detail["rows"][-1]["after_eur"], 193.84)
                 self.assertEqual(len(after["items"]), 5)
                 cash = next(item for item in after["items"] if item["label"] == "Compte")
                 save_item(db, {"id": cash["id"], "kind": "actif", "category": "Liquidités", "label": "Compte renommé", "owner": "conjoint_1", "status": "actuel", "usage": "reserve", "asset_class": "liquidite", "day": "2026-02-01", "verified_on": "2026-02-01", "value_eur": 4000})
