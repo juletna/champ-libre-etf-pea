@@ -7,6 +7,9 @@ import pricesData from "./data/mvp-prices.json";
 import fundSizesData from "./data/mvp-fund-sizes.json";
 import catalogData from "./etf_pea_fortuneo_amundi.json";
 import "./portfolio-mvp.css";
+import { geographicZone } from "./allocation/geography";
+import AllocationWizard from "./allocation/AllocationWizard";
+import { createAllocationModel } from "./allocation/engine";
 
 const ANALYZED = Object.fromEntries(profilesData.etfs.map((item) => [item.isin, item]));
 const CATEGORY_COLORS = {
@@ -41,19 +44,6 @@ const PERIODS = [
   { label: "5 ans", months: 60 },
   { label: "Max", months: Infinity },
 ];
-const EURO_AREA = new Set([
-  "Allemagne", "Autriche", "Belgique", "Bulgarie", "Chypre", "Croatie", "Espagne", "Estonie",
-  "Finlande", "France", "Grèce", "Irlande", "Italie", "Lettonie", "Lituanie", "Luxembourg",
-  "Malte", "Pays-Bas", "Portugal", "Slovaquie", "Slovénie",
-]);
-const EUROPE_OUTSIDE_EURO = new Set([
-  "Danemark", "Hongrie", "Islande", "Norvège", "Pologne", "République tchèque", "Roumanie",
-  "Royaume-Uni", "Suède", "Suisse",
-]);
-const EAST_ASIA = new Set(["Chine", "Corée du Sud", "Hong Kong", "Taïwan"]);
-const SOUTH_SOUTHEAST_ASIA = new Set(["Inde", "Indonésie", "Malaisie", "Singapour", "Thaïlande"]);
-const AMERICAS_OUTSIDE_US = new Set(["Brésil", "Canada", "Chili", "Colombie", "Mexique", "Pérou"]);
-const AFRICA_MIDDLE_EAST = new Set(["Afrique du Sud", "Arabie saoudite", "Égypte", "Émirats arabes unis", "Éthiopie", "Iran", "Koweït", "Qatar"]);
 const BRICS_MEMBERS = new Set([
   "Afrique du Sud", "Arabie saoudite", "Brésil", "Chine", "Égypte", "Émirats arabes unis",
   "Éthiopie", "Inde", "Indonésie", "Iran", "Russie",
@@ -166,21 +156,6 @@ function withContributions(rows, contributions) {
   return rows.map((row) => ({ ...row, contribution: contributions.get(row.name) || 0 }));
 }
 
-function geographicZone(name) {
-  if (name === "Composition indisponible") return name;
-  if (name === "Non alloué") return "Non alloué";
-  if (name === "Autres pays") return "Pays non détaillés";
-  if (name === "États-Unis") return "États-Unis";
-  if (EURO_AREA.has(name)) return "Zone euro";
-  if (EUROPE_OUTSIDE_EURO.has(name)) return "Europe hors zone euro";
-  if (name === "Japon") return "Japon";
-  if (EAST_ASIA.has(name)) return "Asie de l'Est hors Japon";
-  if (SOUTH_SOUTHEAST_ASIA.has(name)) return "Asie du Sud et du Sud-Est";
-  if (AMERICAS_OUTSIDE_US.has(name)) return "Amériques hors États-Unis";
-  if (AFRICA_MIDDLE_EAST.has(name)) return "Afrique et Moyen-Orient";
-  if (name === "Australie") return "Océanie";
-  return "Pays non classés";
-}
 
 function aggregateZones(countries) {
   const zones = new Map();
@@ -321,7 +296,16 @@ function LockIcon({ locked }) {
   </svg>;
 }
 
+const allocationModel = createAllocationModel({
+  profiles: profilesData.etfs, catalog: catalogData.etf,
+  prices: pricesData.par_isin, sizes: fundSizesData.par_isin, geographicZone,
+});
+
 export default function PortfolioMvp() {
+  const [wizardOpen, setWizardOpen] = useState(false);
+  const [saveRequested, setSaveRequested] = useState(false);
+  const [previousAllocation, setPreviousAllocation] = useState(null);
+  const [hasBuiltAllocation, setHasBuiltAllocation] = useState(false);
   const [weights, setWeights] = useState(INITIAL);
   const [selectedIsins, setSelectedIsins] = useState(() => PROFILES.filter((etf) => INITIAL[etf.isin] > 0).map((etf) => etf.isin));
   const [lockedIsins, setLockedIsins] = useState([]);
@@ -418,6 +402,24 @@ export default function PortfolioMvp() {
   const toggleEtfCurve = (isin) => setVisibleEtfIsins((old) => old.includes(isin) ? old.filter((item) => item !== isin) : [...old, isin]);
   const toggleAllEtfCurves = () => setVisibleEtfIsins(allEtfsVisible ? [] : chartableEtfs.map((etf) => etf.isin));
 
+  const applyAllocation = (nextWeights, nextLocks) => {
+    setPreviousAllocation({ weights, selectedIsins, lockedIsins, visibleEtfIsins });
+    setWeights(nextWeights);
+    const ids = Object.keys(nextWeights);
+    setSelectedIsins(ids);
+    setLockedIsins(nextLocks.filter((id) => ids.includes(id)));
+    setVisibleEtfIsins((old) => old.filter((id) => ids.includes(id)));
+    setHasBuiltAllocation(true);
+  };
+  const undoAllocation = () => {
+    if (!previousAllocation) return;
+    setWeights(previousAllocation.weights);
+    setSelectedIsins(previousAllocation.selectedIsins);
+    setLockedIsins(previousAllocation.lockedIsins);
+    setVisibleEtfIsins(previousAllocation.visibleEtfIsins);
+    setPreviousAllocation(null);
+  };
+
   return <div className="mvp-page">
     <header className="mvp-header">
       <div className="mvp-header-inner">
@@ -435,7 +437,7 @@ export default function PortfolioMvp() {
       </section>
       <div className="mvp-layout">
         <aside className="builder-panel">
-          <div className="builder-heading"><span className="card-kicker">01 — EXPLORER & CONSTRUIRE</span><h2>Vos ETF</h2><p>Recherchez, comparez et composez votre portefeuille.</p></div>
+          <div className="builder-heading"><span className="card-kicker">01 — EXPLORER & CONSTRUIRE</span><h2>Vos ETF</h2><p>Recherchez, comparez et composez votre portefeuille.</p><div className="allocation-launch"><button type="button" className="allocation-button allocation-primary" onClick={() => { setSaveRequested(false); setWizardOpen(true); }}>{hasBuiltAllocation ? "Ajuster mon allocation" : "Construire une allocation"}</button></div></div>
           <div className="weight-total"><span>Investi</span><strong>{pct(totalWeight)}</strong></div>
           {unallocated > 0 && <div className="unallocated-total">Non alloué : {pct(unallocated)}</div>}
           <div className="builder-scroll" role="region" aria-label="Liste des ETF" tabIndex={0}>
@@ -469,6 +471,7 @@ export default function PortfolioMvp() {
           </div>
         </aside>
         <div className="dashboard">
+          {previousAllocation && <div className="allocation-notice" role="status"><p>Allocation appliquée au portefeuille virtuel.</p><button type="button" onClick={undoAllocation}>Annuler et restaurer le portefeuille précédent</button><button type="button" onClick={() => { setSaveRequested(false); setWizardOpen(true); }}>Ajuster</button><button type="button" onClick={() => { setSaveRequested(true); setWizardOpen(true); }}>Enregistrer comme modèle</button></div>}
           <div className="period-toolbar"><div><span className="card-kicker">PÉRIODE COMMUNE</span><small>Rendement et contributions · {periodLabel}</small></div><div className="period-tabs" role="group" aria-label="Période d’analyse">{PERIODS.map((option) => <button type="button" key={option.label} className={period === option.months ? "active" : ""} aria-pressed={period === option.months} onClick={() => setPeriod(option.months)}>{option.label}</button>)}</div></div>
           <section className="summary-grid">
             <div className="summary-card dark"><span>Performance sur la période</span><strong>{performanceValue}</strong><small>{performanceDates}</small></div>
@@ -534,5 +537,6 @@ export default function PortfolioMvp() {
       </div>
       <footer className="mvp-footer"><span>CHAMP LIBRE / PEA</span><p>Outil de simulation. Les performances passées ne préjugent pas des performances futures. Données de VL : {pricesData.source}, extraction du {dateLabel(pricesData.date_extraction)}.</p></footer>
     </main>
+    <AllocationWizard resume={hasBuiltAllocation} saveRequested={saveRequested} model={allocationModel} open={wizardOpen} onClose={() => setWizardOpen(false)} weights={weights} lockedIsins={lockedIsins} onApply={applyAllocation}/>
   </div>;
 }

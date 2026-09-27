@@ -26,7 +26,7 @@ npm run lint
 npm run build
 ```
 
-Il n'y a pas encore de suite de tests automatisés. Vérifier dans le navigateur le choix de période, l'ajout et le retrait d'ETF, un poids à 0 %, les verrouillages, les yeux des courbes, le bouton global et les vues Pays/Zones. Contrôler que le rendement, sa période et les contributions des cartes changent ensemble.
+Les calculs du constructeur disposent de tests automatisés (`npm test`) ; le parcours historique reste à vérifier dans le navigateur. Vérifier dans le navigateur le choix de période, l'ajout et le retrait d'ETF, un poids à 0 %, les verrouillages, les yeux des courbes, le bouton global et les vues Pays/Zones. Contrôler que le rendement, sa période et les contributions des cartes changent ensemble.
 
 ## Carte du dépôt
 
@@ -64,4 +64,10 @@ Pour ajouter ou actualiser une composition analysable, suivre `COMPOSITIONS.md`,
 
 ## Prochaines pistes
 
-Surveiller les trois ETF encore sans composition et la stabilité du point d'accès Amundi, ajouter des tests sur les calculs et envisager l'enregistrement local de portefeuilles. Un **véritable rendement historique par pays ou secteur** demanderait des séries historiques des constituants ou des indices dédiés, avec une méthode explicite de pondération et de reconstitution ; il ne peut pas être déduit de la seule composition actuelle des ETF.
+Surveiller les trois ETF encore sans composition et la stabilité du point d'accès Amundi, compléter les tests des calculs historiques et envisager la persistance du portefeuille courant, en complément des modèles locaux du constructeur. Un **véritable rendement historique par pays ou secteur** demanderait des séries historiques des constituants ou des indices dédiés, avec une méthode explicite de pondération et de reconstitution ; il ne peut pas être déduit de la seule composition actuelle des ETF.
+
+## Constructeur d’allocation (septembre 2026)
+
+`app/src/allocation/AllocationWizard.jsx` porte le parcours modal en trois étapes ; `engine.js` sépare les calculs purs de l’interface et `geography.js` partage la classification géographique avec le tableau de bord. `allocation.css` gère l’affichage ordinateur et mobile. La méthode, les limites et la sauvegarde locale sont détaillées dans `app/README.md`.
+
+Avant publication, exécuter également `npm test` dans `app/`, puis vérifier construction → réglages → contrepoids/remplacement → application → annulation, et l’enregistrement/rechargement d’un modèle personnel. Les cibles d’exposition restent approchées, contrairement aux verrous et aux contraintes de budget/lignes. Les variantes doivent conserver des libellés correspondant à une amélioration réelle. Les comparaisons de risque utilisent toujours des dates communes et ne doivent pas traverser un trou d’historique.

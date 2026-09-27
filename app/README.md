@@ -48,3 +48,17 @@ La seconde commande met à jour l'encours des 54 fonds dans `app/src/data/mvp-fu
 Les expositions de `app/src/data/mvp-profiles.json` doivent être mises à jour séparément à partir de nouveaux reportings. La liste PEA et les frais viennent du [catalogue Fortuneo Amundi](https://www.fortuneo.fr/bourse/freetrade-amundi/etf) et des DIC Amundi.
 
 Voir aussi le [guide de reprise](../PROJECT.md) pour la structure du dépôt, la méthode de calcul et la vérification avant publication.
+
+## Constructeur d’allocation
+
+Le bouton **Construire une allocation** ouvre un parcours en trois étapes : point de départ (portefeuille, modèle ou allocation libre), convictions et équilibre, puis propositions. Le portefeuille n’est modifié qu’à l’application. Une action permet de restaurer les poids, la sélection, les verrous et les courbes précédents. Le bouton **Ajuster mon allocation** revient aux réglages après une première application.
+
+- Le curseur de conviction mélange les objectifs de zones/secteurs avec les expositions du repère MSCI World. Les objectifs personnalisés sont exprimés au sein des actions ; les tableaux de résultat montrent les expositions dans le portefeuille total. Monter un objectif redistribue proportionnellement les autres dimensions.
+- Le curseur défensif/dynamique répartit le portefeuille entre actions et le fonds PEA Euro Court Terme. Ce fonds est une poche distincte, sans exposition actions inventée ni garantie de capital.
+- La recherche utilise les 51 compositions vérifiées et le fonds court terme, respecte les verrous, le maximum de lignes et les filtres de frais/encours/distribution/couverture explicite. Les positions verrouillées sont prioritaires sur les filtres. Les contraintes incompatibles bloquent l’application avec un message. L’absence de mention de couverture ne prouve pas l’absence de couverture.
+- Le moteur minimise les écarts quadratiques aux cibles avec une pénalité de frais, par transferts déterministes jusqu’au dixième de point. Il s’agit d’une recherche approchée, sans garantie d’optimum global. Les propositions « moins de frais » et « moins d’ETF » apparaissent seulement quand elles apportent effectivement cette différence. L’encours départage les candidats équivalents ; les rendements ne pilotent pas la sélection.
+- Les vases communicants rapprochent les baisses et les hausses de poids, y compris le solde auparavant non alloué. **Trouver un contrepoids** teste des transferts de 10 points au plus qui réduisent l’exposition dominante d’un ETF, sans dépasser les contraintes de lignes ou modifier les verrous. Il ne s’agit pas d’une couverture garantie. **Remplacer** transfère le poids, le verrouille sur l’ETF choisi et recalcule le reste.
+- La volatilité annualisée et la baisse maximale sont calculées sur les mêmes mois continus communs aux portefeuilles comparés, sur 60 mois au plus. Au moins 12 rendements mensuels sont nécessaires ; moins de 36 mois déclenche une mention d’historique court. La baisse maximale ne mesure que les valeurs de fin de mois. Les poids sont rétablis chaque mois ; le solde non alloué a un rendement nul. Les frais déjà intégrés aux VL ne sont pas soustraits de nouveau.
+- Les modèles personnels sont des instantanés de poids, conservés dans le navigateur sous une clé versionnée. Ils sont validés au chargement, limités à 12 et réutilisables comme points de départ. Un message signale l’indisponibilité du stockage. Ils ne synchronisent pas le portefeuille entre appareils.
+
+Les calculs du constructeur disposent de tests dédiés : `npm test` depuis `app/`.
