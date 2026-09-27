@@ -108,3 +108,50 @@ test('zero-weight locks survive and no unknown composition enters the automatic 
   assert.equal(result.weights.FR0014017NX3, 0);
   for (const [id, w] of Object.entries(result.weights)) if (w > 0 && id !== CASH_ISIN) assert.equal(model.funds[id].known, true);
 });
+
+test('zone locks preserve targets, cap redistribution and handle all locked or last free zone', () => {
+  const values = { US: 60, Europe: 30, Japan: 10 };
+  assert.deepEqual(rebalanceTarget(values, 'Japan', 100, ['Europe']), { US: 0, Europe: 30, Japan: 70 });
+  assert.deepEqual(rebalanceTarget(values, 'Europe', 0, ['Europe']), values);
+  assert.deepEqual(rebalanceTarget(values, 'Japan', 50, ['US', 'Europe']), values);
+  assert.deepEqual(rebalanceTarget(values, 'US', 0, Object.keys(values)), values);
+  assert.deepEqual(rebalanceTarget({ US: 0, Europe: 100, Japan: 0 }, 'Japan', 50, ['US']), { US: 0, Europe: 50, Japan: 50 });
+  const zeroFree = rebalanceTarget({ US: 100, Europe: 0, Japan: 0 }, 'US', 40, ['Europe']);
+  assert.deepEqual(zeroFree, { US: 40, Europe: 0, Japan: 60 });
+});
+test('conviction preserves locked zone targets and redistributes the free remainder', () => {
+  const zones = rebalanceTarget(Object.fromEntries(model.zoneNames.map((name) => [name, defaults.intent.zones[name] || 0])), 'Japon', 35);
+  for (const conviction of [0, 50, 100]) {
+    const target = model.targets({ ...defaults, conviction, equity: 80, intent: { ...defaults.intent, zones }, zoneLocks: ['Japon'] });
+    assert.equal(target.zones.Japon, 28);
+    assert.ok(Math.abs(sum(Object.values(target.zones)) - 80) < 1e-8);
+    assert.ok(Math.abs(sum(Object.values(target.sectors)) - 80) < 1e-8);
+  }
+  const locked = model.targets({ ...defaults, conviction: 0, zoneLocks: model.zoneNames });
+  for (const name of model.zoneNames) assert.equal(locked.zones[name], defaults.intent.zones[name] || 0);
+});
+test('total performance compounds monthly with the same dates for every allocation', () => {
+  const history = [100, 110, 99].map((value, i) => ({ mois: `2025-0${i + 1}`, cours_ajuste: value }));
+  const sample = createAllocationModel({ profiles: [], catalog: [], sizes: {}, geographicZone, prices: { a: { historique: history }, b: { historique: history.slice(1) } } });
+  const full = sample.comparePerformance([{ a: 100, missing: 0 }, { a: 50 }, {}], 12);
+  assert.equal(full.months, 2);
+  assert.equal(full.limited, true);
+  assert.ok(Math.abs(full.totals[0] + 1) < 1e-8);
+  assert.ok(Math.abs(full.totals[1] + 0.25) < 1e-8);
+  assert.equal(full.totals[2], 0);
+  const common = sample.comparePerformance([{ a: 100 }, { b: 100 }], Infinity);
+  assert.equal(common.start, '2025-02');
+  assert.equal(common.end, '2025-03');
+  assert.equal(common.months, 1);
+  assert.deepEqual(common.totals, [-9.999999999999998, -9.999999999999998]);
+  assert.equal(sample.comparePerformance([{ a: 100 }, { missing: 50 }]).available, false);
+  assert.equal(sample.comparePerformance([{}, {}]).available, false);
+});
+test('performance honors requested windows and does not bridge missing months', () => {
+  const history = Array.from({ length: 25 }, (_, i) => ({ mois: `${2024 + Math.floor(i / 12)}-${String(i % 12 + 1).padStart(2, '0')}`, cours_ajuste: 100 + i }));
+  const sample = createAllocationModel({ profiles: [], catalog: [], sizes: {}, geographicZone, prices: { a: { historique: history }, b: { historique: history.filter((_, i) => i !== 20) }, c: { historique: history.slice(0, 1) } } });
+  assert.equal(sample.comparePerformance([{ a: 100 }], 12).months, 12);
+  assert.equal(sample.comparePerformance([{ a: 100 }], Infinity).months, 24);
+  assert.equal(sample.comparePerformance([{ a: 100 }, { b: 100 }], 12).months, 3);
+  assert.equal(sample.comparePerformance([{ a: 100 }, { c: 100 }]).available, false);
+});

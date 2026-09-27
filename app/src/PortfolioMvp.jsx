@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
@@ -9,7 +9,11 @@ import catalogData from "./etf_pea_fortuneo_amundi.json";
 import "./portfolio-mvp.css";
 import { geographicZone } from "./allocation/geography";
 import AllocationWizard from "./allocation/AllocationWizard";
+import { AllocationComparisonDialog } from "./allocation/AllocationComparison";
 import { createAllocationModel } from "./allocation/engine";
+import PortfolioLibrary from "./portfolio/PortfolioLibrary";
+import { MAX_BASKETS, readWorkspace, writeWorkspace, validateSnapshot } from "./portfolio/storage";
+import "./portfolio/workspace.css";
 
 const ANALYZED = Object.fromEntries(profilesData.etfs.map((item) => [item.isin, item]));
 const CATEGORY_COLORS = {
@@ -19,12 +23,12 @@ const CATEGORY_COLORS = {
 };
 const PROFILES = catalogData.etf.map((item) => ({
   isin: item.isin,
-  nom: item.nom,
-  nom_court: item.nom.replace(/^Amundi /, ""),
   indice: item.categorie_fortuneo,
   famille: item.categorie_fortuneo,
   couleur: CATEGORY_COLORS[item.categorie_fortuneo] || "#8caaa0",
   ...ANALYZED[item.isin],
+  nom: item.nom,
+  nom_court: item.nom,
 }));
 const COMPOSITION_COUNT = profilesData.etfs.length;
 const HISTORY_COUNT = Object.keys(pricesData.par_isin).length;
@@ -301,25 +305,104 @@ const allocationModel = createAllocationModel({
   prices: pricesData.par_isin, sizes: fundSizesData.par_isin, geographicZone,
 });
 
+const browserStorage = {
+  getItem: (key) => window.localStorage.getItem(key),
+  setItem: (key, value) => window.localStorage.setItem(key, value),
+};
+const DEFAULT_SNAPSHOT = { weights: INITIAL, selectedIsins: Object.keys(INITIAL).filter((id) => INITIAL[id] > 0), lockedIsins: [], visibleEtfIsins: [], period: 36, geoView: "countries" };
+
 export default function PortfolioMvp() {
+  const [initialWorkspace] = useState(() => readWorkspace(browserStorage, allocationModel, DEFAULT_SNAPSHOT));
+  const initial = initialWorkspace.current;
+  const [baskets, setBaskets] = useState(initialWorkspace.baskets);
+  const [activeBasketId, setActiveBasketId] = useState(initialWorkspace.activeId);
+  const [storageStatus, setStorageStatus] = useState(initialWorkspace.error);
+  const autoSaveEnabled = useRef(!initialWorkspace.error);
+  const [deletedBasket, setDeletedBasket] = useState(null);
+  const [wizardDraft, setWizardDraft] = useState(initial.wizardDraft);
+  const [wizardRevision, setWizardRevision] = useState(0);
+  const [editorView, setEditorView] = useState(initial.editorView);
+  const [recentlyAdded, setRecentlyAdded] = useState("");
+  const basketScrollRef = useRef(null);
   const [wizardOpen, setWizardOpen] = useState(false);
+  const [comparisonOpen, setComparisonOpen] = useState(false);
   const [saveRequested, setSaveRequested] = useState(false);
   const [previousAllocation, setPreviousAllocation] = useState(null);
-  const [hasBuiltAllocation, setHasBuiltAllocation] = useState(false);
-  const [weights, setWeights] = useState(INITIAL);
-  const [selectedIsins, setSelectedIsins] = useState(() => PROFILES.filter((etf) => INITIAL[etf.isin] > 0).map((etf) => etf.isin));
-  const [lockedIsins, setLockedIsins] = useState([]);
-  const [visibleEtfIsins, setVisibleEtfIsins] = useState([]);
-  const [period, setPeriod] = useState(36);
+  const [hasBuiltAllocation, setHasBuiltAllocation] = useState(initial.hasBuiltAllocation);
+  const [weights, setWeights] = useState(initial.weights);
+  const [selectedIsins, setSelectedIsins] = useState(initial.selectedIsins);
+  const [lockedIsins, setLockedIsins] = useState(initial.lockedIsins);
+  const [visibleEtfIsins, setVisibleEtfIsins] = useState(initial.visibleEtfIsins);
+  const [period, setPeriod] = useState(initial.period === "max" ? Infinity : initial.period);
+  useEffect(() => {
+    const container = basketScrollRef.current;
+    const row = container?.querySelector(`[data-isin="${recentlyAdded}"]`);
+    if (!row || !container.clientHeight) return;
+    container.scrollTop += row.getBoundingClientRect().top - container.getBoundingClientRect().top - 8;
+  }, [recentlyAdded, selectedIsins, editorView]);
   const etfReturns = useMemo(() => Object.fromEntries(PROFILES.map((etf) => [etf.isin, etfPeriodReturn(etf.isin, period)])), [period]);
-  const [geoView, setGeoView] = useState("countries");
-  const [catalogQuery, setCatalogQuery] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("");
-  const [distributionFilter, setDistributionFilter] = useState("");
-  const [minFundSize, setMinFundSize] = useState(0);
-  const [maxFee, setMaxFee] = useState("");
-  const [fullHistoryOnly, setFullHistoryOnly] = useState(false);
-  const [catalogSort, setCatalogSort] = useState("performance-desc");
+  const [geoView, setGeoView] = useState(initial.geoView);
+  const [catalogQuery, setCatalogQuery] = useState(initial.filters.query);
+  const [categoryFilter, setCategoryFilter] = useState(initial.filters.category);
+  const [distributionFilter, setDistributionFilter] = useState(initial.filters.distribution);
+  const [minFundSize, setMinFundSize] = useState(initial.filters.minSize);
+  const [maxFee, setMaxFee] = useState(initial.filters.maxFee);
+  const [fullHistoryOnly, setFullHistoryOnly] = useState(initial.filters.fullHistory);
+  const [catalogSort, setCatalogSort] = useState(initial.filters.sort);
+  const snapshot = useMemo(() => ({ weights, selectedIsins, lockedIsins, visibleEtfIsins,
+    period: period === Infinity ? "max" : period, geoView, hasBuiltAllocation, editorView, wizardDraft,
+    filters: { query: catalogQuery, category: categoryFilter, distribution: distributionFilter, minSize: minFundSize, maxFee, fullHistory: fullHistoryOnly, sort: catalogSort },
+  }), [weights, selectedIsins, lockedIsins, visibleEtfIsins, period, geoView, hasBuiltAllocation, editorView, wizardDraft, catalogQuery, categoryFilter, distributionFilter, minFundSize, maxFee, fullHistoryOnly, catalogSort]);
+  useEffect(() => {
+    if (!autoSaveEnabled.current) return;
+    const saved = writeWorkspace(browserStorage, snapshot, baskets, activeBasketId);
+    setStorageStatus(saved ? "Brouillon sauvegardé automatiquement sur ce navigateur." : "Sauvegarde impossible : stockage local indisponible ou plein. Vos changements restent en mémoire.");
+  }, [snapshot, baskets, activeBasketId]);
+  const savedModels = useMemo(() => baskets.map((basket) => ({ id: basket.id, name: basket.name, weights: basket.snapshot.weights, snapshot: basket.snapshot })), [baskets]);
+  const activeBasket = baskets.find((basket) => basket.id === activeBasketId);
+  const basketDirty = activeBasket ? JSON.stringify(activeBasket.snapshot) !== JSON.stringify(validateSnapshot(snapshot, allocationModel)) : false;
+  function saveBaskets(next, activeId = activeBasketId) {
+    const saved = writeWorkspace(browserStorage, snapshot, next, activeId);
+    if (!saved) { setStorageStatus("Enregistrement impossible : stockage local indisponible ou plein."); return false; }
+    autoSaveEnabled.current = true;
+    setBaskets(next); setActiveBasketId(activeId);
+    setStorageStatus("Configuration enregistrée sur ce navigateur.");
+    return true;
+  }
+  function saveBasket(name, proposedSnapshot = snapshot, activate = true) {
+    if (baskets.length >= MAX_BASKETS) { setStorageStatus("La limite de 30 paniers est atteinte. Supprimez un ancien panier ou mettez-le à jour."); return null; }
+    const id = `basket-${crypto.randomUUID()}`;
+    const validated = validateSnapshot(proposedSnapshot, allocationModel);
+    if (!validated || !name.trim()) return null;
+    const entry = { id, name: name.trim().slice(0, 60), snapshot: validated };
+    return saveBaskets([...baskets, entry], activate ? id : activeBasketId) ? id : null;
+  }
+  function loadBasket(basket) {
+    const next = basket.snapshot;
+    setWeights(next.weights); setSelectedIsins(next.selectedIsins); setLockedIsins(next.lockedIsins); setVisibleEtfIsins(next.visibleEtfIsins);
+    setPeriod(next.period === "max" ? Infinity : next.period); setGeoView(next.geoView); setHasBuiltAllocation(next.hasBuiltAllocation); setEditorView(next.editorView);
+    setCatalogQuery(next.filters.query); setCategoryFilter(next.filters.category); setDistributionFilter(next.filters.distribution);
+    setMinFundSize(next.filters.minSize); setMaxFee(next.filters.maxFee); setFullHistoryOnly(next.filters.fullHistory); setCatalogSort(next.filters.sort);
+    setRecentlyAdded(""); setWizardOpen(false); setSaveRequested(false); setWizardDraft(next.wizardDraft); setWizardRevision((old) => old + 1);
+    setActiveBasketId(basket.id); setPreviousAllocation(null);
+  }
+  function updateBasket(id, name) {
+    saveBaskets(baskets.map((basket) => basket.id === id ? { ...basket, name: name.slice(0, 60), snapshot: validateSnapshot(snapshot, allocationModel) } : basket));
+  }
+  function deleteBasket(id) {
+    const entry = baskets.find((basket) => basket.id === id);
+    if (saveBaskets(baskets.filter((basket) => basket.id !== id), activeBasketId === id ? "" : activeBasketId)) setDeletedBasket({ ...entry, wasActive: activeBasketId === id });
+  }
+  function undoDeleteBasket() {
+    if (deletedBasket && baskets.length < MAX_BASKETS && saveBaskets([...baskets, { id: deletedBasket.id, name: deletedBasket.name, snapshot: deletedBasket.snapshot }], deletedBasket.wasActive ? deletedBasket.id : activeBasketId)) setDeletedBasket(null);
+  }
+  function saveWizardConfiguration(name, proposedWeights, draft) {
+    const ids = Object.keys(proposedWeights);
+    return Boolean(saveBasket(name, { ...snapshot, weights: proposedWeights, selectedIsins: ids,
+      lockedIsins: Object.keys(draft.settings.locks).filter((id) => ids.includes(id)), visibleEtfIsins: visibleEtfIsins.filter((id) => ids.includes(id)),
+      hasBuiltAllocation: true, wizardDraft: { ...draft, manual: proposedWeights, step: 2, anchor: { weights: proposedWeights, lockedIsins: Object.keys(draft.settings.locks) } },
+    }, true));
+  }
   const selected = PROFILES.filter((etf) => selectedIsins.includes(etf.isin));
   const chartableEtfs = selected.filter((etf) => pricesData.par_isin[etf.isin]);
   const visibleEtfs = chartableEtfs.filter((etf) => visibleEtfIsins.includes(etf.isin));
@@ -354,7 +437,7 @@ export default function PortfolioMvp() {
   const filteredEtfs = availableEtfs.filter((etf) => {
     const catalog = CATALOG[etf.isin];
     const size = fundSizesData.par_isin[etf.isin]?.encours_fonds_eur;
-    const queryMatches = `${etf.nom} ${etf.isin} ${etf.famille}`.toLocaleLowerCase("fr-FR").includes(catalogQuery.trim().toLocaleLowerCase("fr-FR"));
+    const queryMatches = `${etf.nom} ${ANALYZED[etf.isin]?.nom_court || ""} ${etf.isin} ${etf.famille}`.toLocaleLowerCase("fr-FR").includes(catalogQuery.trim().toLocaleLowerCase("fr-FR"));
     return queryMatches
       && (!categoryFilter || etf.famille === categoryFilter)
       && (!distributionFilter || catalog.distribution === distributionFilter)
@@ -387,7 +470,8 @@ export default function PortfolioMvp() {
     setWeights((old) => redistribute(old, remainingLocks, isin, 0));
   };
   const selectEtf = (isin) => {
-    setSelectedIsins((old) => [...old, isin]);
+    setSelectedIsins((old) => old.includes(isin) ? old : [...old, isin]);
+    setRecentlyAdded(isin);
     setWeights((old) => addEtf(old, lockedIsins, isin));
   };
   const resetCatalogFilters = () => {
@@ -435,14 +519,35 @@ export default function PortfolioMvp() {
         <div><div className="eyebrow">PORTEFEUILLE VIRTUEL · OFFRE FORTUNEO AMUNDI</div><h1>Composez. Observez.<br/><em>Comprenez.</em></h1><p>Réglez les poids de vos ETF et voyez aussitôt ce que vous détenez vraiment — par pays, par secteur et dans le temps.</p></div>
         <div className="intro-index"><span>01 / 03</span><div className="intro-index-line"/><strong>Un premier aperçu concret</strong><small>Données mensuelles · poids rééquilibrés chaque mois</small></div>
       </section>
-      <div className="mvp-layout">
-        <aside className="builder-panel">
-          <div className="builder-heading"><span className="card-kicker">01 — EXPLORER & CONSTRUIRE</span><h2>Vos ETF</h2><p>Recherchez, comparez et composez votre portefeuille.</p><div className="allocation-launch"><button type="button" className="allocation-button allocation-primary" onClick={() => { setSaveRequested(false); setWizardOpen(true); }}>{hasBuiltAllocation ? "Ajuster mon allocation" : "Construire une allocation"}</button></div></div>
+      <PortfolioLibrary key={activeBasketId} onCompare={() => setComparisonOpen(true)} baskets={baskets} activeId={activeBasketId} dirty={basketDirty} status={storageStatus} onLoad={loadBasket} onSave={saveBasket} onUpdate={updateBasket} onDelete={deleteBasket} onUndoDelete={undoDeleteBasket} deleted={deletedBasket}/>
+      <div className="editor-tabs" role="group" aria-label="Zones de composition"><button type="button" aria-pressed={editorView === "catalog"} aria-controls="catalog-panel" onClick={() => setEditorView("catalog")}>Catalogue · {availableEtfs.length}</button><button type="button" aria-pressed={editorView === "basket"} aria-controls="basket-panel" onClick={() => setEditorView("basket")}>Mon panier · {selected.length}</button></div>
+      <div className="mvp-layout" data-editor-view={editorView}>
+        <aside className="builder-panel catalog-panel" id="catalog-panel" aria-labelledby="catalog-title">
+          <div className="builder-heading"><span className="card-kicker">01 — EXPLORER</span><h2 id="catalog-title">ETF disponibles</h2><p>Ajoutez un ETF au panier, puis réglez son poids à côté.</p></div>
+          <div className="catalog-toolbar">
+            <input className="catalog-search" type="search" aria-label="Rechercher un ETF par nom, famille ou ISIN" placeholder="Nom, indice ou ISIN" value={catalogQuery} onChange={(event) => setCatalogQuery(event.target.value)}/>
+            <details className="catalog-filter-details"><summary>Filtres et classement</summary><div className="catalog-controls">
+              <label>Catégorie<select value={categoryFilter} onChange={(event) => setCategoryFilter(event.target.value)}><option value="">Toutes</option>{CATEGORIES.map((category) => <option key={category} value={category}>{category}</option>)}</select></label>
+              <label>Distribution<select value={distributionFilter} onChange={(event) => setDistributionFilter(event.target.value)}><option value="">Toutes</option><option value="capitalisation">Capitalisation</option><option value="distribution">Distribution</option></select></label>
+              <label>Encours minimum<select value={minFundSize} onChange={(event) => setMinFundSize(Number(event.target.value))}><option value={0}>Tous</option><option value={100e6}>100 M€</option><option value={500e6}>500 M€</option><option value={1e9}>1 Md€</option></select></label>
+              <label>Frais maximum<select value={maxFee} onChange={(event) => setMaxFee(event.target.value)}><option value="">Tous</option><option value="0.2">0,20 %</option><option value="0.3">0,30 %</option><option value="0.5">0,50 %</option></select></label>
+              <label className="catalog-sort">Trier par<select value={catalogSort} onChange={(event) => setCatalogSort(event.target.value)}><option value="performance-desc">Performance ↓</option><option value="performance-asc">Performance ↑</option><option value="size-desc">Encours ↓</option><option value="size-asc">Encours ↑</option><option value="fee-asc">Frais ↑</option><option value="fee-desc">Frais ↓</option><option value="name">Nom A → Z</option></select></label>
+              <label className="catalog-checkbox"><input type="checkbox" checked={fullHistoryOnly} onChange={(event) => setFullHistoryOnly(event.target.checked)}/>Historique complet sur la période</label>
+            </div>
+            </details><div className="catalog-results"><span>{filteredEtfs.length} résultat{filteredEtfs.length > 1 ? "s" : ""}</span><button type="button" onClick={resetCatalogFilters}>Réinitialiser</button></div>
+          </div>
+          <div className="catalog-scroll" role="region" aria-label="Catalogue des ETF disponibles" tabIndex={0}>
+            <div className="catalog-list">{filteredEtfs.map((etf) => <button className="add-row" type="button" key={etf.isin} onClick={() => selectEtf(etf.isin)} aria-label={`Ajouter ${etf.nom}`} title={`Ajouter ${etf.nom}`}><span className="etf-dot" style={{ background: etf.couleur }}/><span className="etf-row-info"><span className="etf-name-line"><strong>{etf.nom_court}</strong><EtfPeriodBadge result={etfReturns[etf.isin]}/></span><small>{etf.famille} · {etf.isin}</small><small>Encours {fundSizeLabel(fundSizesData.par_isin[etf.isin]?.encours_fonds_eur)} · Frais {pct(CATALOG[etf.isin].frais_gestion_et_administration_pct_an)} · {CATALOG[etf.isin].distribution === "capitalisation" ? "Capitalisation" : "Distribution"}</small></span><b aria-hidden="true">＋</b></button>)}{!filteredEtfs.length && <p className="builder-empty">Aucun ETF ne correspond aux filtres.</p>}</div>          </div>
+          {recentlyAdded && selectedIsins.includes(recentlyAdded) && <div className="catalog-added"><span role="status">{CATALOG[recentlyAdded].nom} ajouté au panier.</span><button type="button" onClick={() => { setEditorView("basket"); basketScrollRef.current?.querySelector(`[data-isin="${recentlyAdded}"] input[type=number]`)?.focus({ preventScroll: true }); }}>Régler son poids</button></div>}
+          <div className="catalog-footnote">Noms officiels du catalogue · encours au {dateLabel(FUND_SIZE_DATE)}. Les performances « — » signalent un historique insuffisant.</div>
+        </aside>
+        <aside className="builder-panel basket-panel" id="basket-panel" aria-labelledby="basket-title">
+          <div className="builder-heading"><span className="card-kicker">02 — COMPOSER</span><h2 id="basket-title">Mon panier <span>{selected.length} ETF</span></h2><p>Les réglages restent accessibles pendant la recherche.</p><div className="allocation-launch"><button type="button" className="allocation-button allocation-primary" onClick={() => { setSaveRequested(false); setWizardOpen(true); }}>{hasBuiltAllocation ? "Ajuster mon allocation" : "Construire une allocation"}</button></div></div>
           <div className="weight-total"><span>Investi</span><strong>{pct(totalWeight)}</strong></div>
           {unallocated > 0 && <div className="unallocated-total">Non alloué : {pct(unallocated)}</div>}
-          <div className="builder-scroll" role="region" aria-label="Liste des ETF" tabIndex={0}>
+          <div ref={basketScrollRef} className="basket-scroll" role="region" aria-label="ETF du panier et réglages" tabIndex={0}>
           <div className="selected-list">
-            {selected.length ? selected.map((etf) => <div className={`selected-etf${lockedIsins.includes(etf.isin) ? " locked" : ""}`} key={etf.isin}>
+            {selected.length ? selected.map((etf) => <div data-isin={etf.isin} className={`selected-etf${lockedIsins.includes(etf.isin) ? " locked" : ""}${recentlyAdded === etf.isin ? " just-added" : ""}`} key={etf.isin}>
               <div className="etf-heading">
                 <span className="etf-dot" style={{ background: etf.couleur }}/>
                 <div><span className="etf-name-line"><strong>{etf.nom_court}</strong><EtfPeriodBadge result={etfReturns[etf.isin]}/></span><small>{etf.indice} · {etf.isin} · {fundSizeLabel(fundSizesData.par_isin[etf.isin]?.encours_fonds_eur)}</small></div>
@@ -451,23 +556,8 @@ export default function PortfolioMvp() {
                 <button type="button" className="icon-button" title={`Retirer ${etf.nom_court}`} aria-label={`Retirer ${etf.nom_court}`} onClick={() => removeEtf(etf.isin)}>×</button>
               </div>
               <div className="weight-controls"><input aria-label={`Poids de ${etf.nom_court}`} type="range" min="0" max={lockedIsins.includes(etf.isin) ? 100 : availableForUnlocked} step="1" value={weights[etf.isin]} disabled={lockedIsins.includes(etf.isin)} onChange={(event) => setWeights((old) => redistribute(old, lockedIsins, etf.isin, event.target.value))} style={{ accentColor: etf.couleur }}/><div className="weight-number"><input aria-label={`Pourcentage de ${etf.nom_court}`} type="number" min="0" max={lockedIsins.includes(etf.isin) ? 100 : availableForUnlocked} step="0.1" value={Math.round(weights[etf.isin] * 10) / 10} disabled={lockedIsins.includes(etf.isin)} onChange={(event) => setWeights((old) => redistribute(old, lockedIsins, etf.isin, event.target.value))}/><span>%</span></div></div>
-            </div>) : <p className="builder-empty">Votre portefeuille est vide. Ajoutez un ETF ci-dessous.</p>}
+            </div>) : <p className="builder-empty">Votre panier est vide. Ajoutez un ETF depuis le catalogue.</p>}
           </div>
-          <div className="add-section">
-            <div className="add-section-heading"><span className="card-kicker">EXPLORER LES ETF</span><span>{filteredEtfs.length} / {availableEtfs.length}</span></div>
-            <input className="catalog-search" type="search" aria-label="Rechercher un ETF par nom, famille ou ISIN" placeholder="Nom, indice ou ISIN" value={catalogQuery} onChange={(event) => setCatalogQuery(event.target.value)}/>
-            <div className="catalog-controls">
-              <label>Catégorie<select value={categoryFilter} onChange={(event) => setCategoryFilter(event.target.value)}><option value="">Toutes</option>{CATEGORIES.map((category) => <option key={category} value={category}>{category}</option>)}</select></label>
-              <label>Distribution<select value={distributionFilter} onChange={(event) => setDistributionFilter(event.target.value)}><option value="">Toutes</option><option value="capitalisation">Capitalisation</option><option value="distribution">Distribution</option></select></label>
-              <label>Encours minimum<select value={minFundSize} onChange={(event) => setMinFundSize(Number(event.target.value))}><option value={0}>Tous</option><option value={100e6}>100 M€</option><option value={500e6}>500 M€</option><option value={1e9}>1 Md€</option></select></label>
-              <label>Frais maximum<select value={maxFee} onChange={(event) => setMaxFee(event.target.value)}><option value="">Tous</option><option value="0.2">0,20 %</option><option value="0.3">0,30 %</option><option value="0.5">0,50 %</option></select></label>
-              <label className="catalog-sort">Trier par<select value={catalogSort} onChange={(event) => setCatalogSort(event.target.value)}><option value="performance-desc">Performance ↓</option><option value="performance-asc">Performance ↑</option><option value="size-desc">Encours ↓</option><option value="size-asc">Encours ↑</option><option value="fee-asc">Frais ↑</option><option value="fee-desc">Frais ↓</option><option value="name">Nom A → Z</option></select></label>
-              <label className="catalog-checkbox"><input type="checkbox" checked={fullHistoryOnly} onChange={(event) => setFullHistoryOnly(event.target.checked)}/>Historique complet sur la période</label>
-            </div>
-            <div className="catalog-results"><span>{filteredEtfs.length} résultat{filteredEtfs.length > 1 ? "s" : ""}</span><button type="button" onClick={resetCatalogFilters}>Réinitialiser</button></div>
-            <div className="catalog-list">{filteredEtfs.map((etf) => <button className="add-row" type="button" key={etf.isin} onClick={() => selectEtf(etf.isin)} title={`Ajouter ${etf.nom}`}><span className="etf-dot" style={{ background: etf.couleur }}/><span className="etf-row-info"><span className="etf-name-line"><strong>{etf.nom_court}</strong><EtfPeriodBadge result={etfReturns[etf.isin]}/></span><small>{etf.famille} · {etf.isin}</small><small>Encours {fundSizeLabel(fundSizesData.par_isin[etf.isin]?.encours_fonds_eur)} · Frais {pct(CATALOG[etf.isin].frais_gestion_et_administration_pct_an)} · {CATALOG[etf.isin].distribution === "capitalisation" ? "Capitalisation" : "Distribution"}</small></span><b aria-hidden="true">＋</b></button>)}{!filteredEtfs.length && <p className="builder-empty">Aucun ETF ne correspond aux filtres.</p>}</div>
-          </div>
-          <div className="builder-note">Performance jusqu’à {monthsLabel(LATEST_PRICE_MONTH)} ; « — » indique un historique insuffisant. En Max, la date de début varie selon l’ETF. Encours du fonds toutes parts confondues, Amundi au {dateLabel(FUND_SIZE_DATE)}.</div>
           </div>
         </aside>
         <div className="dashboard">
@@ -537,6 +627,7 @@ export default function PortfolioMvp() {
       </div>
       <footer className="mvp-footer"><span>CHAMP LIBRE / PEA</span><p>Outil de simulation. Les performances passées ne préjugent pas des performances futures. Données de VL : {pricesData.source}, extraction du {dateLabel(pricesData.date_extraction)}.</p></footer>
     </main>
-    <AllocationWizard resume={hasBuiltAllocation} saveRequested={saveRequested} model={allocationModel} open={wizardOpen} onClose={() => setWizardOpen(false)} weights={weights} lockedIsins={lockedIsins} onApply={applyAllocation}/>
+    <AllocationComparisonDialog open={comparisonOpen} onClose={() => setComparisonOpen(false)} model={allocationModel} items={[{ id: "current", name: "Portefeuille actuel", weights }, ...savedModels]} period={period} onPeriodChange={setPeriod}/>
+    <AllocationWizard period={period} onPeriodChange={setPeriod} key={wizardRevision} initialDraft={wizardDraft} onDraftChange={setWizardDraft} models={savedModels} onSaveConfiguration={saveWizardConfiguration} resume={hasBuiltAllocation} saveRequested={saveRequested} model={allocationModel} open={wizardOpen} onClose={() => setWizardOpen(false)} weights={weights} lockedIsins={lockedIsins} onApply={applyAllocation}/>
   </div>;
 }

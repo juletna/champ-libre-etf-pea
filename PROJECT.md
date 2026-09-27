@@ -22,6 +22,7 @@ Vite affiche l'adresse locale ; le chemin configuré est `/champ-libre-etf-pea/`
 
 ```bash
 cd app
+npm test
 npm run lint
 npm run build
 ```
@@ -34,6 +35,12 @@ Les calculs du constructeur disposent de tests automatisés (`npm test`) ; le pa
 | --- | --- |
 | `app/src/PortfolioMvp.jsx` | État du portefeuille, calculs et interface React. |
 | `app/src/portfolio-mvp.css` | Styles du tableau de bord. |
+| `app/src/allocation/AllocationWizard.jsx` | Parcours de construction, cibles de zones verrouillables et enregistrement à l’application. |
+| `app/src/allocation/AllocationComparison.jsx` | Tableau partagé de comparaison des propositions et des paniers enregistrés. |
+| `app/src/allocation/engine.js` | Redistribution des cibles, sélection des ETF et comparaisons historiques sur dates communes. |
+| `app/src/allocation/geography.js` | Classement des pays en zones et exemples de pays affichés dans l’assistant. |
+| `app/src/portfolio/storage.js` | Validation, migration et sauvegarde du brouillon et des paniers locaux. |
+| `app/src/portfolio/PortfolioLibrary.jsx` et `workspace.css` | Bibliothèque de paniers et panneaux catalogue/panier à défilements distincts. |
 | `app/src/data/mvp-profiles.json` | 51 profils analysables : ISIN, pays, secteurs, date et URL du reporting Amundi. |
 | `audit_amundi_compositions.py` et `COMPOSITIONS.md` | Audit des reportings et méthode de validation des répartitions. |
 | `app/src/data/mvp-prices.json` | VL ajustées mensuelles en EUR des 54 ETF, source, méthode et date d'extraction. |
@@ -64,10 +71,27 @@ Pour ajouter ou actualiser une composition analysable, suivre `COMPOSITIONS.md`,
 
 ## Prochaines pistes
 
-Surveiller les trois ETF encore sans composition et la stabilité du point d'accès Amundi, compléter les tests des calculs historiques et envisager la persistance du portefeuille courant, en complément des modèles locaux du constructeur. Un **véritable rendement historique par pays ou secteur** demanderait des séries historiques des constituants ou des indices dédiés, avec une méthode explicite de pondération et de reconstitution ; il ne peut pas être déduit de la seule composition actuelle des ETF.
+Surveiller les trois ETF encore sans composition et la stabilité du point d'accès Amundi, compléter les tests des calculs historiques et envisager un export/import des paniers locaux. Un **véritable rendement historique par pays ou secteur** demanderait des séries historiques des constituants ou des indices dédiés, avec une méthode explicite de pondération et de reconstitution ; il ne peut pas être déduit de la seule composition actuelle des ETF.
 
 ## Constructeur d’allocation (septembre 2026)
 
 `app/src/allocation/AllocationWizard.jsx` porte le parcours modal en trois étapes ; `engine.js` sépare les calculs purs de l’interface et `geography.js` partage la classification géographique avec le tableau de bord. `allocation.css` gère l’affichage ordinateur et mobile. La méthode, les limites et la sauvegarde locale sont détaillées dans `app/README.md`.
 
-Avant publication, exécuter également `npm test` dans `app/`, puis vérifier construction → réglages → contrepoids/remplacement → application → annulation, et l’enregistrement/rechargement d’un modèle personnel. Les cibles d’exposition restent approchées, contrairement aux verrous et aux contraintes de budget/lignes. Les variantes doivent conserver des libellés correspondant à une amélioration réelle. Les comparaisons de risque utilisent toujours des dates communes et ne doivent pas traverser un trou d’historique.
+Avant publication, exécuter également `npm test` dans `app/`, puis vérifier construction → réglages → contrepoids/remplacement → application → annulation, et l’enregistrement/rechargement d’un modèle personnel. Les cibles d’exposition restent approchées, contrairement aux poids d’ETF verrouillés et aux contraintes de budget/lignes. Les verrous de zones figent les cibles pendant la redistribution et le mélange de conviction ; ils ne sont pas des contraintes exactes sur la composition obtenue. Les variantes doivent conserver des libellés correspondant à une amélioration réelle. Les comparaisons de risque utilisent toujours des dates communes et ne doivent pas traverser un trou d’historique.
+
+
+## Espace local et panneaux de composition
+
+`app/src/portfolio/storage.js` valide et migre le stockage versionné ; `PortfolioLibrary.jsx` gère les paniers nommés et `workspace.css` sépare catalogue, panier et analyse. Les instantanés conservent le brouillon du constructeur ; `AllocationWizard` reçoit la bibliothèque et remonte son état au portefeuille, sans second stockage concurrent. Le nom de chaque ETF vient du catalogue officiel, après fusion avec les profils.
+
+Vérifier : ajout avec panier visible, restauration après rechargement (zéros, verrous, courbes, Max, filtres, convictions), chargement/mise à jour d’un panier, suppression/annulation, migration des modèles et bascule Catalogue/Panier sur mobile. Les tests de stockage font partie de `npm test`.
+
+`app/src/allocation/AllocationComparison.jsx` partage le tableau de comparaison entre le constructeur et Mes paniers. `comparePerformance` et `compareRisk` utilisent la même extraction de mois communs continus. Vérifier aussi : verrou de zone puis autre curseur/conviction, sauvegarde via le nom facultatif près d’Appliquer, rechargement des verrous, comparaison de paniers avec une part récente et changement de période, défilement du tableau sur mobile.
+
+Points de non-régression pour l’assistant :
+
+- Un verrou de zone porte sur la cible **au sein des actions**. Modifier la part actions change donc son poids cible dans le portefeuille total. Verrouiller une zone à 0 % doit aussi fonctionner ; la dernière zone libre doit conserver le solde disponible.
+- Appliquer puis rouvrir l’assistant doit conserver les objectifs et les verrous de zones. Charger un panier restaure les poids enregistrés ; sélectionner ce panier comme point de départ dans l’assistant recalcule les propositions avec ses réglages.
+- Un nom vide ne crée pas de panier. Un nom renseigné enregistre une copie avant l’application ; un échec de stockage ou la limite de 30 paniers laisse le dialogue ouvert et le portefeuille inchangé. La bibliothèque doit sélectionner le panier nouvellement enregistré.
+- Ajouter ou retirer une allocation de la comparaison peut changer les dates communes et tous les rendements affichés. Un ETF de poids nul ne raccourcit pas la période. Une absence d’historique doit produire une indisponibilité, jamais un rendement inventé.
+- Sur mobile, vérifier la fermeture du dialogue, le champ de nom et le bouton d’application, ainsi que le défilement du tableau jusqu’aux dernières colonnes et aux secteurs. Le document ne doit pas déborder horizontalement.

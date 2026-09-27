@@ -12,11 +12,13 @@ const normalized = (values) => {
   const total = sum(Object.values(values));
   return Object.fromEntries(Object.entries(values).map(([key, value]) => [key, total ? 100 * value / total : 0]));
 };
-export function rebalanceTarget(values, name, requested) {
-  const next = { ...values, [name]: clamp(Number(requested) || 0, 0, 100) };
-  const others = Object.keys(values).filter((key) => key !== name);
+export function rebalanceTarget(values, name, requested, locked = []) {
+  if (locked.includes(name)) return { ...values };
+  const available = Math.max(0, 100 - sum(Object.entries(values).filter(([key]) => locked.includes(key)).map(([, value]) => value)));
+  const others = Object.keys(values).filter((key) => key !== name && !locked.includes(key));
+  const next = { ...values, [name]: others.length ? clamp(Number(requested) || 0, 0, available) : available };
   const total = sum(others.map((key) => values[key]));
-  others.forEach((key) => { next[key] = (100 - next[name]) * (total ? values[key] / total : 1 / others.length); });
+  others.forEach((key) => { next[key] = (available - next[name]) * (total ? values[key] / total : 1 / others.length); });
   return next;
 }
 
@@ -28,7 +30,7 @@ export function createAllocationModel({ profiles, catalog, prices, sizes, geogra
       const zone = geographicZone(country);
       zones[zone] = (zones[zone] || 0) + value;
     });
-    return [item.isin, { ...item, ...profile, name: profile?.nom_court || item.nom.replace(/^Amundi /, ''), fee: item.frais_gestion_et_administration_pct_an,
+    return [item.isin, { ...item, ...profile, nom: item.nom, name: item.nom, fee: item.frais_gestion_et_administration_pct_an,
       size: sizes[item.isin]?.encours_fonds_eur, sizeDate: sizes[item.isin]?.date,
       zones: normalized(zones), sectors: normalized(profile?.secteurs || {}), known: Boolean(profile?.pays && profile?.secteurs) }];
   }));
@@ -57,9 +59,15 @@ export function createAllocationModel({ profiles, catalog, prices, sizes, geogra
   }
   function targets(settings) {
     const world = funds[WORLD_ISIN];
-    return Object.fromEntries(['zones', 'sectors'].map((kind) => [kind, Object.fromEntries((kind === 'zones' ? zoneNames : sectorNames).map((name) => [name,
-      ((world[kind][name] || 0) * (1 - settings.conviction / 100) + (settings.intent[kind][name] || 0) * settings.conviction / 100) * settings.equity / 100,
-    ]))]));
+    return Object.fromEntries(['zones', 'sectors'].map((kind) => {
+      const names = kind === 'zones' ? zoneNames : sectorNames;
+      const locked = kind === 'zones' ? settings.zoneLocks || [] : [];
+      const free = names.filter((name) => !locked.includes(name));
+      const mixed = Object.fromEntries(names.map((name) => [name, (world[kind][name] || 0) * (1 - settings.conviction / 100) + (settings.intent[kind][name] || 0) * settings.conviction / 100]));
+      const remaining = Math.max(0, 100 - sum(names.filter((name) => locked.includes(name)).map((name) => settings.intent[kind][name] || 0)));
+      const freeTotal = sum(free.map((name) => mixed[name]));
+      return [kind, Object.fromEntries(names.map((name) => [name, (locked.includes(name) ? settings.intent[kind][name] || 0 : remaining * (freeTotal ? mixed[name] / freeTotal : 1 / free.length)) * settings.equity / 100]))];
+    }));
   }
   function eligible(settings) {
     return Object.values(funds).filter((f) => (f.known || f.isin === CASH_ISIN)
@@ -139,16 +147,31 @@ export function createAllocationModel({ profiles, catalog, prices, sizes, geogra
   }
   const priceMaps = Object.fromEntries(Object.entries(prices).map(([id, item]) => [id, new Map(item.historique.filter((r) => r.cours_ajuste > 0).map((r) => [r.mois, r.cours_ajuste]))]));
   const monthIndex = (month) => Number(month.slice(0, 4)) * 12 + Number(month.slice(5));
-  function compareRisk(portfolios) {
+  function commonHistory(portfolios, period) {
     const ids = [...new Set(portfolios.flatMap((w) => Object.keys(w).filter((id) => w[id] > 0)))];
-    if (!ids.length || ids.some((id) => !priceMaps[id]?.size)) return { available: false, reason: 'Historique indisponible pour une position.' };
+    if (!ids.length) return { available: false, reason: 'Sélectionnez au moins une allocation investie.' };
+    if (ids.some((id) => !priceMaps[id]?.size)) return { available: false, reason: 'Historique indisponible pour une position. Retirez l’allocation concernée de la comparaison.' };
     const common = [...priceMaps[ids[0]].keys()].filter((m) => ids.every((id) => priceMaps[id].has(m))).sort();
     let start = common.length - 1;
     while (start > 0 && monthIndex(common[start]) - monthIndex(common[start - 1]) === 1) start--;
-    const months = common.slice(start).slice(-61);
+    const months = common.slice(Math.max(0, start)).slice(Number.isFinite(period) ? -(period + 1) : 0);
+    const returns = portfolios.map((weights) => months.slice(1).map((m, i) => sum(ids.map((id) => (weights[id] || 0) / 100 * (priceMaps[id].get(m) / priceMaps[id].get(months[i]) - 1)))));
+    return { available: true, dates: months, returns, start: months[0], end: months.at(-1), months: Math.max(0, months.length - 1) };
+  }
+  function comparePerformance(portfolios, period = Infinity) {
+    const history = commonHistory(portfolios, period);
+    if (!history.available) return history;
+    if (history.months < 1) return { available: false, reason: 'Pas de période commune continue suffisante pour comparer ces allocations.' };
+    return { available: true, start: history.start, end: history.end, months: history.months,
+      limited: Number.isFinite(period) && history.months < period,
+      totals: history.returns.map((returns) => (returns.reduce((value, r) => value * (1 + r), 1) - 1) * 100) };
+  }
+  function compareRisk(portfolios) {
+    const history = commonHistory(portfolios, 60);
+    if (!history.available) return history;
+    const months = history.dates;
     if (months.length < 13) return { available: false, reason: `Historique commun trop court (${Math.max(0, months.length - 1)} mois ; 12 minimum).` };
-    const metrics = portfolios.map((weights) => {
-      const returns = months.slice(1).map((m, i) => sum(ids.map((id) => (weights[id] || 0) / 100 * (priceMaps[id].get(m) / priceMaps[id].get(months[i]) - 1))));
+    const metrics = history.returns.map((returns) => {
       const mean = sum(returns) / returns.length;
       const volatility = Math.sqrt(sum(returns.map((r) => (r - mean) ** 2)) / (returns.length - 1) * 12) * 100;
       let value = 1, peak = 1, drawdown = 0;
@@ -192,7 +215,7 @@ export function createAllocationModel({ profiles, catalog, prices, sizes, geogra
         return { fund, weights: next, amount, dimension: main, delta };
       }).filter((row) => row && row.delta < -0.1).sort((a, b) => a.delta - b.delta || a.fund.fee - b.fund.fee).slice(0, 3);
   }
-  return { funds, zoneNames, sectorNames, exposure, intent, targets, eligible, describe, solve, compareRisk, transfers, counterweights };
+  return { funds, zoneNames, sectorNames, exposure, intent, targets, eligible, describe, solve, compareRisk, comparePerformance, transfers, counterweights };
 }
 
 export function validateSavedModels(value, funds) {

@@ -12,6 +12,21 @@ const SOUTH_SOUTHEAST_ASIA = new Set(["Inde", "Indonésie", "Malaisie", "Singapo
 const AMERICAS_OUTSIDE_US = new Set(["Brésil", "Canada", "Chili", "Colombie", "Mexique", "Pérou"]);
 const AFRICA_MIDDLE_EAST = new Set(["Afrique du Sud", "Arabie saoudite", "Égypte", "Émirats arabes unis", "Éthiopie", "Iran", "Koweït", "Qatar"]);
 
+// Illustrative countries from the same grouping used by geographicZone.
+export const ZONE_COUNTRIES = {
+  'États-Unis': 'États-Unis',
+  'Zone euro': 'France, Allemagne, Pays-Bas, Espagne, Italie…',
+  'Europe hors zone euro': 'Royaume-Uni, Suisse, Suède, Danemark, Norvège…',
+  'Japon': 'Japon, compté séparément de l’Asie de l’Est',
+  "Asie de l'Est hors Japon": 'Chine, Taïwan, Corée du Sud, Hong Kong',
+  'Asie du Sud et du Sud-Est': 'Inde, Singapour, Indonésie, Malaisie, Thaïlande',
+  'Amériques hors États-Unis': 'Canada, Brésil, Mexique, Chili, Pérou…',
+  'Afrique et Moyen-Orient': 'Afrique du Sud, Arabie saoudite, Émirats arabes unis, Qatar…',
+  'Océanie': 'Australie',
+  'Pays non détaillés': 'Pays regroupés sous « Autres pays » dans les compositions',
+  'Pays non classés': 'Pays sans correspondance dans les zones disponibles',
+};
+
 export function geographicZone(name) {
   if (name === "Composition indisponible") return name;
   if (name === "Non alloué") return "Non alloué";
@@ -27,4 +42,3 @@ export function geographicZone(name) {
   if (name === "Australie") return "Océanie";
   return "Pays non classés";
 }
-
