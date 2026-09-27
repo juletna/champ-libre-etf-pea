@@ -1,6 +1,6 @@
 # Champ libre — prototype portefeuille ETF PEA
 
-**Deux modes :** le site statique garde le simulateur public et son stockage navigateur ; `../run-local.sh` et le serveur Python ouvrent l’application privée Patrimoine + ETF avec SQLite. Les sections historiques ci-dessous décrivent surtout le simulateur public. Pour import, budget, PEA et sauvegardes de l’application locale, voir le [README racine](../README.md).
+**Deux modes :** le site statique permet d’explorer les ETF sans sauvegarde ; `../run-local.sh` et le serveur Python ouvrent l’application privée Patrimoine + ETF avec SQLite. Les paniers nommés et le plan d’achats sont réservés à l’application locale. Voir le [README racine](../README.md).
 
 Tableau de bord local pour composer un portefeuille virtuel, visualiser ses expositions géographiques et sectorielles et son rendement historique mensuel, puis planifier les achats permettant de rapprocher son portefeuille réel d’une allocation cible.
 
@@ -63,7 +63,7 @@ Le bouton **Construire une allocation** ouvre un parcours en trois étapes : poi
 - La volatilité annualisée et la baisse maximale sont calculées sur les mêmes mois continus communs aux portefeuilles comparés, sur 60 mois au plus. Au moins 12 rendements mensuels sont nécessaires ; moins de 36 mois déclenche une mention d’historique court. La baisse maximale ne mesure que les valeurs de fin de mois. Les poids sont rétablis chaque mois ; le solde non alloué a un rendement nul. Les frais déjà intégrés aux VL ne sont pas soustraits de nouveau.
 - Le tableau **Comparer les allocations**, dans les propositions et dans **Mes paniers**, confronte jusqu’à quatre allocations : zones, secteurs, frais et performance totale simulée. La période 1 an / 3 ans / 5 ans / Max est partagée avec le tableau de bord. Toutes les colonnes utilisent la même séquence continue de mois communs aux positions de poids positif ; une période raccourcie ou indisponible est signalée. La performance est cumulée, avec rééquilibrage mensuel et solde non alloué à rendement nul. Les expositions affichées sont actuelles, pas historiques.
 - À côté du bouton d’application, un **nom de configuration facultatif** transforme l’action en **Enregistrer et appliquer**. Une copie nommée rejoint la bibliothèque ; sans nom, seul le portefeuille courant est appliqué. Si l’enregistrement échoue, le dialogue reste ouvert et le portefeuille ne change pas.
-- Les modèles personnels sont intégrés à Mes paniers, avec les poids et la configuration du constructeur. Les anciens modèles sont importés à la première ouverture du nouvel espace local. Ils restent réutilisables comme points de départ dans le constructeur.
+- Les modèles personnels sont intégrés à Mes paniers dans SQLite, avec les poids et la configuration du constructeur. Ils restent réutilisables comme points de départ.
 
 Les calculs du constructeur disposent de tests dédiés : `npm test` depuis `app/`.
 
@@ -78,29 +78,15 @@ Dans le comparateur, les lignes de zones et secteurs montrent les expositions ob
 
 ## Paniers et configurations locales
 
-Le brouillon courant est automatiquement sauvegardé sous `champ-libre.workspace.v1` dans `localStorage`. Un rechargement restaure les ETF (y compris à 0 %), les poids, les verrous, les courbes, la période, la vue géographique, les filtres et le brouillon du constructeur (objectifs, critères, étape et proposition). Celui-ci conserve aussi le portefeuille qui servait de référence pour reconnaître une modification manuelle ultérieure.
-
-**Mes paniers** permet d’enregistrer jusqu’à 30 configurations nommées, les charger sans recalcul des poids, mettre à jour ou renommer le panier chargé, et supprimer une entrée avec annulation. Les modifications du brouillon ne changent pas les copies nommées. Les enregistrements du constructeur rejoignent la même bibliothèque. Les anciens modèles de `champ-libre.allocation-models.v1` sont importés sans effacer cette clé.
-
-Les données sont validées au chargement : identifiants obsolètes écartés, poids invalides ou supérieurs à 100 % rejetés, réglages inconnus remplacés par leurs valeurs par défaut. Un échec d’accès ou de quota est signalé sans interrompre le travail en mémoire. Les données sont propres au navigateur et à l’origine : aperçu local et site publié ont des espaces distincts ; effacer les données du navigateur efface les paniers.
+Dans l’application locale, le brouillon et les paniers sont enregistrés dans SQLite. Un rechargement restaure ETF, poids, verrous, courbes, filtres et brouillon du constructeur. **Mes paniers** permet d’enregistrer jusqu’à 30 configurations nommées, de les charger, modifier, renommer ou supprimer. Les données sont validées au chargement. Sur le site statique, le portefeuille virtuel reste uniquement en mémoire et disparaît au rechargement ; aucun bouton ne prétend l’enregistrer.
 
 Tous les ETF utilisent le **nom officiel du catalogue Fortuneo**, jusque dans le constructeur, les légendes et les sources. Les libellés explicatifs restent des métadonnées (indice, catégorie). La recherche accepte aussi les anciens noms courts. Un ETF ajouté est mis en évidence et révélé dans le panneau du panier, sans déplacer le catalogue.
 
 Sur grand écran, le catalogue et le panier disposent de panneaux et de défilements distincts, pour ajouter un ETF puis régler son poids sans aller et venir dans la page. Sur mobile, les onglets **Catalogue** et **Mon panier** permettent de basculer entre les deux. Dans l’assistant, les actions restent accessibles au bas du dialogue ; le tableau de comparaison défile horizontalement pour montrer les autres allocations.
 
-## Planifier les prochains achats
+## Prochain investissement local
 
-**Atteindre cette allocation**, sous Mes paniers, ouvre le portefeuille réel : saisie des valeurs actuelles par ETF et des liquidités, choix du panier simulé ou d’un panier enregistré comme cible, puis saisie du prochain versement. La cible est copiée explicitement et reste indépendante des modifications du simulateur. Les poids non alloués deviennent une cible de liquidités ; un fonds court terme reste une position ETF.
-
-Par exemple, avec 90 € de Monde, une cible de 90 % Monde / 5 % banques / 5 % ressources et un versement de 10 €, le plan théorique propose 5 € de banques et 5 € de ressources. Le portefeuille atteint alors 100 € répartis selon la cible.
-
-Le plan sans vente compare les valeurs et poids avant/après. Le moteur répartit les liquidités et le versement en minimisant la somme des écarts au carré à la cible, puis distribue les centimes restants. Il affiche également l’apport minimum théorique à valorisations constantes, hors frais et arrondis. Une position détenue absente de la cible empêche de l’atteindre exactement par des apports seuls.
-
-Le mode **Parts entières** utilise uniquement des prix en euros datés saisis par l’utilisateur, et des frais fixes par achat. Chaque enveloppe théorique est arrondie à la part inférieure après frais ; le reliquat reste en liquidités. Cette méthode prudente ne recherche pas l’optimum entier global et ne réaffecte pas les reliquats. Les historiques mensuels ne sont pas utilisés comme prix d’exécution.
-
-**Enregistrer mes achats réalisés** ouvre un formulaire pour corriger les montants, le versement et les frais effectivement réalisés. Un dépassement du disponible bloque l’enregistrement. Les montants achetés hors frais augmentent les valorisations saisies, le reliquat devient le solde en liquidités et le versement prévu revient à zéro. Une annulation est disponible jusqu’à la prochaine modification. Il faut réactualiser les valeurs de marché manuellement ; aucun ordre n’est envoyé.
-
-Le portefeuille réel, la cible et les paramètres sont conservés séparément sous `champ-libre.migration.v1`. Les données illisibles ou incompatibles restent intactes et désactivent l’écriture automatique ; les erreurs de stockage sont signalées. Aucun compte courtier ni cours en direct n’est connecté. Les tests du moteur et du stockage de migration font partie de `npm test`.
+Dans l’application locale, le plan lit le PEA et le budget conservés dans SQLite. Le moteur `src/migration/engine.js` calcule les achats sans vente, l’apport minimum et les parts entières. La saisie d’un portefeuille réel dans le navigateur public a été retirée. Aucun ordre n’est envoyé.
 
 ## Portrait visuel du portefeuille
 

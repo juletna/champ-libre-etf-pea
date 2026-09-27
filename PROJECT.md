@@ -1,14 +1,12 @@
 # Champ libre — guide de reprise du projet
 
-## Migration locale en cours (septembre 2026)
+## Application locale et stockage (septembre 2026)
 
-Pour reprendre la migration, lire le [plan](PLAN-FUSION.md) et le [suivi d'étape](MIGRATION-STATUS.md), puis vérifier l'état réel du dépôt. Les étapes de construction et la recette fictive sont validées ; l'import des données personnelles et leur sauvegarde indépendante restent à faire sur la machine de destination.
+Le serveur `local_server.py` crée une base SQLite versionnée hors dépôt et sert `app/dist`. Patrimoine, PEA, budget, brouillon ETF et paniers nommés sont conservés dans cette base. **Sauvegarde SQLite** et **Restaurer SQLite** forment le parcours de copie et de récupération. Les imports de l’ancien Patrimoine et des anciennes données du navigateur, ainsi que l’export JSON parallèle, ont été retirés. La base existante et le projet Patrimoine d’origine restent intacts.
 
-Le serveur `local_server.py` crée une base SQLite versionnée hors dépôt, sert `app/dist`, contrôle les écritures locales et expose l’export/sauvegarde/restauration. `local_data.py`, `local_pea.py` et `local_budget.py` portent les modèles et calculs ; `app/src/local/` les interfaces. La Vue d’ensemble permet la saisie directement dans un tableau inspiré de l’ancien éditeur Patrimoine ; `/api/items` valide et enregistre les lignes modifiées dans une seule transaction, sans remplacer la provenance d’une valorisation inchangée. L’ancienne saisie de portefeuille dans `MigrationPlanner.jsx` reste réservée au site statique ; en local, le plan lit le PEA et le budget et recommande un nouveau relevé pour actualiser le réel. Les simulations de portefeuille et les données réelles ne se confondent pas. Exécuter les tests Python `python3 -m unittest -q test_local_server.py test_local_data.py test_local_pea.py test_local_budget.py` et, dans `app/`, `npm test`, `npm run lint`, `npm run build`.
+Le site statique permet l’exploration ETF en mémoire seulement. Ses essais disparaissent au rechargement ; il n’utilise plus `localStorage`. Le plan d’achats réel se trouve dans l’application locale et lit le PEA et le budget. Exécuter les tests Python `python3 -m unittest discover -p 'test_local_*.py'` et, dans `app/`, `npm test`, `npm run lint`, `npm run build`.
 
-Le build statique utilise `base: './'`. Sans API locale, la navigation privée ne s’affiche pas et le stockage reste dans le navigateur. Un push sur `main` publie automatiquement le site statique ; la migration locale est poussée avec l’accord du propriétaire. Aucune licence de code n’est présente dans ce dépôt. Les [mentions Fortuneo](https://www.fortuneo.fr/mentions-legales-avertissement-legal) restreignent la redistribution de leurs informations ; les [mentions Amundi](https://www.amundietf.fr/fr/particuliers/mentions-legales) et les droits des fournisseurs d’indices/données doivent être examinés avant une diffusion élargie. Les [données statistiques BCE](https://www.ecb.europa.eu/stats/ecb_statistics/governance_and_quality_framework/html/usage_policy.en.html) sont réutilisables sous conditions d’attribution et de fidélité ; les conversions calculées doivent être signalées. Une décision de droits et licence reste nécessaire avant toute publication open source formelle. Ne pas ajouter une licence sans décision du propriétaire.
-
-Archivage de Patrimoine après recette seulement : inventorier `patrimoine.csv`, `amortissement.csv`, `credit.json` et sauvegardes locales éventuelles ; exporter une sauvegarde SQLite vérifiée ; comparer les totaux, le crédit et l’historique à dates identiques ; conserver les originaux et une copie indépendante avant de décider séparément d’un archivage. Ne supprimer aucun fichier source dans cette migration.
+L’application publiée sur GitHub Pages reste à déployer après validation. Ne pas archiver le projet Patrimoine avant d’avoir vérifié les données déjà présentes dans SQLite et conservé une sauvegarde indépendante.
 
 Ce document décrit l'état du dépôt pour toute personne ou tout outil qui reprend le travail. Il complète les README et ne dépend d'aucun assistant particulier.
 
@@ -51,8 +49,7 @@ Les calculs du constructeur, les sauvegardes locales et le plan de migration dis
 | `app/src/allocation/geography.js` | Classement des pays en zones et exemples de pays affichés dans l’assistant. |
 | `app/src/portfolio/storage.js` | Validation, migration et sauvegarde du brouillon et des paniers locaux. |
 | `app/src/portfolio/PortfolioLibrary.jsx` et `workspace.css` | Bibliothèque de paniers et panneaux catalogue/panier à défilements distincts. |
-| `app/src/migration/MigrationPlanner.jsx` et `migration.css` | Saisie du portefeuille réel, cible mémorisée, plan d’achats et enregistrement des opérations. |
-| `app/src/migration/engine.js` et `engine.test.js` | Achats sans vente, apport minimum, parts entières, validation du stockage séparé et tests. |
+| `app/src/migration/engine.js` et `engine.test.js` | Calculs des achats sans vente, apport minimum et parts entières utilisés par le plan local. |
 | `app/src/data/mvp-profiles.json` | 51 profils analysables : ISIN, pays, secteurs, date et URL du reporting Amundi. |
 | `audit_amundi_compositions.py` et `COMPOSITIONS.md` | Audit des reportings et méthode de validation des répartitions. |
 | `app/src/data/mvp-prices.json` | VL ajustées mensuelles en EUR des 54 ETF, source, méthode et date d'extraction. |
@@ -83,7 +80,7 @@ Pour ajouter ou actualiser une composition analysable, suivre `COMPOSITIONS.md`,
 
 ## Prochaines pistes
 
-Surveiller les trois ETF encore sans composition et la stabilité du point d'accès Amundi, compléter les tests des calculs historiques et envisager un export/import des paniers locaux. Un **véritable rendement historique par pays ou secteur** demanderait des séries historiques des constituants ou des indices dédiés, avec une méthode explicite de pondération et de reconstitution ; il ne peut pas être déduit de la seule composition actuelle des ETF.
+Surveiller les trois ETF encore sans composition et la stabilité du point d'accès Amundi, compléter les tests des calculs historiques et améliorer la gestion des paniers locaux. Un **véritable rendement historique par pays ou secteur** demanderait des séries historiques des constituants ou des indices dédiés, avec une méthode explicite de pondération et de reconstitution ; il ne peut pas être déduit de la seule composition actuelle des ETF.
 
 ## Constructeur d’allocation (septembre 2026)
 
@@ -94,9 +91,9 @@ Avant publication, exécuter également `npm test` dans `app/`, puis vérifier c
 
 ## Espace local et panneaux de composition
 
-`app/src/portfolio/storage.js` valide et migre le stockage versionné ; `PortfolioLibrary.jsx` gère les paniers nommés et `workspace.css` sépare catalogue, panier et analyse. Les instantanés conservent le brouillon du constructeur ; `AllocationWizard` reçoit la bibliothèque et remonte son état au portefeuille, sans second stockage concurrent. Le nom de chaque ETF vient du catalogue officiel, après fusion avec les profils.
+`app/src/portfolio/storage.js` valide le stockage versionné ; `PortfolioLibrary.jsx` gère les paniers nommés et `workspace.css` sépare catalogue, panier et analyse. Les instantanés conservent le brouillon du constructeur ; `AllocationWizard` reçoit la bibliothèque et remonte son état au portefeuille, sans second stockage concurrent. Le nom de chaque ETF vient du catalogue officiel, après fusion avec les profils.
 
-Vérifier : ajout avec panier visible, restauration après rechargement (zéros, verrous, courbes, Max, filtres, convictions), chargement/mise à jour d’un panier, suppression/annulation, migration des modèles et bascule Catalogue/Panier sur mobile. Les tests de stockage font partie de `npm test`.
+Vérifier : ajout avec panier visible, restauration après rechargement (zéros, verrous, courbes, Max, filtres, convictions), chargement/mise à jour d’un panier, suppression/annulation, bascule Catalogue/Panier sur mobile. Les tests de stockage font partie de `npm test`.
 
 `app/src/allocation/AllocationComparison.jsx` partage le tableau de comparaison entre le constructeur et Mes paniers. `comparePerformance` et `compareRisk` utilisent la même extraction de mois communs continus. Vérifier aussi : verrou de zone puis autre curseur/conviction, sauvegarde via le nom facultatif près d’Appliquer, rechargement des verrous, comparaison de paniers avec une part récente et changement de période, défilement du tableau sur mobile.
 
@@ -108,11 +105,9 @@ Points de non-régression pour l’assistant :
 - Ajouter ou retirer une allocation de la comparaison peut changer les dates communes et tous les rendements affichés. Un ETF de poids nul ne raccourcit pas la période. Une absence d’historique doit produire une indisponibilité, jamais un rendement inventé.
 - Sur mobile, vérifier la fermeture du dialogue, le champ de nom et le bouton d’application, ainsi que le défilement du tableau jusqu’aux dernières colonnes et aux secteurs. Le document ne doit pas déborder horizontalement.
 
-## Migration vers le portefeuille réel
+## Prochain investissement local
 
-`app/src/migration/MigrationPlanner.jsx` fournit le dialogue accessible depuis le bouton Atteindre cette allocation. `engine.js` isole la projection des achats sans vente, les arrondis, l’apport minimum, l’enregistrement des opérations et le stockage versionné séparé (`champ-libre.migration.v1`). `engine.test.js` couvre le scénario 90 € Monde / cible 90–5–5, les budgets insuffisants, les liquidités, les positions exclues, les parts entières, les frais, la conservation des centimes, les sauvegardes invalides et une comparaison exhaustive de petits budgets.
-
-Vérifier : saisie du portefeuille réel → choix du panier courant ou enregistré → mémorisation de la cible → versement → comparaison avant/après → prix datés et parts entières → enregistrement réel corrigé → annulation → rechargement. La cible ne suit pas les modifications ultérieures du simulateur. La saisie des prix, des valorisations et des opérations reste manuelle. La méthode d’arrondi par enveloppe ne garantit pas l’optimum entier global ; le reliquat reste liquide.
+`app/src/local/NextInvestment.jsx` utilise le PEA et le budget en SQLite. `app/src/migration/engine.js` fournit les calculs purs du plan sans vente, de l’apport minimum et des parts entières. Le dialogue public qui saisissait un second portefeuille réel et sa sauvegarde navigateur ont été supprimés.
 
 ## Portrait et analyse d’allocation
 

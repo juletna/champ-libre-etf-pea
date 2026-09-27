@@ -227,10 +227,3 @@ export function createAllocationModel({ profiles, catalog, prices, sizes, geogra
   }
   return { funds, zoneNames, sectorNames, exposure, intent, targets, eligible, describe, solve, compareRisk, comparePerformance, transfers, counterweights };
 }
-
-export function validateSavedModels(value, funds) {
-  if (!value || value.version !== 1 || !Array.isArray(value.models)) return [];
-  return value.models.filter((entry) => entry && typeof entry.id === 'string' && typeof entry.name === 'string' && entry.weights && typeof entry.weights === 'object' && !Array.isArray(entry.weights)
-    && Object.entries(entry.weights).every(([id, w]) => Object.hasOwn(funds, id) && Number.isFinite(w) && w >= 0 && w <= 100)
-    && sum(Object.values(entry.weights)) <= 100.01 && sum(Object.values(entry.weights)) > 0).slice(0, 12).map((entry) => ({ id: entry.id, name: entry.name.slice(0, 60), weights: entry.weights }));
-}

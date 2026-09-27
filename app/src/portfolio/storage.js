@@ -1,8 +1,7 @@
 import { validateRoles } from './portrait.js';
-import { CASH_ISIN, validateSavedModels } from '../allocation/engine.js';
+import { CASH_ISIN } from '../allocation/engine.js';
 
 export const WORKSPACE_KEY = 'champ-libre.workspace.v1';
-export const LEGACY_MODELS_KEY = 'champ-libre.allocation-models.v1';
 export const MAX_BASKETS = 30;
 const isObject = (value) => value && typeof value === 'object' && !Array.isArray(value);
 const total = (weights) => Object.values(weights).reduce((sum, w) => sum + w, 0);
@@ -98,8 +97,7 @@ export function readWorkspace(storage, model, fallback) {
       const current = validateSnapshot(data.current, model);
       return { current: current || empty.current, baskets, activeId: baskets.some((b) => b.id === data.activeId) ? data.activeId : '', error: current ? '' : 'Le dernier brouillon est illisible. Les paniers valides restent disponibles.' };
     }
-    const legacy = validateSavedModels(JSON.parse(storage.getItem(LEGACY_MODELS_KEY)), model.funds);
-    return { ...empty, baskets: legacy.map((entry) => ({ id: entry.id, name: entry.name, snapshot: validateSnapshot({ ...fallback, weights: entry.weights, selectedIsins: Object.keys(entry.weights), lockedIsins: [], visibleEtfIsins: [] }, model) })) };
+    return empty;
   } catch {
     return { ...empty, error: 'Lecture du stockage local impossible. Le brouillon fonctionne en mémoire.' };
   }

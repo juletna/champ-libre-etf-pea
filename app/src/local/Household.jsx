@@ -48,8 +48,6 @@ export default function Household({ openPea }) {
   const [savedRows, setSavedRows] = useState([]);
   const [expandedRows, setExpandedRows] = useState(new Set());
   const [saving, setSaving] = useState(false);
-  const [files, setFiles] = useState({ patrimoine: null, schedule: null, credit: null });
-  const [pending, setPending] = useState(null);
   const [message, setMessage] = useState('');
   const editorRef = useRef(null);
   const current = data?.snapshot;
@@ -138,29 +136,6 @@ export default function Household({ openPea }) {
     if (dirty && !window.confirm('Abandonner les modifications non enregistrées pour changer de date ?')) return;
     try { await refresh(day); setMessage(''); } catch (error) { setMessage(error.message); }
   }
-  async function preview(event) {
-    event.preventDefault(); setMessage(''); setPending(null);
-    try {
-      if (!files.patrimoine) throw new Error('Choisissez le CSV patrimoine.');
-      const payload = { patrimoine_csv: await files.patrimoine.text(), amortissement_csv: files.schedule ? await files.schedule.text() : '', credit_json: files.credit ? await files.credit.text() : '' };
-      const report = await json('/api/legacy-preview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-      setPending({ payload, report });
-    } catch (error) {
-      setMessage(error.message.startsWith('La dette liée exige')
-        ? 'Ce patrimoine contient une dette liée. Sélectionnez aussi amortissement.csv et credit.json, puis cliquez de nouveau sur Prévisualiser.'
-        : error.message);
-    }
-  }
-  async function commitImport() {
-    setMessage('');
-    try {
-      if (dirty) throw new Error('Enregistrez ou annulez les modifications du tableau avant l’import.');
-      await json('/api/legacy-import', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(pending.payload) });
-      setPending(null); await refresh();
-      setMessage('Import terminé. Vérifiez les totaux et classez les postes encore inconnus.');
-    } catch (error) { setMessage(error.message); }
-  }
-
   return <main className="local-page household-page">
     <header><span className="local-eyebrow">VUE D’ENSEMBLE</span><h1>Patrimoine du foyer</h1><p>Les valorisations et les vérifications ont chacune leur date. Les échéances passées sont supposées payées.</p></header>
     {message && <p role="status" className="local-notice">{message}</p>}
@@ -176,7 +151,7 @@ export default function Household({ openPea }) {
         <p className="household-meta"><span className={`household-dot${dirty ? ' dirty' : ''}`} aria-hidden="true"/>{dirty ? 'Modifications non enregistrées' : 'Modifiez les cellules directement, puis enregistrez.'} <span>·</span> SQLite locale</p>
         <div className="local-table-wrap household-table-wrap" role="region" aria-label="Tableau de saisie du patrimoine">
           <table><thead><tr><th>Date du relevé</th><th>Type</th><th>Catégorie</th><th>Compte ou bien</th><th>Valeur</th><th>Propriété</th><th>Vérifié le</th><th>Actions</th></tr></thead><tbody>
-            {!rows.length && <tr><td colSpan="8" className="household-empty">Aucun poste. Ajoutez une ligne ou importez l’ancien Patrimoine.</td></tr>}
+            {!rows.length && <tr><td colSpan="8" className="household-empty">Aucun poste. Ajoutez votre première ligne.</td></tr>}
             {rows.map((row) => row.managedPea
               ? <tr key={row.key} className="household-managed"><td data-label="Date du relevé">{row.day}</td><td data-label="Type">{labelOf('kind', row.kind)}</td><td data-label="Catégorie">{row.category}</td><td data-label="Compte ou bien">{row.label}</td><td data-label="Valeur" className="household-number">{euro(row.displayValue)}</td><td data-label="Propriété">{labelOf('owner', row.owner)}</td><td data-label="Vérifié le">{row.verified_on}</td><td data-label="Actions"><button type="button" className="household-secondary" onClick={openPea}>Mon PEA</button></td></tr>
               : <Fragment key={row.key}>
@@ -204,7 +179,6 @@ export default function Household({ openPea }) {
         </div>
         <p className="household-footnote">Les lignes « Enfants / hors foyer » et « Prévisionnel » restent visibles, mais hors des totaux actuels. Changer une catégorie ou une propriété conserve l’identifiant et l’historique du poste.</p>
       </form>
-      <section className="local-panel household-import"><h2>Importer l’ancien Patrimoine</h2><p>Choisissez les fichiers d’origine sur cet ordinateur. Ils restent intacts. L’import crée des identifiants stables ; les postes contenant « PEA » seront proposés au rapprochement, sans fusion automatique.</p><p>Si le patrimoine contient une dette liée, sélectionnez aussi <strong>amortissement.csv</strong> et <strong>credit.json</strong> avant de prévisualiser. Les trois fichiers se trouvent dans l’ancien dossier Patrimoine.</p><form onSubmit={preview} className="local-form"><label>Patrimoine CSV<input type="file" accept=".csv,text/csv" onChange={(event) => setFiles({ ...files, patrimoine: event.target.files?.[0] })}/></label><label>Échéancier CSV, si dette liée<input type="file" accept=".csv,text/csv" onChange={(event) => setFiles({ ...files, schedule: event.target.files?.[0] })}/></label><label>Métadonnées crédit JSON<input type="file" accept=".json,application/json" onChange={(event) => setFiles({ ...files, credit: event.target.files?.[0] })}/></label><button type="submit">Prévisualiser</button></form>{pending && <div className="local-preview"><p>{pending.report.lines} lignes · {pending.report.items} postes · {pending.report.schedule_rows} échéances · {pending.report.same_day_overwrites} écrasement(s) de même date.</p><p>Candidats PEA à examiner : {pending.report.pea_candidates.join(', ') || 'aucun'}.</p><button type="button" onClick={commitImport}>Confirmer l’import dans cette base vierge</button></div>}</section>
     </>}
   </main>;
 }

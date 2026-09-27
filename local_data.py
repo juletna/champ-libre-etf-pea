@@ -1,9 +1,7 @@
-"""Versioned household data and legacy CSV conversion. Amounts are stored in cents."""
+"""Versioned household data. Amounts are stored in cents."""
 
 from __future__ import annotations
 
-import csv
-import io
 import json
 import re
 import sqlite3
@@ -16,9 +14,6 @@ class DataError(ValueError):
     pass
 
 
-HEADERS = ["date", "type", "categorie", "poste", "valeur_eur"]
-EXTRA_HEADERS = ["verifie_le", "echeancier_id", "propriete", "statut", "usage"]
-SCHEDULE_HEADERS = ["date_echeance", "capital_avant", "capital_rembourse", "interets", "assurance", "echeance", "capital_apres"]
 OWNERS = {"non_precise", "commun", "conjoint_1", "conjoint_2", "enfants"}
 STATUSES = {"actuel", "previsionnel"}
 USES = {"libre", "reserve", "urgence"}
@@ -78,100 +73,6 @@ def cents(value: object, nullable: bool = False) -> int | None:
 
 def euro(value: int | None) -> float | None:
     return None if value is None else value / 100
-
-
-def parse_legacy_csv(text: str) -> list[dict]:
-    reader = csv.DictReader(io.StringIO(text.lstrip("\ufeff"), newline=""), delimiter=";")
-    if reader.fieldnames not in [HEADERS + EXTRA_HEADERS[:count] for count in (0, 1, 2, 5)]:
-        raise DataError("En-têtes patrimoine invalides.")
-    entries = []
-    for line, row in enumerate(reader, 2):
-        if None in row:
-            raise DataError(f"Ligne {line} : colonnes supplémentaires.")
-        kind = row["type"]
-        owner = row.get("propriete") or "non_precise"
-        status = row.get("statut") or "actuel"
-        usage = row.get("usage") or "libre"
-        schedule_id = row.get("echeancier_id") or None
-        if kind not in {"actif", "passif"} or owner not in OWNERS or status not in STATUSES or usage not in USES:
-            raise DataError(f"Ligne {line} : type ou classification invalide.")
-        if schedule_id and kind != "passif":
-            raise DataError(f"Ligne {line} : échéancier lié à un actif.")
-        category = row["categorie"].strip()
-        label = row["poste"].strip()
-        if not category or not label or len(category) > 80 or len(label) > 80:
-            raise DataError(f"Ligne {line} : catégorie ou poste invalide.")
-        item = {"day": day(row["date"]), "kind": kind, "category": category, "label": label,
-                "owner": owner, "status": status, "usage": usage, "schedule_id": schedule_id,
-                "value_cents": cents(row["valeur_eur"], nullable=bool(schedule_id)),
-                "verified_on": day(row.get("verifie_le") or row["date"]), "original": row}
-        if schedule_id and row["valeur_eur"].strip():
-            raise DataError(f"Ligne {line} : dette liée avec valeur manuelle.")
-        entries.append(item)
-    return entries
-
-
-def parse_schedule_csv(text: str) -> list[dict]:
-    reader = csv.DictReader(io.StringIO(text.lstrip("\ufeff"), newline=""), delimiter=";")
-    if reader.fieldnames != SCHEDULE_HEADERS:
-        raise DataError("En-têtes d'amortissement invalides.")
-    rows = []
-    for line, row in enumerate(reader, 2):
-        try:
-            values = {name: cents(row[name]) for name in SCHEDULE_HEADERS[1:]}
-            due = day(row["date_echeance"])
-            if abs(values["capital_avant"] - values["capital_rembourse"] - values["capital_apres"]) > 1:
-                raise DataError("Capital incohérent.")
-            if rows and (due <= rows[-1]["due_on"] or abs(rows[-1]["capital_apres"] - values["capital_avant"]) > 1):
-                raise DataError("Dates ou continuité incohérentes.")
-            rows.append({"due_on": due, **values})
-        except (KeyError, DataError) as exc:
-            raise DataError(f"Amortissement ligne {line} : {exc}") from exc
-    return rows
-
-
-def preview_legacy(text: str, schedule_text: str = "", credit_text: str = "") -> dict:
-    entries = parse_legacy_csv(text)
-    rows = parse_schedule_csv(schedule_text) if schedule_text else []
-    credit = json.loads(credit_text) if credit_text else None
-    if credit and (not isinstance(credit, dict) or not isinstance(credit.get("id"), str) or not isinstance(credit.get("label"), str)):
-        raise DataError("Métadonnées de crédit invalides.")
-    linked = {entry["schedule_id"] for entry in entries if entry["schedule_id"]}
-    if linked and (not credit or linked != {credit["id"]} or not rows):
-        raise DataError("Dette liée détectée : sélectionnez aussi amortissement.csv et credit.json, puis prévisualisez à nouveau. Vérifiez que les trois fichiers correspondent.")
-    positions = {(e["kind"], e["category"], e["label"]) for e in entries}
-    duplicate_dates = len(entries) - len({(e["kind"], e["category"], e["label"], e["day"]) for e in entries})
-    return {"entries": entries, "schedule": rows, "credit": credit,
-            "report": {"lines": len(entries), "items": len(positions), "schedule_rows": len(rows), "same_day_overwrites": duplicate_dates,
-                       "pea_candidates": [e["label"] for e in entries if "pea" in e["label"].lower()]}}
-
-
-def import_legacy(db: sqlite3.Connection, parsed: dict) -> dict:
-    if db.execute("SELECT COUNT(*) FROM items").fetchone()[0]:
-        raise DataError("Un patrimoine existe déjà. Importez dans une base vierge ou restaurez une sauvegarde.")
-    entries = parsed["entries"]
-    credit = parsed["credit"]
-    with db:
-        if credit:
-            db.execute("INSERT INTO schedules VALUES (?,?,?)", (credit["id"], credit["label"], json.dumps(credit, ensure_ascii=False)))
-            db.executemany("INSERT INTO schedule_rows VALUES (?,?,?,?,?,?,?,?)", [
-                (credit["id"], r["due_on"], r["capital_avant"], r["capital_rembourse"], r["interets"], r["assurance"], r["echeance"], r["capital_apres"]) for r in parsed["schedule"]])
-        ids = {}
-        schedule_links = {}
-        for entry in entries:
-            key = (entry["kind"], entry["category"], entry["label"])
-            if key not in ids:
-                identifier = str(uuid.uuid4())
-                ids[key] = identifier
-                db.execute("INSERT INTO items (id,kind,category,label,owner,status,usage,asset_class,schedule_id,created_on) VALUES (?,?,?,?,?,?,?,?,?,?)",
-                           (identifier, entry["kind"], entry["category"], entry["label"], entry["owner"], entry["status"], entry["usage"], "inconnu", entry["schedule_id"], entry["day"]))
-            if entry["schedule_id"]:
-                schedule_links.setdefault(entry["schedule_id"], set()).add(ids[key])
-            db.execute("INSERT INTO valuations VALUES (?,?,?,?,?,?) ON CONFLICT(item_id,day) DO UPDATE SET value_cents=excluded.value_cents, verified_on=excluded.verified_on, source=excluded.source, original_json=excluded.original_json",
-                       (ids[key], entry["day"], entry["value_cents"], entry["verified_on"], "patrimoine.csv", json.dumps(entry["original"], ensure_ascii=False)))
-        if any(len(values) > 1 for values in schedule_links.values()):
-            raise DataError("Un échéancier est lié à plusieurs dettes.")
-    return parsed["report"]
 
 
 def save_item(db: sqlite3.Connection, value: dict) -> str:

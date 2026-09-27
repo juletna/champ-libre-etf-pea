@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createAllocationModel } from '../allocation/engine.js';
-import { LEGACY_MODELS_KEY, WORKSPACE_KEY, readWorkspace, writeWorkspace, validateSnapshot, validateDraft } from './storage.js';
+import { WORKSPACE_KEY, readWorkspace, writeWorkspace, validateSnapshot, validateDraft } from './storage.js';
 const model = createAllocationModel({ profiles: [{ isin: 'A', nom: 'Nom transformé', nom_court: 'Actions USA', pays: { US: 100 }, secteurs: { Tech: 100 } }], catalog: [{ isin: 'A', nom: 'Amundi Official Fund UCITS ETF Acc' }, { isin: 'B', nom: 'Amundi Second Fund UCITS ETF Dist' }], prices: {}, sizes: {}, geographicZone: (country) => country });
 const fallback = { weights: { A: 100 }, selectedIsins: ['A'], period: 36 };
 const memory = () => { const data = new Map(); return { getItem: (key) => data.get(key) ?? null, setItem: (key, value) => data.set(key, value) }; };
@@ -22,15 +22,6 @@ test('an intentionally empty basket remains empty on reload', () => {
   const storage = memory();
   writeWorkspace(storage, { weights: {}, selectedIsins: [] }, [], '');
   assert.deepEqual(readWorkspace(storage, model, fallback).current.weights, {});
-});
-test('old saved allocation models migrate without overwriting their storage', () => {
-  const storage = memory();
-  const legacy = JSON.stringify({ version: 1, models: [{ id: 'old', name: 'Mon ancien modèle', weights: { A: 75, B: 25 } }] });
-  storage.setItem(LEGACY_MODELS_KEY, legacy);
-  const result = readWorkspace(storage, model, fallback);
-  assert.equal(result.baskets[0].name, 'Mon ancien modèle');
-  assert.deepEqual(result.baskets[0].snapshot.weights, { A: 75, B: 25 });
-  assert.equal(storage.getItem(LEGACY_MODELS_KEY), legacy);
 });
 test('corrupt storage and failed writes are surfaced without crashing', () => {
   const storage = memory(); storage.setItem(WORKSPACE_KEY, '{invalid');

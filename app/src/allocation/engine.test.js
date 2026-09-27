@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { createAllocationModel, rebalanceTarget, validateSavedModels, CASH_ISIN } from './engine.js';
+import { createAllocationModel, rebalanceTarget, CASH_ISIN } from './engine.js';
 import { geographicZone } from './geography.js';
 const read = (path) => JSON.parse(readFileSync(new URL(path, import.meta.url)));
 const model = createAllocationModel({ profiles: read('../data/mvp-profiles.json').etfs, catalog: read('../etf_pea_fortuneo_amundi.json').etf, prices: read('../data/mvp-prices.json').par_isin, sizes: read('../data/mvp-fund-sizes.json').par_isin, geographicZone });
@@ -90,13 +90,6 @@ test('counterweights actually lower the named concentration without modifying a 
   for (const choice of choices) { assert.ok(choice.delta < 0); assert.equal(sum(Object.values(choice.weights)), 100); }
   assert.deepEqual(model.counterweights(weights, 'FR0011871110', { ...defaults, locks: { FR0011871110: 50 } }), []);
 });
-test('saved models reject corrupt or foreign data', () => {
-  assert.deepEqual(validateSavedModels({ version: 2, models: [] }, model.funds), []);
-  const good = { id: 'one', name: 'Mon modèle', weights: base };
-  const bad = [{ ...good, weights: { foreign: 100 } }, { ...good, weights: { LU1681043599: -5 } }, { ...good, weights: { LU1681043599: 101 } }];
-  assert.deepEqual(validateSavedModels({ version: 1, models: [good, ...bad] }, model.funds), [good]);
-});
-
 test('risk calculations stop at a hole and require twelve actual monthly returns', () => {
   const history = Array.from({ length: 25 }, (_, i) => ({ mois: `${2024 + Math.floor(i / 12)}-${String(i % 12 + 1).padStart(2, '0')}`, cours_ajuste: 100 + i }));
   const shortModel = createAllocationModel({ profiles: [], catalog: [{ isin: 'a', nom: 'A' }, { isin: 'b', nom: 'B' }], sizes: {}, geographicZone, prices: { a: { historique: history }, b: { historique: history.filter((_, i) => i !== 20) } } });

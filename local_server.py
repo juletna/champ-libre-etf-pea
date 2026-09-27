@@ -17,14 +17,15 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
-from local_data import DataError, household, import_legacy, migrate_v2, preview_legacy, save_item, save_items, schedule_detail
+from local_data import DataError, household, migrate_v2, save_item, save_items, schedule_detail
 from local_pea import account_state, apply_statement, include_without_aggregate, link_aggregate, migrate_v3, preview_statement, undo_latest, update_account
 from local_budget import activate_target, budget_state, migrate_v4, save_account, save_project, save_settings, select_source
 
 ROOT = Path(__file__).resolve().parent
 DIST = ROOT / "app" / "dist"
 SCHEMA_VERSION = 4
-KEYS = {"champ-libre.workspace.v1", "champ-libre.migration.v1", "champ-libre.allocation-models.v1"}
+CURRENT_KEYS = {"champ-libre.workspace.v1"}
+LEGACY_KEYS = {"champ-libre.migration.v1", "champ-libre.allocation-models.v1"}
 LOCK = threading.RLock()
 
 
@@ -73,11 +74,11 @@ def initialize(path: Path) -> None:
             raise DataError("Base SQLite corrompue.")
 
 
-def validate_browser_data(value: object) -> dict[str, str]:
+def validate_workspace_data(value: object, allow_legacy: bool = False) -> dict[str, str]:
     if not isinstance(value, dict) or value.get("version") != 1 or not isinstance(value.get("entries"), dict):
-        raise DataError("Format d'import navigateur invalide.")
+        raise DataError("Format de données locales invalide.")
     entries = value["entries"]
-    if not entries.keys() <= KEYS:
+    if not entries.keys() <= (CURRENT_KEYS | LEGACY_KEYS if allow_legacy else CURRENT_KEYS):
         raise DataError("Clé de stockage inconnue.")
     for key, raw in entries.items():
         if not isinstance(raw, str) or len(raw) > 2_000_000:
@@ -97,16 +98,15 @@ def validate_browser_data(value: object) -> dict[str, str]:
     return entries
 
 
-def browser_data(db_path: Path) -> dict[str, str]:
+def workspace_data(db_path: Path) -> dict[str, str]:
+    # Keep the v1 table name so existing SQLite databases and backups remain readable.
     with closing(connect(db_path)) as db:
         return {row["key"]: row["value"] for row in db.execute("SELECT key, value FROM browser_data")}
 
 
-def put_browser_data(db_path: Path, value: object, replace: bool = False) -> None:
-    entries = validate_browser_data(value)
+def put_workspace_data(db_path: Path, value: object) -> None:
+    entries = validate_workspace_data(value)
     with closing(connect(db_path)) as db, db:
-        if replace:
-            db.execute("DELETE FROM browser_data")
         db.executemany("INSERT INTO browser_data(key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value=excluded.value", entries.items())
 
 
@@ -149,7 +149,7 @@ def validate_database(path: Path) -> None:
                     raise DataError("Schéma de budget incomplet.")
         if db.execute("SELECT 1 FROM sqlite_master WHERE type IN ('trigger','view') LIMIT 1").fetchone():
             raise DataError("Schéma de sauvegarde inattendu.")
-        validate_browser_data({"version": 1, "entries": {key: value for key, value in db.execute("SELECT key, value FROM browser_data")}})
+        validate_workspace_data({"version": 1, "entries": {key: value for key, value in db.execute("SELECT key, value FROM browser_data")}}, allow_legacy=True)
     except sqlite3.DatabaseError as exc:
         raise DataError("Fichier SQLite invalide.") from exc
     finally:
@@ -215,16 +215,9 @@ class Handler(BaseHTTPRequestHandler):
         if path.startswith("/api/"):
             if path == "/api/health":
                 self.json(HTTPStatus.OK, {"local": True, "schema": SCHEMA_VERSION})
-            elif path == "/api/browser-data":
+            elif path == "/api/workspace":
                 with LOCK:
-                    self.json(HTTPStatus.OK, {"version": 1, "entries": browser_data(self.server.db_path)})
-            elif path == "/api/export.json":
-                with LOCK:
-                    with closing(connect(self.server.db_path)) as db:
-                        tables = ("browser_data", "items", "valuations", "schedules", "schedule_rows", "pea_accounts", "pea_positions", "pea_imports", "accounts", "projects", "funding_choices", "budget_settings", "investment_targets")
-                        content = {table: [dict(row) for row in db.execute(f"SELECT * FROM {table}")] for table in tables}
-                    raw = json.dumps({"format": "champ-libre-json-export", "version": 1, "schema_version": SCHEMA_VERSION, "tables": content}, ensure_ascii=False, indent=2).encode()
-                self.respond(HTTPStatus.OK, raw, "application/json; charset=utf-8", "champ-libre-export.json")
+                    self.json(HTTPStatus.OK, {"version": 1, "entries": workspace_data(self.server.db_path)})
             elif path == "/api/backup.sqlite":
                 if self.headers.get("X-Champ-Local") != "1":
                     self.json(HTTPStatus.FORBIDDEN, {"error": "En-tête local requis."})
@@ -275,8 +268,11 @@ class Handler(BaseHTTPRequestHandler):
             self.json(HTTPStatus.FORBIDDEN, {"error": "Écriture locale uniquement."})
             return
         path = urlsplit(self.path).path
-        if path not in ("/api/browser-data", "/api/restore.sqlite", "/api/legacy-preview", "/api/legacy-import", "/api/item", "/api/items", "/api/pea-preview", "/api/pea-import", "/api/pea-undo", "/api/pea-link", "/api/pea-include", "/api/pea-browser-import", "/api/pea-account", "/api/account", "/api/project", "/api/funding", "/api/budget-settings", "/api/target"):
+        if path not in ("/api/workspace", "/api/restore.sqlite", "/api/item", "/api/items", "/api/pea-preview", "/api/pea-import", "/api/pea-undo", "/api/pea-link", "/api/pea-include", "/api/pea-account", "/api/account", "/api/project", "/api/funding", "/api/budget-settings", "/api/target"):
             self.json(HTTPStatus.NOT_FOUND, {"error": "API inconnue."})
+            return
+        if path == "/api/workspace" and self.command != "PUT":
+            self.json(HTTPStatus.METHOD_NOT_ALLOWED, {"error": "Méthode inconnue."})
             return
         try:
             length = int(self.headers.get("Content-Length", "0"))
@@ -292,7 +288,7 @@ class Handler(BaseHTTPRequestHandler):
                 with LOCK:
                     previous = restore_database(self.server.db_path, raw)
                 self.json(HTTPStatus.OK, {"restored": True, "previous_backup": previous.name})
-            elif path in ("/api/legacy-preview", "/api/legacy-import", "/api/item", "/api/items", "/api/pea-preview", "/api/pea-import", "/api/pea-undo", "/api/pea-link", "/api/pea-include", "/api/pea-browser-import", "/api/pea-account", "/api/account", "/api/project", "/api/funding", "/api/budget-settings", "/api/target"):
+            elif path in ("/api/item", "/api/items", "/api/pea-preview", "/api/pea-import", "/api/pea-undo", "/api/pea-link", "/api/pea-include", "/api/pea-account", "/api/account", "/api/project", "/api/funding", "/api/budget-settings", "/api/target"):
                 if self.headers.get_content_type() != "application/json":
                     raise DataError("JSON attendu.")
                 value = json.loads(raw)
@@ -335,44 +331,15 @@ class Handler(BaseHTTPRequestHandler):
                             result = account_state(db)
                         elif path == "/api/pea-account":
                             result = update_account(db, value.get("label"), value.get("holder"), value.get("property_owner"))
-                        else:
-                            raw_migration = browser_data(self.server.db_path).get("champ-libre.migration.v1")
-                            if not raw_migration:
-                                raise DataError("Ancien portefeuille navigateur absent.")
-                            old = json.loads(raw_migration)
-                            values = old.get("data", {})
-                            as_of = value.get("as_of")
-                            from local_data import cents, day
-                            as_of = day(as_of)
-                            rows = [{"isin": isin, "label": isin, "quantity": None, "value_cents": cents(amount), "price_cents": None, "valued_on": as_of} for isin, amount in values.get("holdings", {}).items()]
-                            if account_state(db)["positions"]:
-                                raise DataError("Un portefeuille PEA détaillé existe déjà.")
-                            result = apply_statement(db, {"as_of": as_of, "mode": "complete", "cash_cents": cents(values.get("cash", 0)), "positions": rows}, "ancien navigateur")
                     self.json(HTTPStatus.OK, result)
-                else:
-                    if not isinstance(value.get("patrimoine_csv"), str) or not all(isinstance(value.get(key, ""), str) for key in ("amortissement_csv", "credit_json")):
-                        raise DataError("Fichiers source invalides.")
-                    parsed = preview_legacy(value["patrimoine_csv"], value.get("amortissement_csv", ""), value.get("credit_json", ""))
-                    if path == "/api/legacy-preview":
-                        self.json(HTTPStatus.OK, parsed["report"])
-                    else:
-                        with LOCK, closing(connect(self.server.db_path)) as db:
-                            report = import_legacy(db, parsed)
-                        self.json(HTTPStatus.OK, report)
             else:
                 if self.headers.get_content_type() != "application/json":
                     raise DataError("JSON attendu.")
                 value = json.loads(raw)
-                validate_browser_data(value)
+                validate_workspace_data(value)
                 with LOCK:
-                    if self.command == "POST":
-                        fd, previous_name = tempfile.mkstemp(prefix="champ-libre-before-import-", suffix=".sqlite", dir=self.server.db_path.parent)
-                        with os.fdopen(fd, "wb") as previous_file:
-                            previous_file.write(backup_bytes(self.server.db_path))
-                            previous_file.flush()
-                            os.fsync(previous_file.fileno())
-                    put_browser_data(self.server.db_path, value, replace=self.command == "POST")
-                self.json(HTTPStatus.OK, {"saved": True, "previous_backup": Path(previous_name).name if self.command == "POST" else None})
+                    put_workspace_data(self.server.db_path, value)
+                self.json(HTTPStatus.OK, {"saved": True})
         except (DataError, ValueError, sqlite3.DatabaseError) as exc:
             self.json(HTTPStatus.BAD_REQUEST, {"error": str(exc)})
 

@@ -13,7 +13,6 @@ import { AllocationComparisonDialog } from "./allocation/AllocationComparison";
 import { createAllocationModel } from "./allocation/engine";
 import PortfolioPortrait from "./portfolio/PortfolioPortrait";
 import PortfolioLibrary from "./portfolio/PortfolioLibrary";
-import MigrationPlanner from "./migration/MigrationPlanner";
 import { MAX_BASKETS, readWorkspace, writeWorkspace, validateSnapshot } from "./portfolio/storage";
 import "./portfolio/workspace.css";
 
@@ -309,12 +308,23 @@ const allocationModel = createAllocationModel({
 
 const DEFAULT_SNAPSHOT = { weights: INITIAL, selectedIsins: Object.keys(INITIAL).filter((id) => INITIAL[id] > 0), lockedIsins: [], visibleEtfIsins: [], period: 36, geoView: "countries" };
 
-export default function PortfolioMvp({ storage = window.localStorage, local = false, onOpenInvestment }) {
+export default function PortfolioMvp({ storage, local = false, onOpenInvestment }) {
   const [initialWorkspace] = useState(() => readWorkspace(storage, allocationModel, DEFAULT_SNAPSHOT));
   const initial = initialWorkspace.current;
   const [baskets, setBaskets] = useState(initialWorkspace.baskets);
   const [activeBasketId, setActiveBasketId] = useState(initialWorkspace.activeId);
   const [storageStatus, setStorageStatus] = useState(initialWorkspace.error);
+  useEffect(() => {
+    if (!local) return undefined;
+    const confirmed = () => setStorageStatus('Brouillon enregistré dans SQLite.');
+    const failed = (event) => setStorageStatus(`Enregistrement SQLite échoué : ${event.detail}`);
+    window.addEventListener('local-save-success', confirmed);
+    window.addEventListener('local-save-error', failed);
+    return () => {
+      window.removeEventListener('local-save-success', confirmed);
+      window.removeEventListener('local-save-error', failed);
+    };
+  }, [local]);
   const autoSaveEnabled = useRef(!initialWorkspace.error);
   const [deletedBasket, setDeletedBasket] = useState(null);
   const [wizardDraft, setWizardDraft] = useState(initial.wizardDraft);
@@ -324,7 +334,6 @@ export default function PortfolioMvp({ storage = window.localStorage, local = fa
   const basketScrollRef = useRef(null);
   const [wizardOpen, setWizardOpen] = useState(false);
   const [comparisonOpen, setComparisonOpen] = useState(false);
-  const [migrationOpen, setMigrationOpen] = useState(false);
   const [saveRequested, setSaveRequested] = useState(false);
   const [previousAllocation, setPreviousAllocation] = useState(null);
   const [hasBuiltAllocation, setHasBuiltAllocation] = useState(initial.hasBuiltAllocation);
@@ -356,7 +365,7 @@ export default function PortfolioMvp({ storage = window.localStorage, local = fa
   useEffect(() => {
     if (!autoSaveEnabled.current) return;
     const saved = writeWorkspace(storage, snapshot, baskets, activeBasketId);
-    setStorageStatus(saved ? (local ? "Brouillon sauvegardé dans la base locale." : "Brouillon sauvegardé automatiquement sur ce navigateur.") : "Sauvegarde impossible. Vos changements restent en mémoire.");
+    setStorageStatus(saved ? (local ? "Enregistrement SQLite en cours…" : "Essai temporaire : rien n’est enregistré après fermeture ou rechargement.") : "Sauvegarde impossible. Vos changements restent en mémoire.");
   }, [snapshot, baskets, activeBasketId, storage, local]);
   const savedModels = useMemo(() => baskets.map((basket) => ({ id: basket.id, name: basket.name, weights: basket.snapshot.weights, snapshot: basket.snapshot })), [baskets]);
   const activeBasket = baskets.find((basket) => basket.id === activeBasketId);
@@ -366,7 +375,7 @@ export default function PortfolioMvp({ storage = window.localStorage, local = fa
     if (!saved) { setStorageStatus("Enregistrement impossible : stockage local indisponible ou plein."); return false; }
     autoSaveEnabled.current = true;
     setBaskets(next); setActiveBasketId(activeId);
-    setStorageStatus(local ? "Configuration enregistrée dans la base locale." : "Configuration enregistrée sur ce navigateur.");
+    setStorageStatus(local ? "Enregistrement SQLite en cours…" : "Configuration conservée uniquement sur cette page, jusqu’au rechargement.");
     return true;
   }
   function saveBasket(name, proposedSnapshot = snapshot, activate = true) {
@@ -508,6 +517,7 @@ export default function PortfolioMvp({ storage = window.localStorage, local = fa
   };
 
   return <div className="mvp-page">
+    {!local && <p className="mvp-temporary-notice" role="status">Mode découverte : vos essais ne sont pas enregistrés. Rechargez ou fermez cette page et ils disparaîtront. Lancez l’application locale pour les conserver dans SQLite.</p>}
     <header className="mvp-header">
       <div className="mvp-header-inner">
         <div className="mvp-logo"><span className="mvp-logo-mark">◈</span> Champ libre <span className="mvp-logo-sub">/ PEA</span></div>
@@ -522,8 +532,8 @@ export default function PortfolioMvp({ storage = window.localStorage, local = fa
         <div><div className="eyebrow">PORTEFEUILLE VIRTUEL · OFFRE FORTUNEO AMUNDI</div><h1>Composez. Observez.<br/><em>Comprenez.</em></h1><p>Réglez les poids de vos ETF et voyez aussitôt ce que vous détenez vraiment — par pays, par secteur et dans le temps.</p></div>
         <div className="intro-index"><span>01 / 03</span><div className="intro-index-line"/><strong>Un premier aperçu concret</strong><small>Données mensuelles · poids rééquilibrés chaque mois</small></div>
       </section>
-      <PortfolioLibrary key={activeBasketId} onCompare={() => setComparisonOpen(true)} baskets={baskets} activeId={activeBasketId} dirty={basketDirty} status={storageStatus} onLoad={loadBasket} onSave={saveBasket} onUpdate={updateBasket} onDelete={deleteBasket} onUndoDelete={undoDeleteBasket} deleted={deletedBasket}/>
-      <section className="migration-entry"><div><strong>Du panier simulé au portefeuille réel</strong><p>Préparez vos prochains achats pour rejoindre votre allocation cible, grâce à vos versements.</p></div><button type="button" className="allocation-button allocation-primary" onClick={() => local ? onOpenInvestment() : setMigrationOpen(true)}>Atteindre cette allocation →</button></section>
+      {local && <PortfolioLibrary key={activeBasketId} onCompare={() => setComparisonOpen(true)} baskets={baskets} activeId={activeBasketId} dirty={basketDirty} status={storageStatus} onLoad={loadBasket} onSave={saveBasket} onUpdate={updateBasket} onDelete={deleteBasket} onUndoDelete={undoDeleteBasket} deleted={deletedBasket}/>}
+      {local && <section className="migration-entry"><div><strong>Du panier simulé au portefeuille réel</strong><p>Préparez vos prochains achats pour rejoindre votre allocation cible, grâce à vos versements.</p></div><button type="button" className="allocation-button allocation-primary" onClick={onOpenInvestment}>Atteindre cette allocation →</button></section>}
       <div className="editor-tabs" role="group" aria-label="Zones de composition"><button type="button" aria-pressed={editorView === "catalog"} aria-controls="catalog-panel" onClick={() => setEditorView("catalog")}>Catalogue · {availableEtfs.length}</button><button type="button" aria-pressed={editorView === "basket"} aria-controls="basket-panel" onClick={() => setEditorView("basket")}>Mon panier · {selected.length}</button></div>
       <div className="mvp-layout" data-editor-view={editorView}>
         <aside className="builder-panel catalog-panel" id="catalog-panel" aria-labelledby="catalog-title">
@@ -565,7 +575,7 @@ export default function PortfolioMvp({ storage = window.localStorage, local = fa
           </div>
         </aside>
         <div className="dashboard">
-          {previousAllocation && <div className="allocation-notice" role="status"><p>Allocation appliquée au portefeuille virtuel.</p><button type="button" onClick={undoAllocation}>Annuler et restaurer le portefeuille précédent</button><button type="button" onClick={() => { setSaveRequested(false); setWizardOpen(true); }}>Ajuster</button><button type="button" onClick={() => { setSaveRequested(true); setWizardOpen(true); }}>Enregistrer comme modèle</button></div>}
+          {previousAllocation && <div className="allocation-notice" role="status"><p>Allocation appliquée au portefeuille virtuel.</p><button type="button" onClick={undoAllocation}>Annuler et restaurer le portefeuille précédent</button><button type="button" onClick={() => { setSaveRequested(false); setWizardOpen(true); }}>Ajuster</button>{local && <button type="button" onClick={() => { setSaveRequested(true); setWizardOpen(true); }}>Enregistrer comme modèle</button>}</div>}
           <div className="period-toolbar"><div><span className="card-kicker">PÉRIODE COMMUNE</span><small>Rendement et contributions · {periodLabel}</small></div><div className="period-tabs" role="group" aria-label="Période d’analyse">{PERIODS.map((option) => <button type="button" key={option.label} className={period === option.months ? "active" : ""} aria-pressed={period === option.months} onClick={() => setPeriod(option.months)}>{option.label}</button>)}</div></div>
           <section className="summary-grid">
             <div className="summary-card dark"><span>Performance sur la période</span><strong>{performanceValue}</strong><small>{performanceDates}</small></div>
@@ -632,8 +642,7 @@ export default function PortfolioMvp({ storage = window.localStorage, local = fa
       </div>
       <footer className="mvp-footer"><span>CHAMP LIBRE / PEA</span><p>Outil de simulation. Les performances passées ne préjugent pas des performances futures. Données de VL : {pricesData.source}, extraction du {dateLabel(pricesData.date_extraction)}.</p></footer>
     </main>
-    {!local && <MigrationPlanner open={migrationOpen} onClose={() => setMigrationOpen(false)} funds={allocationModel.funds} weights={weights} baskets={baskets} storage={storage} local={local}/>}
     <AllocationComparisonDialog open={comparisonOpen} onClose={() => setComparisonOpen(false)} model={allocationModel} items={[{ id: "current", name: "Portefeuille actuel", weights, roles: portraitRoles }, ...savedModels]} period={period} onPeriodChange={setPeriod}/>
-    <AllocationWizard portraitRoles={portraitRoles} period={period} onPeriodChange={setPeriod} key={wizardRevision} initialDraft={wizardDraft} onDraftChange={setWizardDraft} models={savedModels} onSaveConfiguration={saveWizardConfiguration} resume={hasBuiltAllocation} saveRequested={saveRequested} model={allocationModel} open={wizardOpen} onClose={() => setWizardOpen(false)} weights={weights} lockedIsins={lockedIsins} onApply={applyAllocation}/>
+    <AllocationWizard portraitRoles={portraitRoles} period={period} onPeriodChange={setPeriod} key={wizardRevision} initialDraft={wizardDraft} onDraftChange={setWizardDraft} models={savedModels} onSaveConfiguration={local ? saveWizardConfiguration : null} resume={hasBuiltAllocation} saveRequested={saveRequested} model={allocationModel} open={wizardOpen} onClose={() => setWizardOpen(false)} weights={weights} lockedIsins={lockedIsins} onApply={applyAllocation}/>
   </div>;
 }
