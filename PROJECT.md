@@ -2,11 +2,19 @@
 
 ## Application locale et stockage (septembre 2026)
 
+### Décision à conserver lors des prochaines sessions
+
+- **SQLite est l’unique stockage persistant** de l’application locale : patrimoine, PEA, budget, brouillon ETF et paniers. Une écriture n’est annoncée comme enregistrée qu’après confirmation de l’API.
+- Le site public sert à explorer les ETF. Son état reste en mémoire et disparaît au rechargement, ce que l’interface annonce. Il n’utilise pas `localStorage` et ne propose pas d’enregistrement de paniers ni de portefeuille réel.
+- Le parcours standard ne reprend plus les fichiers de l’ancienne application Patrimoine ni les anciennes clés du navigateur. Si une nouvelle reprise historique devient nécessaire, la traiter comme une opération technique ponctuelle, après sauvegarde et contrôle des données, sans ajouter un parcours permanent pour tous les utilisateurs.
+- **Sauvegarde SQLite** et **Restaurer SQLite** restent les seules commandes d’export et de récupération. L’import CSV/tableau d’un relevé PEA actuel reste une fonction métier distincte. Le projet Patrimoine d’origine et ses fichiers doivent être conservés tant que leur archivage n’a pas été décidé.
+- La table SQLite `browser_data` garde son nom historique pour lire les bases et sauvegardes existantes ; elle stocke le brouillon local en SQLite et ne signifie pas qu’un second stockage navigateur est actif. Les anciennes clés sont acceptées uniquement lors de la validation d’une sauvegarde antérieure.
+
 Le serveur `local_server.py` crée une base SQLite versionnée hors dépôt et sert `app/dist`. Patrimoine, PEA, budget, brouillon ETF et paniers nommés sont conservés dans cette base. **Sauvegarde SQLite** et **Restaurer SQLite** forment le parcours de copie et de récupération. Les imports de l’ancien Patrimoine et des anciennes données du navigateur, ainsi que l’export JSON parallèle, ont été retirés. La base existante et le projet Patrimoine d’origine restent intacts.
 
 Le site statique permet l’exploration ETF en mémoire seulement. Ses essais disparaissent au rechargement ; il n’utilise plus `localStorage`. Le plan d’achats réel se trouve dans l’application locale et lit le PEA et le budget. Exécuter les tests Python `python3 -m unittest discover -p 'test_local_*.py'` et, dans `app/`, `npm test`, `npm run lint`, `npm run build`.
 
-L’application publiée sur GitHub Pages reste à déployer après validation. Ne pas archiver le projet Patrimoine avant d’avoir vérifié les données déjà présentes dans SQLite et conservé une sauvegarde indépendante.
+La simplification a été poussée sur `main` dans `07cbaee` le 27 septembre 2026 ; le workflow GitHub Pages publie depuis cette branche. Vérifier l’état du déploiement avant d’affirmer que le site public sert déjà la nouvelle version. Ne pas archiver le projet Patrimoine avant d’avoir comparé les données présentes dans SQLite et conservé une sauvegarde indépendante.
 
 Ce document décrit l'état du dépôt pour toute personne ou tout outil qui reprend le travail. Il complète les README et ne dépend d'aucun assistant particulier.
 
@@ -47,7 +55,7 @@ Les calculs du constructeur, les sauvegardes locales et le plan de migration dis
 | `app/src/allocation/AllocationComparison.jsx` | Tableau partagé de comparaison des propositions et des paniers enregistrés. |
 | `app/src/allocation/engine.js` | Redistribution des cibles, sélection des ETF et comparaisons historiques sur dates communes. |
 | `app/src/allocation/geography.js` | Classement des pays en zones et exemples de pays affichés dans l’assistant. |
-| `app/src/portfolio/storage.js` | Validation, migration et sauvegarde du brouillon et des paniers locaux. |
+| `app/src/portfolio/storage.js` | Validation et sauvegarde du brouillon et des paniers locaux. |
 | `app/src/portfolio/PortfolioLibrary.jsx` et `workspace.css` | Bibliothèque de paniers et panneaux catalogue/panier à défilements distincts. |
 | `app/src/migration/engine.js` et `engine.test.js` | Calculs des achats sans vente, apport minimum et parts entières utilisés par le plan local. |
 | `app/src/data/mvp-profiles.json` | 51 profils analysables : ISIN, pays, secteurs, date et URL du reporting Amundi. |

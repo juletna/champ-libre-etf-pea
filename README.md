@@ -2,7 +2,7 @@
 
 Outil de simulation d'un portefeuille d'ETF éligibles au PEA et de planification des achats pour rejoindre une allocation cible avec son portefeuille réel.
 
-**[Site public](https://juletna.github.io/champ-libre-etf-pea/)** — exploration ETF temporaire, sans enregistrement. Les données personnelles, paniers et achats exigent l’application locale SQLite. Le site publié ne reflétera ce changement qu’après un déploiement.
+**[Site public](https://juletna.github.io/champ-libre-etf-pea/)** — exploration ETF temporaire, sans enregistrement dans la version poussée le 27 septembre 2026. Les données personnelles, paniers et achats exigent l’application locale SQLite. Vérifier le déploiement GitHub Pages avant de supposer que le site publié sert cette version.
 
 ## Application locale Patrimoine + ETF
 
