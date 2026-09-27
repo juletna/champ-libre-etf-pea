@@ -32,9 +32,15 @@ ETF héberge l'application locale Patrimoine, PEA, budget et simulation d'achats
 
 ## Points restant à vérifier
 
-- Comparer les totaux, l’historique et le crédit de la base SQLite existante avec l’ancien outil aux mêmes dates. Une reprise des 14 postes issus de `patrimoine.csv` est déjà présente ; ne pas tenter un second import.
-- Exporter une sauvegarde SQLite sur un support indépendant avant de décider de l’archivage éventuel du projet Patrimoine. Conserver les fichiers source jusque-là.
+- Copier la sauvegarde SQLite validée sur un support indépendant de ce Mac ; l’utilisateur prendra en charge cette copie. Conserver les fichiers du projet Patrimoine d’origine jusque-là et ne pas l’archiver sans décision explicite.
+- Vérifier le solde espèces du PEA dans un relevé complet : l’export des titres du 27 septembre ne le contient pas et l’import courant est partiel.
 - Les lanceurs Windows et Linux sont fournis mais n’ont pas été exécutés sur ces OS. Adapter le format Fortuneo seulement avec un exemple anonymisé. Examiner les droits des données Fortuneo/Amundi et la licence du code avant toute diffusion supplémentaire.
+
+## 27 septembre 2026 — contrôle des données et sauvegarde
+
+Comparaison en lecture seule de l’ancien CSV et de la base locale : les 14 postes d’origine, leurs classifications et valorisations, ainsi que les lignes et métadonnées de l’échéancier, concordent. À la date d’origine, actifs, dettes et patrimoine net concordent aussi. À la date plus récente, la seule différence provient de la valorisation PEA détaillée qui remplace l’ancien agrégat. Les deux lignes de titres de l’export Fortuneo daté du 27 septembre correspondent exactement, au centime près, aux positions importées ; cet export ne confirme pas le solde espèces.
+
+Une nouvelle sauvegarde SQLite a été créée après les dernières écritures de la base. Son contenu logique correspondait à la base active lors du contrôle ; `integrity_check` et `foreign_key_check` étaient satisfaisants. La copie sur un autre support reste à faire par l’utilisateur. Aucun fichier de l’ancien projet n’a été supprimé ou archivé.
 
 ## 27 septembre 2026 — simplification du stockage
 
