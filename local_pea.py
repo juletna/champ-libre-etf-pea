@@ -223,9 +223,14 @@ def update_account(db: sqlite3.Connection, label: str, holder: str, property_own
     return account_state(db)
 
 
-def total_at(db: sqlite3.Connection, when: str) -> float | None:
-    row = db.execute("SELECT after_json FROM pea_imports WHERE account_id='pea' AND as_of<=? ORDER BY as_of DESC,rowid DESC LIMIT 1", (when,)).fetchone()
+def statement_at(db: sqlite3.Connection, when: str) -> tuple[float, str] | None:
+    row = db.execute("SELECT as_of,after_json FROM pea_imports WHERE account_id='pea' AND as_of<=? ORDER BY as_of DESC,rowid DESC LIMIT 1", (when,)).fetchone()
     if not row:
         return None
     state = json.loads(row["after_json"])
-    return state["total_eur"]
+    return state["total_eur"], row["as_of"]
+
+
+def total_at(db: sqlite3.Connection, when: str) -> float | None:
+    statement = statement_at(db, when)
+    return statement[0] if statement else None

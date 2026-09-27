@@ -60,6 +60,7 @@
 .household-table-wrap td input, .household-table-wrap td select { width: 100%; min-width: 0; height: 2.8rem; padding: 0 .3rem; border: 0; border-radius: 0; outline: 0; background: transparent; color: inherit; font: inherit; font-size: .84rem; }
 .household-table-wrap td input[type="number"], .household-number { text-align: right; font-variant-numeric: tabular-nums; }
 .household-table-wrap td input:disabled, .household-table-wrap td select:disabled { color: #718076; }
+.household-table-wrap .household-managed input:disabled, .household-table-wrap .household-managed select:disabled { color: inherit; opacity: 1; -webkit-text-fill-color: currentColor; }
 .household-table-wrap td small { font-size: .7rem; text-align: right; }
 .household-table-wrap td[data-label="Compte ou bien"] small { text-align: left; color: #8a6a35; }
 .household-row-actions { white-space: nowrap; }
@@ -89,7 +90,6 @@
   .household-table-wrap tbody tr[data-row-key] td:nth-child(4), .household-table-wrap tbody tr.household-managed td:nth-child(4), .household-table-wrap tbody tr[data-row-key] td:nth-child(8), .household-table-wrap tbody tr.household-managed td:nth-child(8) { grid-column: 1 / -1; }
   .household-table-wrap tbody tr[data-row-key] td input, .household-table-wrap tbody tr[data-row-key] td select { height: 2.2rem; }
   .household-table-wrap tbody tr.household-managed td { overflow-wrap: anywhere; }
-  .household-table-wrap tbody tr.household-managed .household-number { text-align: left; }
   .household-table-wrap tbody tr.household-extra-row { display: block; margin: -.1rem .5rem 0; border: 1px solid #dce6dd; border-top: 0; border-radius: 0 0 .5rem .5rem; }
   .household-table-wrap tbody tr.household-extra-row td { display: block; }
   .household-extra-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }

@@ -129,7 +129,7 @@ def _save_item(db: sqlite3.Connection, value: dict) -> str:
 
 def snapshot(db: sqlite3.Connection, when: str) -> dict:
     when = day(when)
-    from local_pea import total_at
+    from local_pea import statement_at
     items = []
     for row in db.execute("SELECT * FROM items ORDER BY category,label"):
         valuation = db.execute("SELECT * FROM valuations WHERE item_id=? AND day<=? ORDER BY day DESC LIMIT 1", (row["id"], when)).fetchone()
@@ -145,14 +145,16 @@ def snapshot(db: sqlite3.Connection, when: str) -> dict:
         items.append({**dict(row), "day": valuation["day"], "value_eur": euro(amount), "verified_on": valuation["verified_on"], "source": valuation["source"], "last_due": last_due})
     pea = db.execute("SELECT * FROM pea_accounts WHERE id='pea'").fetchone()
     if pea and pea["include_in_household"]:
-        total = total_at(db, when)
-        if total is not None and pea["linked_item_id"] and when >= pea["linked_from"]:
+        statement = statement_at(db, when)
+        if statement is not None and pea["linked_item_id"] and when >= pea["linked_from"]:
+            total, statement_day = statement
             for item in items:
                 if item["id"] == pea["linked_item_id"]:
-                    item.update(value_eur=total, source="relevé PEA détaillé", day=pea["linked_from"], asset_class="titre")
+                    item.update(value_eur=total, source="relevé PEA détaillé", day=statement_day, verified_on=statement_day, asset_class="titre")
                     break
-        elif total is not None and not pea["linked_item_id"]:
-            items.append({"id": "pea", "kind": "actif", "category": "PEA", "label": pea["label"], "owner": pea["property_owner"], "status": "actuel", "usage": "libre", "asset_class": "titre", "account_id": "pea", "schedule_id": None, "created_on": pea["as_of"], "linked_account_from": None, "day": pea["as_of"], "value_eur": total, "verified_on": pea["as_of"], "source": "relevé PEA détaillé", "last_due": None})
+        elif statement is not None and not pea["linked_item_id"]:
+            total, statement_day = statement
+            items.append({"id": "pea", "kind": "actif", "category": "PEA", "label": pea["label"], "owner": pea["property_owner"], "status": "actuel", "usage": "libre", "asset_class": "titre", "account_id": "pea", "schedule_id": None, "created_on": statement_day, "linked_account_from": None, "day": statement_day, "value_eur": total, "verified_on": statement_day, "source": "relevé PEA détaillé", "last_due": None})
     current = [item for item in items if item["status"] != "previsionnel" and item["owner"] != "enfants"]
     assets = sum(round(item["value_eur"] * 100) for item in current if item["kind"] == "actif")
     debts = sum(round(item["value_eur"] * 100) for item in current if item["kind"] == "passif")

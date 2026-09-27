@@ -17,7 +17,6 @@ const fieldLabels = { kind: 'Type', owner: 'Propriété', status: 'Statut', usag
 const fields = ['id', 'day', 'kind', 'category', 'label', 'value_eur', 'schedule_id', 'owner', 'status', 'usage', 'asset_class', 'account_id', 'verified_on'];
 
 async function json(path, options) { return (await request(path, options)).json(); }
-const labelOf = (name, value) => choices[name]?.find(([code]) => code === value)?.[1] || value || '—';
 const stored = (row) => Object.fromEntries(fields.flatMap((name) => name === 'id' && !row.id ? [] : [[name, row[name] ?? '']]));
 const same = (left, right) => JSON.stringify(stored(left)) === JSON.stringify(stored(right));
 const draftFrom = (item) => ({
@@ -153,7 +152,16 @@ export default function Household({ openPea }) {
           <table><thead><tr><th>Date du relevé</th><th>Type</th><th>Catégorie</th><th>Compte ou bien</th><th>Valeur</th><th>Propriété</th><th>Vérifié le</th><th>Actions</th></tr></thead><tbody>
             {!rows.length && <tr><td colSpan="8" className="household-empty">Aucun poste. Ajoutez votre première ligne.</td></tr>}
             {rows.map((row) => row.managedPea
-              ? <tr key={row.key} className="household-managed"><td data-label="Date du relevé">{row.day}</td><td data-label="Type">{labelOf('kind', row.kind)}</td><td data-label="Catégorie">{row.category}</td><td data-label="Compte ou bien">{row.label}</td><td data-label="Valeur" className="household-number">{euro(row.displayValue)}</td><td data-label="Propriété">{labelOf('owner', row.owner)}</td><td data-label="Vérifié le">{row.verified_on}</td><td data-label="Actions"><button type="button" className="household-secondary" onClick={openPea}>Mon PEA</button></td></tr>
+              ? <tr key={row.key} className="household-managed">
+                <td data-label="Date du relevé"><input aria-label="Date du relevé PEA" type="date" value={row.day} disabled readOnly/></td>
+                <td data-label="Type"><Choice row={row} field="kind" change={change} disabled/></td>
+                <td data-label="Catégorie"><input aria-label="Catégorie PEA" value={row.category} readOnly/></td>
+                <td data-label="Compte ou bien"><input aria-label="Compte PEA" title="Valeur gérée dans Mon PEA" value={row.label} readOnly/></td>
+                <td data-label="Valeur"><input aria-label="Valeur PEA en euros" type="number" value={row.displayValue ?? ''} disabled readOnly/></td>
+                <td data-label="Propriété"><Choice row={row} field="owner" change={change} disabled/></td>
+                <td data-label="Vérifié le"><input aria-label="Vérifié le PEA" type="date" value={row.verified_on} disabled readOnly/></td>
+                <td data-label="Actions" className="household-row-actions"><button type="button" className="household-more" onClick={openPea}>Mon PEA</button></td>
+              </tr>
               : <Fragment key={row.key}>
                 <tr data-row-key={row.key} className={row.status === 'previsionnel' || row.owner === 'enfants' ? 'local-excluded' : undefined} onKeyDown={(event) => nextCell(event, row, event.target.dataset.field)}>
                   <td data-label="Date du relevé"><input data-field="day" aria-label="Date du relevé" type="date" required value={row.day} onChange={(event) => change(row.key, 'day', event.target.value)}/></td>
