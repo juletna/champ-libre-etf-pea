@@ -11,6 +11,7 @@ import { geographicZone } from "./allocation/geography";
 import AllocationWizard from "./allocation/AllocationWizard";
 import { AllocationComparisonDialog } from "./allocation/AllocationComparison";
 import { createAllocationModel } from "./allocation/engine";
+import PortfolioPortrait from "./portfolio/PortfolioPortrait";
 import PortfolioLibrary from "./portfolio/PortfolioLibrary";
 import MigrationPlanner from "./migration/MigrationPlanner";
 import { MAX_BASKETS, readWorkspace, writeWorkspace, validateSnapshot } from "./portfolio/storage";
@@ -332,6 +333,7 @@ export default function PortfolioMvp() {
   const [previousAllocation, setPreviousAllocation] = useState(null);
   const [hasBuiltAllocation, setHasBuiltAllocation] = useState(initial.hasBuiltAllocation);
   const [weights, setWeights] = useState(initial.weights);
+  const [portraitRoles, setPortraitRoles] = useState(initial.portraitRoles);
   const [selectedIsins, setSelectedIsins] = useState(initial.selectedIsins);
   const [lockedIsins, setLockedIsins] = useState(initial.lockedIsins);
   const [visibleEtfIsins, setVisibleEtfIsins] = useState(initial.visibleEtfIsins);
@@ -351,10 +353,10 @@ export default function PortfolioMvp() {
   const [maxFee, setMaxFee] = useState(initial.filters.maxFee);
   const [fullHistoryOnly, setFullHistoryOnly] = useState(initial.filters.fullHistory);
   const [catalogSort, setCatalogSort] = useState(initial.filters.sort);
-  const snapshot = useMemo(() => ({ weights, selectedIsins, lockedIsins, visibleEtfIsins,
+  const snapshot = useMemo(() => ({ weights, portraitRoles, selectedIsins, lockedIsins, visibleEtfIsins,
     period: period === Infinity ? "max" : period, geoView, hasBuiltAllocation, editorView, wizardDraft,
     filters: { query: catalogQuery, category: categoryFilter, distribution: distributionFilter, minSize: minFundSize, maxFee, fullHistory: fullHistoryOnly, sort: catalogSort },
-  }), [weights, selectedIsins, lockedIsins, visibleEtfIsins, period, geoView, hasBuiltAllocation, editorView, wizardDraft, catalogQuery, categoryFilter, distributionFilter, minFundSize, maxFee, fullHistoryOnly, catalogSort]);
+  }), [weights, portraitRoles, selectedIsins, lockedIsins, visibleEtfIsins, period, geoView, hasBuiltAllocation, editorView, wizardDraft, catalogQuery, categoryFilter, distributionFilter, minFundSize, maxFee, fullHistoryOnly, catalogSort]);
   useEffect(() => {
     if (!autoSaveEnabled.current) return;
     const saved = writeWorkspace(browserStorage, snapshot, baskets, activeBasketId);
@@ -381,6 +383,7 @@ export default function PortfolioMvp() {
   }
   function loadBasket(basket) {
     const next = basket.snapshot;
+    setPortraitRoles(next.portraitRoles);
     setWeights(next.weights); setSelectedIsins(next.selectedIsins); setLockedIsins(next.lockedIsins); setVisibleEtfIsins(next.visibleEtfIsins);
     setPeriod(next.period === "max" ? Infinity : next.period); setGeoView(next.geoView); setHasBuiltAllocation(next.hasBuiltAllocation); setEditorView(next.editorView);
     setCatalogQuery(next.filters.query); setCategoryFilter(next.filters.category); setDistributionFilter(next.filters.distribution);
@@ -398,9 +401,9 @@ export default function PortfolioMvp() {
   function undoDeleteBasket() {
     if (deletedBasket && baskets.length < MAX_BASKETS && saveBaskets([...baskets, { id: deletedBasket.id, name: deletedBasket.name, snapshot: deletedBasket.snapshot }], deletedBasket.wasActive ? deletedBasket.id : activeBasketId)) setDeletedBasket(null);
   }
-  function saveWizardConfiguration(name, proposedWeights, draft) {
+  function saveWizardConfiguration(name, proposedWeights, draft, proposedRoles = portraitRoles) {
     const ids = Object.keys(proposedWeights);
-    return Boolean(saveBasket(name, { ...snapshot, weights: proposedWeights, selectedIsins: ids,
+    return Boolean(saveBasket(name, { ...snapshot, weights: proposedWeights, portraitRoles: proposedRoles, selectedIsins: ids,
       lockedIsins: Object.keys(draft.settings.locks).filter((id) => ids.includes(id)), visibleEtfIsins: visibleEtfIsins.filter((id) => ids.includes(id)),
       hasBuiltAllocation: true, wizardDraft: { ...draft, manual: proposedWeights, step: 2, anchor: { weights: proposedWeights, lockedIsins: Object.keys(draft.settings.locks) } },
     }, true));
@@ -488,8 +491,9 @@ export default function PortfolioMvp() {
   const toggleEtfCurve = (isin) => setVisibleEtfIsins((old) => old.includes(isin) ? old.filter((item) => item !== isin) : [...old, isin]);
   const toggleAllEtfCurves = () => setVisibleEtfIsins(allEtfsVisible ? [] : chartableEtfs.map((etf) => etf.isin));
 
-  const applyAllocation = (nextWeights, nextLocks) => {
-    setPreviousAllocation({ weights, selectedIsins, lockedIsins, visibleEtfIsins });
+  const applyAllocation = (nextWeights, nextLocks, nextRoles = portraitRoles) => {
+    setPreviousAllocation({ weights, selectedIsins, lockedIsins, visibleEtfIsins, portraitRoles });
+    setPortraitRoles(nextRoles);
     setWeights(nextWeights);
     const ids = Object.keys(nextWeights);
     setSelectedIsins(ids);
@@ -499,6 +503,7 @@ export default function PortfolioMvp() {
   };
   const undoAllocation = () => {
     if (!previousAllocation) return;
+    setPortraitRoles(previousAllocation.portraitRoles);
     setWeights(previousAllocation.weights);
     setSelectedIsins(previousAllocation.selectedIsins);
     setLockedIsins(previousAllocation.lockedIsins);
@@ -572,6 +577,7 @@ export default function PortfolioMvp() {
             <div className="summary-card"><span>Frais annuels pondérés</span><strong>{totalWeight ? pct(cost) : "—"}</strong><small>gestion et administration</small></div>
             <div className="summary-card"><span>Premier pays</span><strong>{geo[0]?.name || "—"}</strong><small>{geo[0] ? pct(geo[0].value) : "Aucune exposition"}</small></div>
           </section>
+          <PortfolioPortrait model={allocationModel} items={[{ id: "current", name: "Portefeuille actuel", weights, roles: portraitRoles }]} period={period} onRolesChange={setPortraitRoles}/>
           <section className="mvp-card performance-card">
             <div className="card-topline"><span className="card-kicker">02 — ÉVOLUTION</span><span className="card-date">Cours arrêtés à {history.end ? monthsLabel(history.end) : "—"}</span></div>
             <div className="performance-heading"><div><h2>Rendement historique</h2><p className="card-description">Base 100 · poids cibles rééquilibrés chaque mois · VL ajustées Amundi en EUR{unallocated > 0 ? " · solde non alloué sans rendement" : ""}</p></div></div>
@@ -631,7 +637,7 @@ export default function PortfolioMvp() {
       <footer className="mvp-footer"><span>CHAMP LIBRE / PEA</span><p>Outil de simulation. Les performances passées ne préjugent pas des performances futures. Données de VL : {pricesData.source}, extraction du {dateLabel(pricesData.date_extraction)}.</p></footer>
     </main>
     <MigrationPlanner open={migrationOpen} onClose={() => setMigrationOpen(false)} funds={allocationModel.funds} weights={weights} baskets={baskets}/>
-    <AllocationComparisonDialog open={comparisonOpen} onClose={() => setComparisonOpen(false)} model={allocationModel} items={[{ id: "current", name: "Portefeuille actuel", weights }, ...savedModels]} period={period} onPeriodChange={setPeriod}/>
-    <AllocationWizard period={period} onPeriodChange={setPeriod} key={wizardRevision} initialDraft={wizardDraft} onDraftChange={setWizardDraft} models={savedModels} onSaveConfiguration={saveWizardConfiguration} resume={hasBuiltAllocation} saveRequested={saveRequested} model={allocationModel} open={wizardOpen} onClose={() => setWizardOpen(false)} weights={weights} lockedIsins={lockedIsins} onApply={applyAllocation}/>
+    <AllocationComparisonDialog open={comparisonOpen} onClose={() => setComparisonOpen(false)} model={allocationModel} items={[{ id: "current", name: "Portefeuille actuel", weights, roles: portraitRoles }, ...savedModels]} period={period} onPeriodChange={setPeriod}/>
+    <AllocationWizard portraitRoles={portraitRoles} period={period} onPeriodChange={setPeriod} key={wizardRevision} initialDraft={wizardDraft} onDraftChange={setWizardDraft} models={savedModels} onSaveConfiguration={saveWizardConfiguration} resume={hasBuiltAllocation} saveRequested={saveRequested} model={allocationModel} open={wizardOpen} onClose={() => setWizardOpen(false)} weights={weights} lockedIsins={lockedIsins} onApply={applyAllocation}/>
   </div>;
 }

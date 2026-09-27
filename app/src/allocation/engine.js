@@ -166,17 +166,27 @@ export function createAllocationModel({ profiles, catalog, prices, sizes, geogra
       limited: Number.isFinite(period) && history.months < period,
       totals: history.returns.map((returns) => (returns.reduce((value, r) => value * (1 + r), 1) - 1) * 100) };
   }
-  function compareRisk(portfolios) {
-    const history = commonHistory(portfolios, 60);
+  function compareRisk(portfolios, period = 60) {
+    const history = commonHistory(portfolios, period);
     if (!history.available) return history;
     const months = history.dates;
     if (months.length < 13) return { available: false, reason: `Historique commun trop court (${Math.max(0, months.length - 1)} mois ; 12 minimum).` };
     const metrics = history.returns.map((returns) => {
       const mean = sum(returns) / returns.length;
       const volatility = Math.sqrt(sum(returns.map((r) => (r - mean) ** 2)) / (returns.length - 1) * 12) * 100;
-      let value = 1, peak = 1, drawdown = 0;
-      for (const r of returns) { value *= 1 + r; peak = Math.max(peak, value); drawdown = Math.min(drawdown, value / peak - 1); }
-      return { volatility, drawdown: drawdown * 100 };
+      let value = 1, peak = 1, drawdown = 0, peakIndex = 0, worstPeak = 0, trough = 0;
+      const values = [1];
+      returns.forEach((r, index) => {
+        value *= 1 + r;
+        values.push(value);
+        if (value >= peak - 1e-12) { peak = Math.max(peak, value); peakIndex = index + 1; }
+        const decline = value / peak - 1;
+        if (decline < drawdown - 1e-12) { drawdown = decline; worstPeak = peakIndex; trough = index + 1; }
+      });
+      const recovery = drawdown < 0 ? values.findIndex((v, index) => index > trough && v >= values[worstPeak] - 1e-12) : 0;
+      return { volatility, drawdown: drawdown * 100,
+        recoveryMonths: recovery < 0 ? null : recovery - worstPeak,
+        underwaterMonths: returns.length - worstPeak };
     });
     return { available: true, start: months[0], end: months.at(-1), months: months.length - 1, metrics };
   }

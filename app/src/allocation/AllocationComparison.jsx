@@ -1,4 +1,5 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
+import PortfolioPortrait from '../portfolio/PortfolioPortrait';
 import { ZONE_COUNTRIES } from './geography';
 
 const pct = (value, digits = 1) => `${new Intl.NumberFormat('fr-FR', { maximumFractionDigits: digits }).format(value)} %`;
@@ -22,6 +23,7 @@ export default function AllocationComparison({ model, items, period, onPeriodCha
     <fieldset className="comparison-picker"><legend>Allocations à comparer · 4 maximum</legend>{items.map((item) => <label key={item.id}><input type="checkbox" checked={selectedIds.includes(item.id)} disabled={selected.length >= 4 && !selectedIds.includes(item.id)} onChange={() => toggle(item.id)}/><span>{item.name}</span></label>)}</fieldset>
     {selected.length < 2 ? <p className="allocation-note" role="status">Choisissez au moins deux allocations. Vos configurations enregistrées apparaissent ici.</p> : <>
       <p className="allocation-note" role="status">{performance.available ? <>Même période pour toutes : <strong>{month(performance.start)} – {month(performance.end)}</strong> ({performance.months} mois).{performance.limited && ' Historique commun plus court que la période demandée.'}</> : performance.reason}</p>
+      <PortfolioPortrait model={model} items={selected} period={period}/>
       <p className="comparison-scroll-hint">Faites défiler le tableau horizontalement pour voir les autres allocations →</p>
       <div className="comparison-scroll" tabIndex={0} role="region" aria-label="Tableau des allocations, défilement horizontal et vertical">
         <table><caption className="allocation-sr-only">Performances totales, zones et secteurs des allocations sélectionnées</caption><thead><tr><th scope="col">Part du portefeuille</th>{selected.map((item) => <th scope="col" key={item.id}>{item.name}</th>)}</tr></thead><tbody>

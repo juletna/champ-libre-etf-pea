@@ -1,3 +1,4 @@
+import { validateRoles } from './portrait.js';
 import { CASH_ISIN, validateSavedModels } from '../allocation/engine.js';
 
 export const WORKSPACE_KEY = 'champ-libre.workspace.v1';
@@ -74,6 +75,7 @@ export function validateSnapshot(value, model) {
       fullHistory: filters.fullHistory === true,
       sort: ['performance-desc', 'performance-asc', 'size-desc', 'size-asc', 'fee-asc', 'fee-desc', 'name'].includes(filters.sort) ? filters.sort : 'performance-desc',
     },
+    portraitRoles: Object.fromEntries(Object.entries(validateRoles(value.portraitRoles, model.funds)).filter(([id]) => selected.has(id))),
     wizardDraft: validateDraft(value.wizardDraft, model),
   };
 }

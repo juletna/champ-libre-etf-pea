@@ -41,7 +41,7 @@ function BalancePanel({ model, base, result, pending }) {
   </>}</aside>;
 }
 
-export default function AllocationWizard({ model, open, onClose, weights, lockedIsins, onApply, saveRequested, resume, initialDraft, onDraftChange, models, onSaveConfiguration, period, onPeriodChange }) {
+export default function AllocationWizard({ portraitRoles = {}, model, open, onClose, weights, lockedIsins, onApply, saveRequested, resume, initialDraft, onDraftChange, models, onSaveConfiguration, period, onPeriodChange }) {
   const dialogRef = useRef(null);
   const titleRef = useRef(null);
   const lastInputs = useRef(initialDraft?.anchor || { weights, lockedIsins });
@@ -73,11 +73,12 @@ export default function AllocationWizard({ model, open, onClose, weights, locked
   }, [model, deferredSettings, open]);
   const result = manual ? model.describe(manual, settings) : proposals[selectedVariant] || proposals[0];
   const choices = useMemo(() => counterFrom && result?.weights ? model.counterweights(result.weights, counterFrom, settings) : [], [model, result?.weights, counterFrom, settings]);
+  const proposedRoles = models.find((entry) => entry.id === source)?.snapshot?.portraitRoles || portraitRoles;
   const comparisonItems = [
-    { id: 'current', name: 'Portefeuille actuel', weights },
-    ...(result?.weights ? [{ id: 'choice', name: 'Choix à appliquer', weights: result.weights }] : []),
+    { id: 'current', name: 'Portefeuille actuel', weights, roles: portraitRoles },
+    ...(result?.weights ? [{ id: 'choice', name: 'Choix à appliquer', weights: result.weights, roles: proposedRoles }] : []),
     ...models,
-    ...proposals.filter((proposal) => proposal.weights && proposal !== result).map((proposal) => ({ id: `proposal-${proposal.variant}`, name: proposal.variant === 'cost' ? 'Moins de frais' : proposal.variant === 'simple' ? 'Moins d’ETF' : 'Proche de vos objectifs', weights: proposal.weights })),
+    ...proposals.filter((proposal) => proposal.weights && proposal !== result).map((proposal) => ({ id: `proposal-${proposal.variant}`, name: proposal.variant === 'cost' ? 'Moins de frais' : proposal.variant === 'simple' ? 'Moins d’ETF' : 'Proche de vos objectifs', weights: proposal.weights, roles: proposedRoles })),
   ];
   const currentIds = Object.keys(base).filter((id) => model.funds[id]);
   const eligible = model.eligible(settings);
@@ -111,14 +112,14 @@ export default function AllocationWizard({ model, open, onClose, weights, locked
   }
   function apply() {
     if (!result?.weights || result.errors?.length || pending) return;
-    if (modelName.trim() && !onSaveConfiguration(modelName.trim(), result.weights, draft)) {
+    if (modelName.trim() && !onSaveConfiguration(modelName.trim(), result.weights, draft, proposedRoles)) {
       setStorageMessage('Enregistrement impossible : stockage local indisponible ou limite de 30 paniers atteinte. Réessayez, ou effacez le nom pour appliquer sans enregistrer.');
       return;
     }
     const nextLocks = Object.keys(settings.locks);
     lastInputs.current = { weights: result.weights, lockedIsins: nextLocks };
     setAnchor(lastInputs.current);
-    onApply(result.weights, nextLocks); setModelName(''); setStorageMessage(''); setStep(1); onClose();
+    onApply(result.weights, nextLocks, proposedRoles); setModelName(''); setStorageMessage(''); setStep(1); onClose();
   }
   function replace() {
     if (!replaceFrom || !replaceTo || !result?.weights) return;

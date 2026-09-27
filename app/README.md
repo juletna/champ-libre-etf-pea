@@ -99,3 +99,15 @@ Le mode **Parts entières** utilise uniquement des prix en euros datés saisis p
 **Enregistrer mes achats réalisés** ouvre un formulaire pour corriger les montants, le versement et les frais effectivement réalisés. Un dépassement du disponible bloque l’enregistrement. Les montants achetés hors frais augmentent les valorisations saisies, le reliquat devient le solde en liquidités et le versement prévu revient à zéro. Une annulation est disponible jusqu’à la prochaine modification. Il faut réactualiser les valeurs de marché manuellement ; aucun ordre n’est envoyé.
 
 Le portefeuille réel, la cible et les paramètres sont conservés séparément sous `champ-libre.migration.v1`. Les données illisibles ou incompatibles restent intactes et désactivent l’écriture automatique ; les erreurs de stockage sont signalées. Aucun compte courtier ni cours en direct n’est connecté. Les tests du moteur et du stockage de migration font partie de `npm test`.
+
+## Portrait visuel du portefeuille
+
+Le portefeuille courant et les deux comparatifs (bibliothèque et constructeur) partagent cinq jauges cliquables : diversité géographique, diversité sectorielle, place des convictions, écart au MSCI World et résistance historique. Une barre répartit les poids entre socle, complément émergents, convictions, fonds court terme et non alloué. Le texte explicatif est produit localement à partir des mêmes chiffres ; il ne recommande pas de portefeuille gagnant.
+
+- Géographie : poids du premier pays parmi les pays détaillés ; la jauge montre son complément à 100 %. « Autres pays » est exclu et la couverture est affichée. Minimum : 80 % de la poche actions détaillés.
+- Secteurs : poids des trois premiers secteurs dans la poche actions ; la jauge montre le reste.
+- Convictions : poids total des ETF classés en conviction. Les rôles initiaux sont documentés et modifiables ; ils sont conservés dans le brouillon et chaque panier, puis repris lors d’une application/annulation du constructeur. Ce classement est distinct du curseur d’objectifs du constructeur.
+- Écart au World : moyenne des distances de variation totale des distributions de zones et de secteurs (moitié de la somme des écarts absolus en points), de 0 à 100. Les zones non détaillées sont exclues et les distributions restantes normalisées ; 80 % de couverture minimum des deux côtés. Ce n’est ni une mesure par titres individuels ni une prévision.
+- Résistance : recul maximal sommet-creux sur les fins de mois de la période sélectionnée, accompagné de la volatilité annualisée et du temps de récupération de cet épisode, du sommet au retour à son niveau. Douze rendements mensuels continus minimum. Un sommet non retrouvé reste signalé. En comparaison, les dates sont communes à toutes les allocations et identiques à celles des performances.
+
+Une position actions sans composition vérifiée rend les indicateurs de géographie, secteurs et écart indisponibles ; le fonds court terme et le non alloué ne créent pas artificiellement de diversité actions. Les compositions arrondies sont normalisées. Les calculs et la persistance des rôles sont couverts par `src/portfolio/portrait.test.js` dans `npm test`.
