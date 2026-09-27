@@ -307,14 +307,10 @@ const allocationModel = createAllocationModel({
   prices: pricesData.par_isin, sizes: fundSizesData.par_isin, geographicZone,
 });
 
-const browserStorage = {
-  getItem: (key) => window.localStorage.getItem(key),
-  setItem: (key, value) => window.localStorage.setItem(key, value),
-};
 const DEFAULT_SNAPSHOT = { weights: INITIAL, selectedIsins: Object.keys(INITIAL).filter((id) => INITIAL[id] > 0), lockedIsins: [], visibleEtfIsins: [], period: 36, geoView: "countries" };
 
-export default function PortfolioMvp() {
-  const [initialWorkspace] = useState(() => readWorkspace(browserStorage, allocationModel, DEFAULT_SNAPSHOT));
+export default function PortfolioMvp({ storage = window.localStorage, local = false, onOpenInvestment }) {
+  const [initialWorkspace] = useState(() => readWorkspace(storage, allocationModel, DEFAULT_SNAPSHOT));
   const initial = initialWorkspace.current;
   const [baskets, setBaskets] = useState(initialWorkspace.baskets);
   const [activeBasketId, setActiveBasketId] = useState(initialWorkspace.activeId);
@@ -359,25 +355,25 @@ export default function PortfolioMvp() {
   }), [weights, portraitRoles, selectedIsins, lockedIsins, visibleEtfIsins, period, geoView, hasBuiltAllocation, editorView, wizardDraft, catalogQuery, categoryFilter, distributionFilter, minFundSize, maxFee, fullHistoryOnly, catalogSort]);
   useEffect(() => {
     if (!autoSaveEnabled.current) return;
-    const saved = writeWorkspace(browserStorage, snapshot, baskets, activeBasketId);
-    setStorageStatus(saved ? "Brouillon sauvegardé automatiquement sur ce navigateur." : "Sauvegarde impossible : stockage local indisponible ou plein. Vos changements restent en mémoire.");
-  }, [snapshot, baskets, activeBasketId]);
+    const saved = writeWorkspace(storage, snapshot, baskets, activeBasketId);
+    setStorageStatus(saved ? (local ? "Brouillon sauvegardé dans la base locale." : "Brouillon sauvegardé automatiquement sur ce navigateur.") : "Sauvegarde impossible. Vos changements restent en mémoire.");
+  }, [snapshot, baskets, activeBasketId, storage, local]);
   const savedModels = useMemo(() => baskets.map((basket) => ({ id: basket.id, name: basket.name, weights: basket.snapshot.weights, snapshot: basket.snapshot })), [baskets]);
   const activeBasket = baskets.find((basket) => basket.id === activeBasketId);
   const basketDirty = activeBasket ? JSON.stringify(activeBasket.snapshot) !== JSON.stringify(validateSnapshot(snapshot, allocationModel)) : false;
   function saveBaskets(next, activeId = activeBasketId) {
-    const saved = writeWorkspace(browserStorage, snapshot, next, activeId);
+    const saved = writeWorkspace(storage, snapshot, next, activeId);
     if (!saved) { setStorageStatus("Enregistrement impossible : stockage local indisponible ou plein."); return false; }
     autoSaveEnabled.current = true;
     setBaskets(next); setActiveBasketId(activeId);
-    setStorageStatus("Configuration enregistrée sur ce navigateur.");
+    setStorageStatus(local ? "Configuration enregistrée dans la base locale." : "Configuration enregistrée sur ce navigateur.");
     return true;
   }
   function saveBasket(name, proposedSnapshot = snapshot, activate = true) {
     if (baskets.length >= MAX_BASKETS) { setStorageStatus("La limite de 30 paniers est atteinte. Supprimez un ancien panier ou mettez-le à jour."); return null; }
-    const id = `basket-${crypto.randomUUID()}`;
     const validated = validateSnapshot(proposedSnapshot, allocationModel);
-    if (!validated || !name.trim()) return null;
+    if (!validated || !name.trim()) { setStorageStatus("Panier non enregistré : brouillon ou nom invalide."); return null; }
+    const id = `basket-${crypto.randomUUID()}`;
     const entry = { id, name: name.trim().slice(0, 60), snapshot: validated };
     return saveBaskets([...baskets, entry], activate ? id : activeBasketId) ? id : null;
   }
@@ -527,7 +523,7 @@ export default function PortfolioMvp() {
         <div className="intro-index"><span>01 / 03</span><div className="intro-index-line"/><strong>Un premier aperçu concret</strong><small>Données mensuelles · poids rééquilibrés chaque mois</small></div>
       </section>
       <PortfolioLibrary key={activeBasketId} onCompare={() => setComparisonOpen(true)} baskets={baskets} activeId={activeBasketId} dirty={basketDirty} status={storageStatus} onLoad={loadBasket} onSave={saveBasket} onUpdate={updateBasket} onDelete={deleteBasket} onUndoDelete={undoDeleteBasket} deleted={deletedBasket}/>
-      <section className="migration-entry"><div><strong>Du panier simulé au portefeuille réel</strong><p>Préparez vos prochains achats pour rejoindre votre allocation cible, grâce à vos versements.</p></div><button type="button" className="allocation-button allocation-primary" onClick={() => setMigrationOpen(true)}>Atteindre cette allocation →</button></section>
+      <section className="migration-entry"><div><strong>Du panier simulé au portefeuille réel</strong><p>Préparez vos prochains achats pour rejoindre votre allocation cible, grâce à vos versements.</p></div><button type="button" className="allocation-button allocation-primary" onClick={() => local ? onOpenInvestment() : setMigrationOpen(true)}>Atteindre cette allocation →</button></section>
       <div className="editor-tabs" role="group" aria-label="Zones de composition"><button type="button" aria-pressed={editorView === "catalog"} aria-controls="catalog-panel" onClick={() => setEditorView("catalog")}>Catalogue · {availableEtfs.length}</button><button type="button" aria-pressed={editorView === "basket"} aria-controls="basket-panel" onClick={() => setEditorView("basket")}>Mon panier · {selected.length}</button></div>
       <div className="mvp-layout" data-editor-view={editorView}>
         <aside className="builder-panel catalog-panel" id="catalog-panel" aria-labelledby="catalog-title">
@@ -636,7 +632,7 @@ export default function PortfolioMvp() {
       </div>
       <footer className="mvp-footer"><span>CHAMP LIBRE / PEA</span><p>Outil de simulation. Les performances passées ne préjugent pas des performances futures. Données de VL : {pricesData.source}, extraction du {dateLabel(pricesData.date_extraction)}.</p></footer>
     </main>
-    <MigrationPlanner open={migrationOpen} onClose={() => setMigrationOpen(false)} funds={allocationModel.funds} weights={weights} baskets={baskets}/>
+    {!local && <MigrationPlanner open={migrationOpen} onClose={() => setMigrationOpen(false)} funds={allocationModel.funds} weights={weights} baskets={baskets} storage={storage} local={local}/>}
     <AllocationComparisonDialog open={comparisonOpen} onClose={() => setComparisonOpen(false)} model={allocationModel} items={[{ id: "current", name: "Portefeuille actuel", weights, roles: portraitRoles }, ...savedModels]} period={period} onPeriodChange={setPeriod}/>
     <AllocationWizard portraitRoles={portraitRoles} period={period} onPeriodChange={setPeriod} key={wizardRevision} initialDraft={wizardDraft} onDraftChange={setWizardDraft} models={savedModels} onSaveConfiguration={saveWizardConfiguration} resume={hasBuiltAllocation} saveRequested={saveRequested} model={allocationModel} open={wizardOpen} onClose={() => setWizardOpen(false)} weights={weights} lockedIsins={lockedIsins} onApply={applyAllocation}/>
   </div>;

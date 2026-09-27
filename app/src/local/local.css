@@ -1,0 +1,27 @@
+.local-page { min-height: 100vh; padding: clamp(1rem, 3vw, 3rem); background: #f4f7f3; color: #1c302a; font: 16px/1.5 system-ui, sans-serif; }
+.local-page header { max-width: 75rem; margin: auto auto 1.5rem; }
+.local-page h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; margin: .3rem 0; }
+.local-page h2 { margin: 0 0 .4rem; }
+.local-eyebrow { color: #27735c; font-size: .8rem; font-weight: 700; letter-spacing: .1em; }
+.local-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; max-width: 75rem; margin: auto auto 1.5rem; }
+.local-metrics article, .local-panel { background: white; border: 1px solid #dce6dd; border-radius: .8rem; padding: 1.2rem; }
+.local-metrics span, .local-metrics strong { display: block; }
+.local-metrics strong { font-size: clamp(1.3rem, 3vw, 2rem); }
+.local-date, .local-empty, .local-table-wrap, .local-page details, .local-panel, .local-notice { display: block; max-width: 75rem; margin: 1rem auto; }
+.local-table-wrap { overflow: auto; border-radius: .7rem; background: white; border: 1px solid #dce6dd; }
+.local-page table { width: 100%; border-collapse: collapse; min-width: 790px; }
+.local-page th, .local-page td { padding: .7rem; text-align: left; border-bottom: 1px solid #e4ebe5; }
+.local-page td small, .local-page th small { display: block; color: #587063; font-weight: 400; }
+.local-excluded { background: #fbf9f1; }
+.local-page button { border: 1px solid #216c52; background: #216c52; color: white; border-radius: .4rem; cursor: pointer; padding: .45rem .7rem; }
+.local-page button:hover, .local-page button:focus-visible { background: #134e3a; }
+.local-form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; }
+.local-form label { display: grid; gap: .2rem; font-weight: 600; }
+.local-form input, .local-form select, .local-date select { min-width: 0; padding: .5rem; border: 1px solid #b9c9bf; border-radius: .3rem; font: inherit; }
+.local-form-actions { display: flex; align-items: end; gap: .5rem; }
+.local-notice { padding: .6rem; border-left: .25rem solid #216c52; background: #e6f1e9; }
+.local-preview { margin-top: 1rem; padding: 1rem; background: #eef5ed; }
+.local-wide-label { display: grid; gap: .2rem; max-width: 75rem; margin: 1rem 0; font-weight: 600; }
+.local-wide-label textarea { min-height: 9rem; padding: .7rem; font: inherit; border: 1px solid #b9c9bf; border-radius: .3rem; }
+.local-page button:disabled { opacity: .5; cursor: not-allowed; }
+@media (max-width: 750px) { .local-metrics, .local-form { grid-template-columns: 1fr; } }

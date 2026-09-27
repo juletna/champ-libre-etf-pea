@@ -9,3 +9,8 @@ html, body, #root {
 body {
   background: #0E141C;
 }
+.local-tools { display: flex; flex-wrap: wrap; gap: .5rem; padding: .6rem 1rem; background: #172a27; color: white; }
+.local-tools button { cursor: pointer; border: 1px solid #8bbcb0; border-radius: .4rem; padding: .4rem .7rem; background: transparent; color: inherit; }
+.local-tools button:hover, .local-tools button:focus-visible { background: #285047; }
+.local-tools button[aria-current="page"] { background: #347b60; }
+.local-message { margin: .5rem 1rem; padding: .5rem; color: #8b2424; background: #fff0ed; }

@@ -5,7 +5,6 @@ import './migration.css';
 const euro = (n) => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(n);
 const percent = (n) => `${new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 1 }).format(n)} %`;
 const today = () => new Date().toLocaleDateString('en-CA');
-const storage = { getItem: (key) => window.localStorage.getItem(key), setItem: (key, value) => window.localStorage.setItem(key, value) };
 
 function Amount({ label, value, onChange, ...props }) {
   return <label>{label}<input type="number" inputMode="decimal" min="0" max="10000000000" step="0.01" placeholder="0,00" value={value} onChange={(e) => {
@@ -32,7 +31,7 @@ function PurchaseReceipt({ data, plan, funds, onRecord, onCancel }) {
   </form>;
 }
 
-export default function MigrationPlanner({ open, onClose, funds, weights, baskets }) {
+export default function MigrationPlanner({ open, onClose, funds, weights, baskets, storage = window.localStorage, local = false }) {
   const dialog = useRef(null);
   const [initial] = useState(() => readMigration(storage, funds));
   const [data, setData] = useState(initial.data);
@@ -60,7 +59,7 @@ export default function MigrationPlanner({ open, onClose, funds, weights, basket
   useEffect(() => {
     if (initial.error) return;
     setSaveError(writeMigration(storage, data) ? '' : 'Sauvegarde impossible. Vos changements restent en mémoire tant que cette page reste ouverte.');
-  }, [data, initial.error]);
+  }, [data, initial.error, storage]);
 
   function update(patch) { setData((old) => ({ ...old, ...patch })); setReceiptOpen(false); setUndo(null); setMessage(''); }
   function updateHolding(id, value) { update({ holdings: { ...data.holdings, [id]: value }, updatedAt: today() }); }
@@ -74,7 +73,7 @@ export default function MigrationPlanner({ open, onClose, funds, weights, basket
   return <dialog ref={dialog} className="migration-dialog" aria-labelledby="migration-title" onCancel={onClose} onClose={onClose}>
     <header className="migration-header"><div><span className="card-kicker">DU PANIER À VOS PROCHAINS ACHATS</span><h2 id="migration-title">Atteindre mon allocation</h2><p>Faites évoluer votre portefeuille réel grâce à vos versements, sans vendre.</p></div><button type="button" autoFocus className="allocation-button" onClick={onClose} aria-label="Fermer le plan d’achats">Fermer ×</button></header>
     <div className="migration-body">
-      <p className={saveError ? 'migration-warning' : 'migration-local'} role="status">{saveError || 'Sauvegarde locale sur ce navigateur · Saisie manuelle · Aucun ordre transmis'}</p>
+      <p className={saveError ? 'migration-warning' : 'migration-local'} role="status">{saveError || (local ? 'Sauvegarde dans la base locale · Aucun ordre transmis' : 'Sauvegarde locale sur ce navigateur · Saisie manuelle · Aucun ordre transmis')}</p>
       <div className="migration-setup">
         <section className="migration-card"><span className="card-kicker">01 — POINT DE DÉPART</span><h3>Mon portefeuille réel</h3><p>Saisissez la valeur actuelle de vos lignes, hors liquidités.</p>
           {!Object.keys(data.holdings).length && <div className="migration-empty">Ajoutez votre premier ETF pour partir de ce que vous détenez déjà. Vous pouvez aussi démarrer avec un portefeuille vide.</div>}

@@ -1,5 +1,7 @@
 # Champ libre — prototype portefeuille ETF PEA
 
+**Deux modes :** le site statique garde le simulateur public et son stockage navigateur ; `../run-local.sh` et le serveur Python ouvrent l’application privée Patrimoine + ETF avec SQLite. Les sections historiques ci-dessous décrivent surtout le simulateur public. Pour import, budget, PEA et sauvegardes de l’application locale, voir le [README racine](../README.md).
+
 Tableau de bord local pour composer un portefeuille virtuel, visualiser ses expositions géographiques et sectorielles et son rendement historique mensuel, puis planifier les achats permettant de rapprocher son portefeuille réel d’une allocation cible.
 
 **[Ouvrir l'outil en ligne](https://juletna.github.io/champ-libre-etf-pea/)**

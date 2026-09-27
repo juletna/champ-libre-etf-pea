@@ -8,3 +8,7 @@ __pycache__/
 !.env.example
 app/node_modules/
 app/dist/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+champ-libre-*.csv

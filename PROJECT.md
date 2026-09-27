@@ -1,5 +1,13 @@
 # Champ libre — guide de reprise du projet
 
+## Migration locale en cours (septembre 2026)
+
+Le serveur `local_server.py` crée une base SQLite versionnée hors dépôt, sert `app/dist`, contrôle les écritures locales et expose l’export/sauvegarde/restauration. `local_data.py`, `local_pea.py` et `local_budget.py` portent les modèles et calculs ; `app/src/local/` les interfaces. L’ancienne saisie de portefeuille dans `MigrationPlanner.jsx` reste réservée au site statique ; en local, le plan lit le PEA et le budget et recommande un nouveau relevé pour actualiser le réel. Les simulations de portefeuille et les données réelles ne se confondent pas. Exécuter les tests Python `python3 -m unittest -q test_local_server.py test_local_data.py test_local_pea.py test_local_budget.py` et, dans `app/`, `npm test`, `npm run lint`, `npm run build`.
+
+Le build statique utilise `base: './'`. Sans API locale, la navigation privée ne s’affiche pas et le stockage reste dans le navigateur. Un push sur `main` publie automatiquement le site statique ; la migration locale est poussée avec l’accord du propriétaire. Aucune licence de code n’est présente dans ce dépôt. Les [mentions Fortuneo](https://www.fortuneo.fr/mentions-legales-avertissement-legal) restreignent la redistribution de leurs informations ; les [mentions Amundi](https://www.amundietf.fr/fr/particuliers/mentions-legales) et les droits des fournisseurs d’indices/données doivent être examinés avant une diffusion élargie. Les [données statistiques BCE](https://www.ecb.europa.eu/stats/ecb_statistics/governance_and_quality_framework/html/usage_policy.en.html) sont réutilisables sous conditions d’attribution et de fidélité ; les conversions calculées doivent être signalées. Une décision de droits et licence reste nécessaire avant toute publication open source formelle. Ne pas ajouter une licence sans décision du propriétaire.
+
+Archivage de Patrimoine après recette seulement : inventorier `patrimoine.csv`, `amortissement.csv`, `credit.json` et sauvegardes locales éventuelles ; exporter une sauvegarde SQLite vérifiée ; comparer les totaux, le crédit et l’historique à dates identiques ; conserver les originaux et une copie indépendante avant de décider séparément d’un archivage. Ne supprimer aucun fichier source dans cette migration.
+
 Ce document décrit l'état du dépôt pour toute personne ou tout outil qui reprend le travail. Il complète les README et ne dépend d'aucun assistant particulier.
 
 ## Objectif et périmètre
@@ -18,7 +26,7 @@ npm ci
 npm run dev
 ```
 
-Vite affiche l'adresse locale ; le chemin configuré est `/champ-libre-etf-pea/`. Avant de publier :
+Vite affiche l'adresse locale ; le build utilise des chemins relatifs (`base: './'`) pour fonctionner sur le site statique et le serveur local. Avant toute publication autorisée :
 
 ```bash
 cd app
