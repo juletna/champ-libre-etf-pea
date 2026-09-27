@@ -4,7 +4,7 @@ Ce document décrit l'état du dépôt pour toute personne ou tout outil qui rep
 
 ## Objectif et périmètre
 
-L'application permet de composer un portefeuille **virtuel** d'ETF PEA de l'offre Fortuneo Amundi, puis d'observer son rendement mensuel simulé et ses expositions par pays, zone et secteur. Elle sert à explorer des allocations, sans passer d'ordre. Les 54 ETF du catalogue relevé le 26 septembre 2026 sont sélectionnables et disposent d'un historique mensuel ; 51 ont aussi une composition issue d'un reporting Amundi daté.
+L'application permet de composer un portefeuille **virtuel** d'ETF PEA de l'offre Fortuneo Amundi, puis d'observer son rendement mensuel simulé et ses expositions par pays, zone et secteur. Elle sert à explorer des allocations et à préparer des achats sans vente à partir d’un portefeuille réel saisi manuellement, sans passer d’ordre. Les 54 ETF du catalogue relevé le 26 septembre 2026 sont sélectionnables et disposent d'un historique mensuel ; 51 ont aussi une composition issue d'un reporting Amundi daté.
 
 Site publié : <https://juletna.github.io/champ-libre-etf-pea/>. Un push sur `main` déclenche le workflow GitHub Pages dans `.github/workflows/pages.yml`.
 
@@ -27,7 +27,7 @@ npm run lint
 npm run build
 ```
 
-Les calculs du constructeur disposent de tests automatisés (`npm test`) ; le parcours historique reste à vérifier dans le navigateur. Vérifier dans le navigateur le choix de période, l'ajout et le retrait d'ETF, un poids à 0 %, les verrouillages, les yeux des courbes, le bouton global et les vues Pays/Zones. Contrôler que le rendement, sa période et les contributions des cartes changent ensemble.
+Les calculs du constructeur, les sauvegardes locales et le plan de migration disposent de tests automatisés (`npm test`) ; le parcours historique reste à vérifier dans le navigateur. Vérifier dans le navigateur le choix de période, l'ajout et le retrait d'ETF, un poids à 0 %, les verrouillages, les yeux des courbes, le bouton global et les vues Pays/Zones. Contrôler que le rendement, sa période et les contributions des cartes changent ensemble.
 
 ## Carte du dépôt
 
@@ -41,6 +41,8 @@ Les calculs du constructeur disposent de tests automatisés (`npm test`) ; le pa
 | `app/src/allocation/geography.js` | Classement des pays en zones et exemples de pays affichés dans l’assistant. |
 | `app/src/portfolio/storage.js` | Validation, migration et sauvegarde du brouillon et des paniers locaux. |
 | `app/src/portfolio/PortfolioLibrary.jsx` et `workspace.css` | Bibliothèque de paniers et panneaux catalogue/panier à défilements distincts. |
+| `app/src/migration/MigrationPlanner.jsx` et `migration.css` | Saisie du portefeuille réel, cible mémorisée, plan d’achats et enregistrement des opérations. |
+| `app/src/migration/engine.js` et `engine.test.js` | Achats sans vente, apport minimum, parts entières, validation du stockage séparé et tests. |
 | `app/src/data/mvp-profiles.json` | 51 profils analysables : ISIN, pays, secteurs, date et URL du reporting Amundi. |
 | `audit_amundi_compositions.py` et `COMPOSITIONS.md` | Audit des reportings et méthode de validation des répartitions. |
 | `app/src/data/mvp-prices.json` | VL ajustées mensuelles en EUR des 54 ETF, source, méthode et date d'extraction. |
@@ -95,3 +97,9 @@ Points de non-régression pour l’assistant :
 - Un nom vide ne crée pas de panier. Un nom renseigné enregistre une copie avant l’application ; un échec de stockage ou la limite de 30 paniers laisse le dialogue ouvert et le portefeuille inchangé. La bibliothèque doit sélectionner le panier nouvellement enregistré.
 - Ajouter ou retirer une allocation de la comparaison peut changer les dates communes et tous les rendements affichés. Un ETF de poids nul ne raccourcit pas la période. Une absence d’historique doit produire une indisponibilité, jamais un rendement inventé.
 - Sur mobile, vérifier la fermeture du dialogue, le champ de nom et le bouton d’application, ainsi que le défilement du tableau jusqu’aux dernières colonnes et aux secteurs. Le document ne doit pas déborder horizontalement.
+
+## Migration vers le portefeuille réel
+
+`app/src/migration/MigrationPlanner.jsx` fournit le dialogue accessible depuis le bouton Atteindre cette allocation. `engine.js` isole la projection des achats sans vente, les arrondis, l’apport minimum, l’enregistrement des opérations et le stockage versionné séparé (`champ-libre.migration.v1`). `engine.test.js` couvre le scénario 90 € Monde / cible 90–5–5, les budgets insuffisants, les liquidités, les positions exclues, les parts entières, les frais, la conservation des centimes, les sauvegardes invalides et une comparaison exhaustive de petits budgets.
+
+Vérifier : saisie du portefeuille réel → choix du panier courant ou enregistré → mémorisation de la cible → versement → comparaison avant/après → prix datés et parts entières → enregistrement réel corrigé → annulation → rechargement. La cible ne suit pas les modifications ultérieures du simulateur. La saisie des prix, des valorisations et des opérations reste manuelle. La méthode d’arrondi par enveloppe ne garantit pas l’optimum entier global ; le reliquat reste liquide.

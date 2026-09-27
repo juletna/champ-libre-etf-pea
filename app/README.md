@@ -1,6 +1,6 @@
 # Champ libre — prototype portefeuille ETF PEA
 
-Tableau de bord local pour composer un portefeuille virtuel et visualiser ses expositions géographiques et sectorielles, ainsi que son rendement historique mensuel.
+Tableau de bord local pour composer un portefeuille virtuel, visualiser ses expositions géographiques et sectorielles et son rendement historique mensuel, puis planifier les achats permettant de rapprocher son portefeuille réel d’une allocation cible.
 
 **[Ouvrir l'outil en ligne](https://juletna.github.io/champ-libre-etf-pea/)**
 
@@ -85,3 +85,17 @@ Les données sont validées au chargement : identifiants obsolètes écartés, p
 Tous les ETF utilisent le **nom officiel du catalogue Fortuneo**, jusque dans le constructeur, les légendes et les sources. Les libellés explicatifs restent des métadonnées (indice, catégorie). La recherche accepte aussi les anciens noms courts. Un ETF ajouté est mis en évidence et révélé dans le panneau du panier, sans déplacer le catalogue.
 
 Sur grand écran, le catalogue et le panier disposent de panneaux et de défilements distincts, pour ajouter un ETF puis régler son poids sans aller et venir dans la page. Sur mobile, les onglets **Catalogue** et **Mon panier** permettent de basculer entre les deux. Dans l’assistant, les actions restent accessibles au bas du dialogue ; le tableau de comparaison défile horizontalement pour montrer les autres allocations.
+
+## Planifier les prochains achats
+
+**Atteindre cette allocation**, sous Mes paniers, ouvre le portefeuille réel : saisie des valeurs actuelles par ETF et des liquidités, choix du panier simulé ou d’un panier enregistré comme cible, puis saisie du prochain versement. La cible est copiée explicitement et reste indépendante des modifications du simulateur. Les poids non alloués deviennent une cible de liquidités ; un fonds court terme reste une position ETF.
+
+Par exemple, avec 90 € de Monde, une cible de 90 % Monde / 5 % banques / 5 % ressources et un versement de 10 €, le plan théorique propose 5 € de banques et 5 € de ressources. Le portefeuille atteint alors 100 € répartis selon la cible.
+
+Le plan sans vente compare les valeurs et poids avant/après. Le moteur répartit les liquidités et le versement en minimisant la somme des écarts au carré à la cible, puis distribue les centimes restants. Il affiche également l’apport minimum théorique à valorisations constantes, hors frais et arrondis. Une position détenue absente de la cible empêche de l’atteindre exactement par des apports seuls.
+
+Le mode **Parts entières** utilise uniquement des prix en euros datés saisis par l’utilisateur, et des frais fixes par achat. Chaque enveloppe théorique est arrondie à la part inférieure après frais ; le reliquat reste en liquidités. Cette méthode prudente ne recherche pas l’optimum entier global et ne réaffecte pas les reliquats. Les historiques mensuels ne sont pas utilisés comme prix d’exécution.
+
+**Enregistrer mes achats réalisés** ouvre un formulaire pour corriger les montants, le versement et les frais effectivement réalisés. Un dépassement du disponible bloque l’enregistrement. Les montants achetés hors frais augmentent les valorisations saisies, le reliquat devient le solde en liquidités et le versement prévu revient à zéro. Une annulation est disponible jusqu’à la prochaine modification. Il faut réactualiser les valeurs de marché manuellement ; aucun ordre n’est envoyé.
+
+Le portefeuille réel, la cible et les paramètres sont conservés séparément sous `champ-libre.migration.v1`. Les données illisibles ou incompatibles restent intactes et désactivent l’écriture automatique ; les erreurs de stockage sont signalées. Aucun compte courtier ni cours en direct n’est connecté. Les tests du moteur et du stockage de migration font partie de `npm test`.

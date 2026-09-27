@@ -12,6 +12,7 @@ import AllocationWizard from "./allocation/AllocationWizard";
 import { AllocationComparisonDialog } from "./allocation/AllocationComparison";
 import { createAllocationModel } from "./allocation/engine";
 import PortfolioLibrary from "./portfolio/PortfolioLibrary";
+import MigrationPlanner from "./migration/MigrationPlanner";
 import { MAX_BASKETS, readWorkspace, writeWorkspace, validateSnapshot } from "./portfolio/storage";
 import "./portfolio/workspace.css";
 
@@ -326,6 +327,7 @@ export default function PortfolioMvp() {
   const basketScrollRef = useRef(null);
   const [wizardOpen, setWizardOpen] = useState(false);
   const [comparisonOpen, setComparisonOpen] = useState(false);
+  const [migrationOpen, setMigrationOpen] = useState(false);
   const [saveRequested, setSaveRequested] = useState(false);
   const [previousAllocation, setPreviousAllocation] = useState(null);
   const [hasBuiltAllocation, setHasBuiltAllocation] = useState(initial.hasBuiltAllocation);
@@ -520,6 +522,7 @@ export default function PortfolioMvp() {
         <div className="intro-index"><span>01 / 03</span><div className="intro-index-line"/><strong>Un premier aperçu concret</strong><small>Données mensuelles · poids rééquilibrés chaque mois</small></div>
       </section>
       <PortfolioLibrary key={activeBasketId} onCompare={() => setComparisonOpen(true)} baskets={baskets} activeId={activeBasketId} dirty={basketDirty} status={storageStatus} onLoad={loadBasket} onSave={saveBasket} onUpdate={updateBasket} onDelete={deleteBasket} onUndoDelete={undoDeleteBasket} deleted={deletedBasket}/>
+      <section className="migration-entry"><div><strong>Du panier simulé au portefeuille réel</strong><p>Préparez vos prochains achats pour rejoindre votre allocation cible, grâce à vos versements.</p></div><button type="button" className="allocation-button allocation-primary" onClick={() => setMigrationOpen(true)}>Atteindre cette allocation →</button></section>
       <div className="editor-tabs" role="group" aria-label="Zones de composition"><button type="button" aria-pressed={editorView === "catalog"} aria-controls="catalog-panel" onClick={() => setEditorView("catalog")}>Catalogue · {availableEtfs.length}</button><button type="button" aria-pressed={editorView === "basket"} aria-controls="basket-panel" onClick={() => setEditorView("basket")}>Mon panier · {selected.length}</button></div>
       <div className="mvp-layout" data-editor-view={editorView}>
         <aside className="builder-panel catalog-panel" id="catalog-panel" aria-labelledby="catalog-title">
@@ -627,6 +630,7 @@ export default function PortfolioMvp() {
       </div>
       <footer className="mvp-footer"><span>CHAMP LIBRE / PEA</span><p>Outil de simulation. Les performances passées ne préjugent pas des performances futures. Données de VL : {pricesData.source}, extraction du {dateLabel(pricesData.date_extraction)}.</p></footer>
     </main>
+    <MigrationPlanner open={migrationOpen} onClose={() => setMigrationOpen(false)} funds={allocationModel.funds} weights={weights} baskets={baskets}/>
     <AllocationComparisonDialog open={comparisonOpen} onClose={() => setComparisonOpen(false)} model={allocationModel} items={[{ id: "current", name: "Portefeuille actuel", weights }, ...savedModels]} period={period} onPeriodChange={setPeriod}/>
     <AllocationWizard period={period} onPeriodChange={setPeriod} key={wizardRevision} initialDraft={wizardDraft} onDraftChange={setWizardDraft} models={savedModels} onSaveConfiguration={saveWizardConfiguration} resume={hasBuiltAllocation} saveRequested={saveRequested} model={allocationModel} open={wizardOpen} onClose={() => setWizardOpen(false)} weights={weights} lockedIsins={lockedIsins} onApply={applyAllocation}/>
   </div>;
