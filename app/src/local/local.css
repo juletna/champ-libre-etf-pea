@@ -103,3 +103,5 @@
   .household-meta { flex-wrap: wrap; }
   .household-extra-grid { grid-template-columns: 1fr; }
 }
+.local-import-actions{display:flex;gap:10px;flex-wrap:wrap}
+.local-import-hint{font-size:.9rem;color:#52675d}
