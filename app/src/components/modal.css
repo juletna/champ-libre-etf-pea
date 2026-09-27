@@ -1,0 +1,27 @@
+.app-modal { width: min(560px, calc(100vw - 32px)); max-width: none; max-height: calc(100dvh - 32px); padding: 0; border: 1px solid #dce6dd; border-radius: 14px; background: #fff; color: #1c302a; box-shadow: 0 24px 80px #102d224d; overflow: auto; font: 16px/1.5 system-ui, sans-serif; }
+.app-modal-wide { width: min(860px, calc(100vw - 32px)); }
+.app-modal::backdrop { background: #102d22ad; }
+.app-modal-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 20px 24px 12px; border-bottom: 1px solid #e4ebe5; }
+.app-modal-header h2 { margin: 0; font-size: 1.4rem; }
+.app-modal-close { border: 0; background: transparent; color: #426452; font-size: 1.8rem; line-height: 1; cursor: pointer; }
+.app-modal form, .app-modal-content { padding: 20px 24px 24px; }
+.app-modal .app-modal-inner-form { padding: 0; }
+.app-modal-alternative { border-top: 1px solid #e4ebe5; margin-top: 24px; padding-top: 16px; }
+.app-wizard-steps { display: flex; gap: 8px; list-style: none; padding: 0; margin: 0 0 20px; }
+.app-wizard-steps li { flex: 1; min-width: 0; padding: 8px; border-bottom: 3px solid #dce6dd; color: #63776a; font-size: .85rem; font-weight: 600; }
+.app-wizard-steps li[aria-current="step"] { border-color: #216c52; color: #216c52; }
+.app-wizard-steps span { font-weight: 800; }
+.app-modal p:first-child { margin-top: 0; }
+.library-modal-label { display: grid; gap: 6px; font-weight: 600; }
+.app-modal .local-form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.app-modal .local-form label { min-width: 0; }
+.app-modal .local-form input, .app-modal .local-form select, .app-modal textarea, .app-modal input, .app-modal select { font: inherit; }
+.app-modal-actions { display: flex; justify-content: flex-end; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.app-modal button { border: 1px solid #216c52; background: #216c52; color: #fff; border-radius: 6px; cursor: pointer; padding: 9px 13px; font: inherit; }
+.app-modal button:hover:not(:disabled) { background: #134e3a; }
+.app-modal button.app-modal-secondary, .app-modal button.app-modal-close { border-color: #d1dfd3; background: #fff; color: #28543b; }
+.app-modal button.app-modal-close { border: 0; padding: 0 4px; }
+.app-modal button:disabled { opacity: .5; cursor: not-allowed; }
+.app-modal :focus-visible { outline: 3px solid #72a583; outline-offset: 2px; }
+.app-modal-error { color: #a33424; margin: 12px 0 0; }
+@media (max-width: 600px) { .app-modal, .app-modal-wide { width: 100%; height: 100dvh; max-height: 100dvh; border: 0; border-radius: 0; } .app-modal .local-form { grid-template-columns: 1fr; } }

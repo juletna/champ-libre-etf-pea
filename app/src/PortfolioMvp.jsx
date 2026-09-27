@@ -397,7 +397,7 @@ export default function PortfolioMvp({ storage, local = false, onOpenInvestment 
     setActiveBasketId(basket.id); setPreviousAllocation(null);
   }
   function updateBasket(id, name) {
-    saveBaskets(baskets.map((basket) => basket.id === id ? { ...basket, name: name.slice(0, 60), snapshot: validateSnapshot(snapshot, allocationModel) } : basket));
+    return saveBaskets(baskets.map((basket) => basket.id === id ? { ...basket, name: name.slice(0, 60), snapshot: validateSnapshot(snapshot, allocationModel) } : basket));
   }
   function deleteBasket(id) {
     const entry = baskets.find((basket) => basket.id === id);
