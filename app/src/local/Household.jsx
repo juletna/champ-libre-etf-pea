@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { request } from './bridge.js';
 import './local.css';
 
@@ -45,6 +45,7 @@ export default function Household({ openPea }) {
   const [selectedDay, setSelectedDay] = useState('');
   const [rows, setRows] = useState([]);
   const [savedRows, setSavedRows] = useState([]);
+  const [expandedRows, setExpandedRows] = useState(new Set());
   const [saving, setSaving] = useState(false);
   const [files, setFiles] = useState({ patrimoine: null, schedule: null, credit: null });
   const [pending, setPending] = useState(null);
@@ -64,6 +65,7 @@ export default function Household({ openPea }) {
     setSelectedDay(result.snapshot.day);
     setRows(loaded);
     setSavedRows(loaded.map((row) => ({ ...row })));
+    setExpandedRows(new Set());
   }
   useEffect(() => { refresh().catch((error) => setMessage(error.message)); }, []);
   useEffect(() => {
@@ -87,7 +89,7 @@ export default function Household({ openPea }) {
     const row = newDraft(selectedDay || today());
     setRows((previous) => [...previous, row]);
     setTimeout(() => {
-      const last = editorRef.current?.querySelector('tbody tr:last-child');
+      const last = [...(editorRef.current?.querySelectorAll('tbody tr[data-row-key]') || [])].at(-1);
       last?.querySelector(`[data-field="${focusField}"]`)?.focus();
     }, 0);
   }
@@ -96,6 +98,14 @@ export default function Household({ openPea }) {
     setRows((previous) => original
       ? previous.map((entry) => entry.key === row.key ? { ...original } : entry)
       : previous.filter((entry) => entry.key !== row.key));
+  }
+  function toggleDetails(key) {
+    setExpandedRows((previous) => {
+      const next = new Set(previous);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
   }
   function nextCell(event, row, field) {
     if (!field || event.key !== 'Enter' || event.target.tagName === 'SELECT') return;
@@ -161,26 +171,30 @@ export default function Household({ openPea }) {
       <form className="household-editor" onSubmit={saveAll} ref={editorRef}>
         <div className="household-toolbar"><div className="household-view-name"><span aria-hidden="true">▦</span> Tous les postes <span className="household-count">{rows.length}</span></div><div className="household-actions"><button type="button" className="household-secondary" disabled={!dirty || saving} onClick={() => { setRows(savedRows.map((row) => ({ ...row }))); setMessage('Modifications annulées.'); }}>Annuler</button><button type="submit" disabled={!dirty || saving}>{saving ? 'Enregistrement…' : `Enregistrer${dirty ? ` (${changed.length})` : ''}`}</button></div></div>
         <p className="household-meta"><span className={`household-dot${dirty ? ' dirty' : ''}`} aria-hidden="true"/>{dirty ? 'Modifications non enregistrées' : 'Modifiez les cellules directement, puis enregistrez.'} <span>·</span> SQLite locale</p>
-        <div className="local-table-wrap household-table-wrap" role="region" tabIndex="0" aria-label="Tableau de saisie du patrimoine">
-          <table><thead><tr><th>Date du relevé</th><th>Type</th><th>Catégorie</th><th>Compte ou bien</th><th>Valeur</th><th>Échéancier</th><th>Propriété</th><th>Statut</th><th>Usage</th><th>Actif détenu</th><th>Enveloppe</th><th>Vérifié le</th><th></th></tr></thead><tbody>
-            {!rows.length && <tr><td colSpan="13" className="household-empty">Aucun poste. Ajoutez une ligne ou importez l’ancien Patrimoine.</td></tr>}
+        <div className="local-table-wrap household-table-wrap" role="region" aria-label="Tableau de saisie du patrimoine">
+          <table><thead><tr><th>Date du relevé</th><th>Type</th><th>Catégorie</th><th>Compte ou bien</th><th>Valeur</th><th>Propriété</th><th>Vérifié le</th><th>Actions</th></tr></thead><tbody>
+            {!rows.length && <tr><td colSpan="8" className="household-empty">Aucun poste. Ajoutez une ligne ou importez l’ancien Patrimoine.</td></tr>}
             {rows.map((row) => row.managedPea
-              ? <tr key={row.key} className="household-managed"><td>{row.day}</td><td>{labelOf('kind', row.kind)}</td><td>{row.category}</td><td>{row.label}</td><td className="household-number">{euro(row.displayValue)}</td><td>—</td><td>{labelOf('owner', row.owner)}</td><td>{labelOf('status', row.status)}</td><td>{labelOf('usage', row.usage)}</td><td>{labelOf('asset_class', row.asset_class)}</td><td>PEA</td><td>{row.verified_on}</td><td><button type="button" className="household-secondary" onClick={openPea}>Mon PEA</button></td></tr>
-              : <tr key={row.key} data-row-key={row.key} className={row.status === 'previsionnel' || row.owner === 'enfants' ? 'local-excluded' : undefined} onKeyDown={(event) => nextCell(event, row, event.target.dataset.field)}>
-                <td><input data-field="day" aria-label="Date du relevé" type="date" required value={row.day} onChange={(event) => change(row.key, 'day', event.target.value)}/></td>
-                <td><Choice row={row} field="kind" change={change}/></td>
-                <td><input data-field="category" aria-label="Catégorie" list="household-categories" required maxLength="80" placeholder="Catégorie" value={row.category} onChange={(event) => change(row.key, 'category', event.target.value)}/></td>
-                <td><input data-field="label" aria-label="Compte ou bien" required maxLength="80" placeholder="Nom du poste" value={row.label} onChange={(event) => change(row.key, 'label', event.target.value)}/></td>
-                <td><input data-field="value_eur" aria-label="Valeur en euros" type="number" min="0" step="0.01" required={!row.schedule_id} disabled={!!row.schedule_id} placeholder={row.schedule_id ? 'Calculé' : '0,00'} value={row.value_eur} onChange={(event) => change(row.key, 'value_eur', event.target.value)}/>{row.schedule_id && <small>{euro(row.displayValue)}</small>}</td>
-                <td><select data-field="schedule_id" aria-label="Échéancier" value={row.schedule_id} disabled={row.kind !== 'passif'} onChange={(event) => change(row.key, 'schedule_id', event.target.value)}><option value="">Aucun · valeur manuelle</option>{data.schedules.map((schedule) => <option key={schedule.id} value={schedule.id}>{schedule.label}</option>)}</select></td>
-                <td><Choice row={row} field="owner" change={change}/></td>
-                <td><Choice row={row} field="status" change={change}/></td>
-                <td><Choice row={row} field="usage" change={change}/></td>
-                <td><Choice row={row} field="asset_class" change={change}/></td>
-                <td><select data-field="account_id" aria-label="Compte ou enveloppe" value={row.account_id} onChange={(event) => change(row.key, 'account_id', event.target.value)}><option value="">Non précisé</option>{accounts.map((account) => <option key={account.id} value={account.id}>{account.label} · {account.envelope}</option>)}</select></td>
-                <td><input data-field="verified_on" aria-label="Vérifié le" type="date" required value={row.verified_on} onChange={(event) => change(row.key, 'verified_on', event.target.value)}/></td>
-                <td><button type="button" className="household-row-reset" onClick={() => resetRow(row)} disabled={!!savedByKey.get(row.key) && same(row, savedByKey.get(row.key))} title={savedByKey.has(row.key) ? 'Annuler les changements de cette ligne' : 'Retirer cette nouvelle ligne'} aria-label={savedByKey.has(row.key) ? `Annuler les changements de ${row.label}` : 'Retirer cette nouvelle ligne'}>{savedByKey.has(row.key) ? '↶' : '×'}</button></td>
-              </tr>)}
+              ? <tr key={row.key} className="household-managed"><td data-label="Date du relevé">{row.day}</td><td data-label="Type">{labelOf('kind', row.kind)}</td><td data-label="Catégorie">{row.category}</td><td data-label="Compte ou bien">{row.label}</td><td data-label="Valeur" className="household-number">{euro(row.displayValue)}</td><td data-label="Propriété">{labelOf('owner', row.owner)}</td><td data-label="Vérifié le">{row.verified_on}</td><td data-label="Actions"><button type="button" className="household-secondary" onClick={openPea}>Mon PEA</button></td></tr>
+              : <Fragment key={row.key}>
+                <tr data-row-key={row.key} className={row.status === 'previsionnel' || row.owner === 'enfants' ? 'local-excluded' : undefined} onKeyDown={(event) => nextCell(event, row, event.target.dataset.field)}>
+                  <td data-label="Date du relevé"><input data-field="day" aria-label="Date du relevé" type="date" required value={row.day} onChange={(event) => change(row.key, 'day', event.target.value)}/></td>
+                  <td data-label="Type"><Choice row={row} field="kind" change={change}/></td>
+                  <td data-label="Catégorie"><input data-field="category" aria-label="Catégorie" list="household-categories" required maxLength="80" placeholder="Catégorie" value={row.category} onChange={(event) => change(row.key, 'category', event.target.value)}/></td>
+                  <td data-label="Compte ou bien"><input data-field="label" aria-label="Compte ou bien" required maxLength="80" placeholder="Nom du poste" value={row.label} onChange={(event) => change(row.key, 'label', event.target.value)}/>{row.status === 'previsionnel' && <small>Prévisionnel · hors totaux</small>}{row.owner === 'enfants' && <small>Enfants · hors totaux</small>}</td>
+                  <td data-label="Valeur"><input data-field="value_eur" aria-label="Valeur en euros" type="number" min="0" step="0.01" required={!row.schedule_id} disabled={!!row.schedule_id} placeholder={row.schedule_id ? 'Calculé' : '0,00'} value={row.value_eur} onChange={(event) => change(row.key, 'value_eur', event.target.value)}/>{row.schedule_id && <small>{euro(row.displayValue)}</small>}</td>
+                  <td data-label="Propriété"><Choice row={row} field="owner" change={change}/></td>
+                  <td data-label="Vérifié le"><input data-field="verified_on" aria-label="Vérifié le" type="date" required value={row.verified_on} onChange={(event) => change(row.key, 'verified_on', event.target.value)}/></td>
+                  <td data-label="Actions" className="household-row-actions"><button type="button" className="household-more" aria-expanded={expandedRows.has(row.key)} aria-label={`${expandedRows.has(row.key) ? 'Masquer' : 'Afficher'} les autres champs de ${row.label || 'cette ligne'}`} onClick={() => toggleDetails(row.key)}>{expandedRows.has(row.key) ? '−' : '＋'} Champs</button><button type="button" className="household-row-reset" onClick={() => resetRow(row)} disabled={!!savedByKey.get(row.key) && same(row, savedByKey.get(row.key))} title={savedByKey.has(row.key) ? 'Annuler les changements de cette ligne' : 'Retirer cette nouvelle ligne'} aria-label={savedByKey.has(row.key) ? `Annuler les changements de ${row.label}` : 'Retirer cette nouvelle ligne'}>{savedByKey.has(row.key) ? '↶' : '×'}</button></td>
+                </tr>
+                {expandedRows.has(row.key) && <tr className="household-extra-row"><td colSpan="8"><div className="household-extra-grid">
+                  <label>Échéancier<select data-field="schedule_id" aria-label="Échéancier" value={row.schedule_id} disabled={row.kind !== 'passif'} onChange={(event) => change(row.key, 'schedule_id', event.target.value)}><option value="">Aucun · valeur manuelle</option>{data.schedules.map((schedule) => <option key={schedule.id} value={schedule.id}>{schedule.label}</option>)}</select></label>
+                  <label>Statut<Choice row={row} field="status" change={change}/></label>
+                  <label>Usage<Choice row={row} field="usage" change={change}/></label>
+                  <label>Actif détenu<Choice row={row} field="asset_class" change={change}/></label>
+                  <label>Compte ou enveloppe<select data-field="account_id" aria-label="Compte ou enveloppe" value={row.account_id} onChange={(event) => change(row.key, 'account_id', event.target.value)}><option value="">Non précisé</option>{accounts.map((account) => <option key={account.id} value={account.id}>{account.label} · {account.envelope}</option>)}</select></label>
+                </div></td></tr>}
+              </Fragment>)}
           </tbody></table>
           <datalist id="household-categories">{categories.map((category) => <option key={category} value={category}/>)}</datalist>
           <button type="button" className="household-add-row" onClick={() => addRow()}>＋ Nouvelle ligne</button>
