@@ -6,7 +6,7 @@ Outil de simulation d'un portefeuille d'ETF éligibles au PEA et de planificatio
 
 ## Application locale Patrimoine + ETF
 
-Après `cd app && npm ci && npm run build`, revenir à la racine puis lancer `./run-local.sh` sur macOS/Linux, `run-local.command` sur macOS, ou `run-local.cmd` sous Windows. Python 3.9+ et une interface compilée sont requis ; Node sert uniquement à compiler les sources. Le serveur n’écoute que `127.0.0.1:8765` et ouvre la page locale. `--data-dir CHEMIN` choisit un autre répertoire de données, `--port N` un autre port. L’emplacement par défaut dépend de l’OS et s’affiche au lancement.
+Après `cd app && npm ci && npm run build`, revenir à la racine puis double-cliquer sur `Champ libre.command` dans le dossier du projet sur macOS. Il est possible d’en créer un alias Finder sur le Bureau. En terminal, utiliser `./run-local.sh` sur macOS/Linux, ou `run-local.cmd` sous Windows. Python 3.9+ et une interface compilée sont requis ; Node sert uniquement à compiler les sources. Le serveur n’écoute que `127.0.0.1:8765` et ouvre la page locale. `--data-dir CHEMIN` choisit un autre répertoire de données, `--port N` un autre port. L’emplacement par défaut dépend de l’OS et s’affiche au lancement.
 
 Le serveur et `run-local.sh` ont été vérifiés sur macOS. Les lanceurs Windows et Linux sont fournis, mais leur exécution sur ces OS reste à vérifier. Après une nouvelle situation patrimoniale, vérifiez et, si nécessaire, réduisez le versement ponctuel déclaré : il n’est pas abaissé silencieusement lorsque la liquidité mobilisable diminue.
 
@@ -22,7 +22,7 @@ Le bouton **Atteindre cette allocation** permet de saisir les valeurs de son por
 
 La méthode de contrôle et les trois ETF encore sans composition sont décrits dans [COMPOSITIONS.md](COMPOSITIONS.md).
 
-Pour lancer l'application localement :
+Pour développer le simulateur statique sans serveur de données :
 
 ```bash
 cd app
